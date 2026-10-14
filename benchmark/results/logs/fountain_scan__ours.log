@@ -1,0 +1,2 @@
+/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/fountain_scan.obj -o benchmark/results/meshes/fountain_scan__ours.obj -f 15000 -a 35.0 --no-uv
+quadremesh: 1033745 faces -> 15447 quads/tris (80.73s) -> benchmark/results/meshes/fountain_scan__ours.obj

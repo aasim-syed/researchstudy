@@ -1,0 +1,101 @@
+{
+"method": "ours_learned",
+"faces": {
+  "total": 14230,
+  "quads": 14229,
+  "triangles": 1,
+  "vertices": 15080,
+  "quad_ratio": 0.99993,
+  "target": 15000,
+  "count_ratio": 0.948667
+},
+"quality": {
+  "scaled_jacobian": {
+    "mean": 0.910759,
+    "min": -0.630528,
+    "p05": 0.54868,
+    "median": 0.989907,
+    "p95": 0.999791,
+    "max": 0.999999,
+    "std": 0.169441
+  },
+  "scaled_jacobian_quads": {
+    "mean": 0.910814,
+    "min": -0.630528,
+    "p05": 0.548719,
+    "median": 0.989907,
+    "p95": 0.999791,
+    "max": 0.999999,
+    "std": 0.169317
+  },
+  "frac_sj_below_0.5": 0.0403373,
+  "inverted_or_degenerate": 35,
+  "planarity": {
+    "mean": 0.0210893,
+    "min": 3.70497e-09,
+    "p05": 0.000270258,
+    "median": 0.00449187,
+    "p95": 0.108856,
+    "max": 0.367559,
+    "std": 0.0397905
+  },
+  "aspect_ratio": {
+    "mean": 1.4699,
+    "min": 1.00069,
+    "p05": 1.01907,
+    "median": 1.17251,
+    "p95": 2.75233,
+    "max": 26.3912,
+    "std": 1.01839
+  },
+  "edge_length_rel": {
+    "mean": 1,
+    "min": 0.0168801,
+    "p05": 0.497817,
+    "median": 1.04439,
+    "p95": 1.38204,
+    "max": 4.22593,
+    "std": 0.288633
+  },
+  "edge_length_mean_pct_diag": 0.704553
+},
+"topology": {
+  "singularities": 1036,
+  "boundary_irregular": 331,
+  "singularities_per_1k_faces": 72.8039,
+  "interior_vertices": 13416,
+  "boundary_vertices": 1664,
+  "boundary_edges": 1691,
+  "nonmanifold_edges": 0,
+  "components": 27,
+  "valence_histogram": {
+    "2": 146,
+    "3": 497,
+    "4": 12380,
+    "5": 368,
+    "6": 21,
+    "7": 3,
+    "8": 1
+  }
+},
+"distance": {
+  "mean_pct": 0.0752663,
+  "out_to_in_mean_pct": 0.0306131,
+  "in_to_out_mean_pct": 0.119919,
+  "rms_pct": 0.2327,
+  "hausdorff_pct": 7.86331,
+  "area_ratio": 0.831376
+},
+"features": {
+  "feature_coverage": 0.0214452,
+  "boundary_coverage": 0.100963,
+  "combined_coverage": 0.0633555,
+  "feature_length_pct_diag": 5223.34,
+  "boundary_length_pct_diag": 5820.91,
+  "feature_segments": 45965,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+},
+"runtime_s": 135.61,
+"input_faces": 999999
+}

@@ -87,6 +87,7 @@ void Parametrizer::Initialize(int faces) {
     }
     ComputeSharpEdges();
     ComputeSmoothNormal();
+    if (ext_normals.cols() == N.cols() && ext_normals.rows() == 3) N = ext_normals;  // quadremesh patch
     ComputeVertexArea();
     
     if (flag_adaptive_scale)

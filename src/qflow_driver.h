@@ -14,6 +14,7 @@ struct QFJob {
     std::vector<int> sharp_he;  // feature half-edges
     FieldConstraints cons;      // per-vertex orientation / position constraints
     VectorXd scale;             // optional per-vertex target scale multiplier (density)
+    MatrixXd normals;           // optional smoothed vertex normals (n x 3)
     int faces = 1000;
     bool preserve_boundary = true;
     bool min_cost_flow = false;

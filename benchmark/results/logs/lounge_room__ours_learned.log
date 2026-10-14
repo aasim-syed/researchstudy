@@ -1,0 +1,8 @@
+/usr/bin/python3 -c 
+import sys
+sys.path.insert(0, '/home/claude/quadremesh/python')
+from quadremesh import quadremesh
+src, dst, target, angle = sys.argv[1], sys.argv[2], int(sys.argv[3]), float(sys.argv[4])
+quadremesh(src, target_faces=target, feature_angle=angle, learned_field=True, output=dst, report=False,
+           transfer_uv=False)
+ /home/claude/quadremesh/data/models/lounge_room.obj benchmark/results/meshes/lounge_room__ours_learned.obj 15000 35.0

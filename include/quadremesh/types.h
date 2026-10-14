@@ -100,7 +100,7 @@ struct Result {
     MatrixXd feature_edges;   // (k x 6) segments p0,p1 of detected features (input space)
     std::vector<std::string> log;
     Timing timing;
-    int components_in = 0, components_out = 0, components_fallback = 0, components_im = 0;
+    int components_in = 0, components_out = 0, components_fallback = 0, components_im = 0, components_approx = 0;
 };
 
 }  // namespace qrm

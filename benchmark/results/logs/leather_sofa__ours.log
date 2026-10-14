@@ -1,2 +1,2 @@
 /home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/leather_sofa.obj -o benchmark/results/meshes/leather_sofa__ours.obj -f 5000 -a 35.0 --no-uv
-quadremesh: 46492 faces -> 49355 quads/tris (16.00s) -> benchmark/results/meshes/leather_sofa__ours.obj
+quadremesh: 46492 faces -> 5153 quads/tris (9.66s) -> benchmark/results/meshes/leather_sofa__ours.obj

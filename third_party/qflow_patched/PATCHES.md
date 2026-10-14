@@ -30,3 +30,4 @@ constraints, guidance strokes) are injected through the existing `mCQ/mCQw/mCO/m
    non-manifold boundary configurations of large scans).
 9. `parametrizer-flip.cpp` - `FixHoles` boundary walks are bounded (infinite loop on non-manifold quad fans).
 10. `subdivide.cpp` - unbounded rotation search in `subdivide_edgeDiff` (spins forever on inconsistent data) now raises.
+11. `Parametrizer::ext_normals` - optional externally smoothed normals for the field (noisy scans).

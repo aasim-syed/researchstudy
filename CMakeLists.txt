@@ -45,13 +45,13 @@ add_library(imcore STATIC
   ${IM}/src/meshio.cpp ${IM}/ext/rply/rply.c)
 target_include_directories(imcore PUBLIC ${IM}/src ${IM}/ext/pcg32 ${IM}/ext/dset ${IM}/ext/pss ${IM}/ext/tbb/include
                                          ${IM}/ext/half ${IM}/ext/rply ${EIGEN_DIR})
-target_compile_options(imcore PRIVATE -w $<$<COMPILE_LANGUAGE:CXX>:-include ${IM}/im_compat.h>)
+target_compile_options(imcore PRIVATE -w $<$<COMPILE_LANGUAGE:CXX>:-include ${TP}/im_compat.h>)
 target_link_libraries(imcore PUBLIC tbb_static pthread)
 
 # ---------------------------------------------------------------- core
 add_library(quadremesh_core STATIC
   src/io.cpp src/geometry.cpp src/preprocess.cpp src/features.cpp src/field.cpp
-  src/qflow_driver.cpp src/im_driver.cpp src/postprocess.cpp src/transfer.cpp src/metrics.cpp src/remesh.cpp)
+  src/qflow_driver.cpp src/im_driver.cpp src/decimate.cpp src/postprocess.cpp src/transfer.cpp src/metrics.cpp src/remesh.cpp)
 target_include_directories(quadremesh_core PUBLIC include ${EIGEN_DIR} PRIVATE src ${LIBIGL_DIR}/include ${TP}/cgltf)
 target_link_libraries(quadremesh_core PUBLIC qflow imcore)
 target_compile_options(quadremesh_core PRIVATE -Wall -Wno-sign-compare -Wno-unused-variable -Wno-int-in-bool-context -Wno-maybe-uninitialized)

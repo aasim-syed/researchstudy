@@ -8,6 +8,7 @@
 
 #include <algorithm>
 
+#include "decimate.h"
 #include "im_driver.h"
 #include "qflow_driver.h"
 #include "quadremesh/features.h"
@@ -91,6 +92,28 @@ void coverage_distance(const MatrixXd& V, const MatrixXi& F, const MatrixXd& QV,
     std::sort(d.begin(), d.end());
     p95 = d.empty() ? 0 : d[std::min<size_t>(d.size() - 1, (size_t)(0.95 * d.size()))];
 }
+// Interior irregular vertices of a raw quad list (valence != 4, boundary excluded).
+int count_singularities(int nv, const std::vector<std::array<int, 4>>& Q) {
+    std::map<std::pair<int, int>, int> ec;
+    for (auto& q : Q) {
+        int n = q[3] < 0 || q[3] == q[2] || q[3] == q[0] ? 3 : 4;
+        for (int k = 0; k < n; ++k) {
+            int a = q[k], b = q[(k + 1) % n];
+            if (a == b) continue;
+            ec[{std::min(a, b), std::max(a, b)}]++;
+        }
+    }
+    std::vector<int> val(nv, 0);
+    std::vector<char> bnd(nv, 0);
+    for (auto& kv : ec) {
+        val[kv.first.first]++, val[kv.first.second]++;
+        if (kv.second == 1) bnd[kv.first.first] = bnd[kv.first.second] = 1;
+    }
+    int s = 0;
+    for (int v = 0; v < nv; ++v)
+        if (val[v] > 0 && !bnd[v] && val[v] != 4) s++;
+    return s;
+}
 }  // namespace
 
 Result quadremesh(const TriMesh& input, const Params& p) {
@@ -150,6 +173,7 @@ Result quadremesh(const TriMesh& input, const Params& p) {
     log("target: L=", L, " field faces=", qf_total, p.pure_quad ? " (pure-quad split x4)" : "");
 
     // ---------------------------------------------------------------- features
+    const bool dense_input = input.F.rows() > 30LL * std::max(1, p.target_faces);
     FeatureSet fs = detect_features(wm.V, wm.F, p.feature_angle, p.min_feature_length * Lqf, 1.0 * Lqf);
     // Feature budget: a quad mesh with N faces can carry roughly O(sqrt(N)) edge loops; when the
     // detected feature network is far denser than the resolution (typical for raw scans), keep
@@ -161,7 +185,8 @@ Result quadremesh(const TriMesh& input, const Params& p) {
             for (int i = 0; i < f.segments.rows(); ++i) l += (f.segments.row(i).head<3>() - f.segments.row(i).tail<3>()).norm();
             return l;
         };
-        const double budget = 0.04 * qf_total * Lqf;
+        // dense scans (input much finer than the target) get a stricter budget than CAD-like inputs
+        const double budget = (dense_input ? 0.06 : 0.3) * qf_total * Lqf;
         double ang = p.feature_angle, ml = p.min_feature_length;
         for (int it = 0; it < 4 && p.feature_angle > 0 && feature_len(fs) > budget; ++it) {
             ang = std::min(ang + 10.0, 80.0);
@@ -239,6 +264,41 @@ Result quadremesh(const TriMesh& input, const Params& p) {
 
     // ---------------------------------------------------------------- field design inputs
     MatrixXd N = vertex_normals(wm.V, wm.F);
+    // Normals for the field are smoothed at the scale of the target element (not across
+    // feature edges): fine-scale scan noise otherwise turns into field singularities.
+    MatrixXd Nfield = N;
+    {
+        EdgeTopology topo;
+        topo.build(wm.F);
+        double h = 0;
+        for (auto& e : topo.ev) h += (wm.V.row(e.first) - wm.V.row(e.second)).norm();
+        h /= std::max<size_t>(1, topo.ev.size());
+        int iters = (int)std::lround(std::pow(0.5 * Lqf / std::max(h, 1e-12), 2));
+        iters = std::max(0, std::min(iters, 30));
+        if (std::getenv("QRM_NO_NSMOOTH") || !dense_input) iters = 0;  // scans only: on clean CAD meshes the solver normals are better
+        if (iters > 0) {
+            std::vector<std::vector<int>> nb(wm.V.rows());
+            for (size_t e = 0; e < topo.ev.size(); ++e) {
+                bool sharp = topo.ehe[e].size() != 2;
+                for (int hh : topo.ehe[e]) sharp |= (!wm.sharp.empty() && wm.sharp[hh]);
+                if (sharp) continue;
+                nb[topo.ev[e].first].push_back(topo.ev[e].second);
+                nb[topo.ev[e].second].push_back(topo.ev[e].first);
+            }
+            MatrixXd T = Nfield;
+            for (int it = 0; it < iters; ++it) {
+                for (int i = 0; i < wm.V.rows(); ++i) {
+                    Vector3d acc = Nfield.row(i).transpose();
+                    for (int j : nb[i]) acc += Nfield.row(j).transpose();
+                    double l = acc.norm();
+                    if (l > 0) T.row(i) = (acc / l).transpose();
+                    else T.row(i) = Nfield.row(i);
+                }
+                Nfield.swap(T);
+            }
+            log("field normals smoothed: ", iters, " iterations");
+        }
+    }
     CurvatureInfo curv;
     bool use_curv = p.curvature_weight > 0 || p.curvature_density > 0;
     if (use_curv) curv = principal_directions(wm.V, wm.F, 0.75 * Lqf, p.curvature_min_anisotropy);
@@ -317,7 +377,9 @@ Result quadremesh(const TriMesh& input, const Params& p) {
     for (int c = 0; c < nc; ++c) {
         const auto& fl = cfaces[c];
         // parts smaller than a few target quads cannot be represented at this resolution
-        if (carea[c] < 4.0 * Lqf * Lqf) { skipped_small++; continue; }
+        // (dense scans: small disconnected fragments are reconstruction debris; each closed
+        // fragment would need >= 8 singularities, so fragments below ~40 quads are dropped)
+        if (carea[c] < (dense_input ? 40.0 : 4.0) * Lqf * Lqf) { skipped_small++; continue; }
         std::vector<int> vmap(wm.V.rows(), -1), vlist;
         MatrixXi Fc(fl.size(), 3);
         for (size_t k = 0; k < fl.size(); ++k)
@@ -333,6 +395,8 @@ Result quadremesh(const TriMesh& input, const Params& p) {
         job.sharp_he.resize(3 * fl.size());
         for (size_t k = 0; k < fl.size(); ++k)
             for (int j = 0; j < 3; ++j) job.sharp_he[3 * k + j] = wm.sharp[3 * fl[k] + j];
+        job.normals.resize(vlist.size(), 3);
+        for (size_t i = 0; i < vlist.size(); ++i) job.normals.row(i) = Nfield.row(vlist[i]);
         job.cons.dir.resize(vlist.size(), 3);
         job.cons.w.resize(vlist.size());
         job.cons.pos.resize(vlist.size());
@@ -351,20 +415,68 @@ Result quadremesh(const TriMesh& input, const Params& p) {
             dm.F = job.F;
             save_tri_obj(std::string(dump) + "/comp_" + std::to_string(c) + ".obj", dm);
         }
+        QFResult qr;
+        bool good = false;
+        QFResult best_rej;               // best rejected candidate (lowest coverage p95)
+        double best_rej_p95 = 1e300, best_rej_mean = 1e300;
+        // keep the FIRST (= lowest budget) candidate within the loose tolerance, else the best
+        auto keep_best = [&](const QFResult& r, double mean, double p95) {
+            if (r.Q.empty()) return;
+            bool loose_ok = p95 < 3.0 * Lqf && mean < 0.6 * Lqf;
+            bool have_loose = best_rej_p95 < 3.0 * Lqf && best_rej_mean < 0.6 * Lqf;
+            if (have_loose) return;
+            if (loose_ok || p95 < best_rej_p95) { best_rej = r; best_rej_p95 = p95; best_rej_mean = mean; }
+        };
+        // Instant Meshes extractor (robust on scans / thin parts; more singularities than the
+        // integer-grid solve, so it is the second choice)
+        auto try_im = [&](int im_faces) -> bool {
+            if (job.F.rows() == 0) return false;
+            std::vector<double> iv(3 * job.V.rows());
+            std::vector<int> ifc(3 * job.F.rows());
+            for (int i = 0; i < job.V.rows(); ++i)
+                for (int k = 0; k < 3; ++k) iv[3 * i + k] = job.V(i, k);
+            for (int f = 0; f < job.F.rows(); ++f)
+                for (int k = 0; k < 3; ++k) ifc[3 * f + k] = job.F(f, k);
+            auto te0 = Clock::now();
+            IMResult ir = run_instant_meshes(iv, ifc, im_faces, p.feature_angle, boundary_hard);
+            t_extract += secs(te0, Clock::now());
+            if (!ir.ok) {
+                log("component ", c, ": Instant Meshes extractor produced no faces (target ", im_faces, ")");
+                return false;
+            }
+            QFResult alt;
+            alt.V.resize(ir.V.size() / 3, 3);
+            for (int i = 0; i < alt.V.rows(); ++i)
+                for (int k = 0; k < 3; ++k) alt.V(i, k) = ir.V[3 * i + k];
+            alt.Q = ir.Q;
+            double cm = 0, c95 = 0;
+            coverage_distance(job.V, job.F, alt.V, alt.Q, cm, c95);
+            keep_best(alt, cm, c95);
+            if (cm < 0.25 * Lqf && c95 < 1.0 * Lqf) {
+                qr = alt;
+                qr.ok = true;
+                R.components_im++;
+                log("component ", c, ": solved by the Instant Meshes extractor (", qr.Q.size(), " quads)");
+                return true;
+            }
+            log("component ", c, ": Instant Meshes extractor rejected (cover mean/p95=", cm, "/", c95, ")");
+            return false;
+        };
         // Solve; if the extracted quads do not cover the component (thin parts, narrow strips
         // between features), retry at a finer field resolution before falling back.
-        QFResult qr;
         double qa = 0;
-        bool good = false;
         // thin tubes / plates need several quads across: grow the budget geometrically
-        static const int growth[5] = {1, 3, 9, 27, 81};
+        static const int growth[5] = {1, 3, 9, 0, 0};  // cap the overshoot at 9x the nominal budget
         // attempts 0-4: full constraints, growing budget; 5-6: no feature constraints (tiny or
         // degenerate parts where the hard constraints are unsatisfiable)
         const FieldConstraints full_cons = job.cons;
+        const MatrixXd comp_V0 = job.V;
+        const MatrixXi comp_F0 = job.F;
         const std::vector<int> full_sharp = job.sharp_he;
         for (int attempt = 0; attempt < 8 && !good; ++attempt) {
             if (attempt < 5) {
                 job.faces = budget * growth[attempt];
+                if (job.faces == 0) continue;
                 if (attempt > 0 && job.faces > (int)job.F.rows() / 2) continue;
             } else if (attempt == 7) {
                 // last solver attempt: finer input tessellation (long edges relative to the
@@ -410,49 +522,63 @@ Result quadremesh(const TriMesh& input, const Params& p) {
                 // coverage: how far is the component surface from the extracted quads?
                 // (thin shells legitimately collapse to one sheet, so area alone is not enough)
                 coverage_distance(job.V, job.F, qr.V, qr.Q, cov_mean, cov_p95);
-                good = qa < 1.6 * carea[c] && cov_mean < 0.15 * Lqf && cov_p95 < 0.6 * Lqf;
+                good = qa < 1.6 * carea[c] && cov_mean < 0.25 * Lqf && cov_p95 < 1.0 * Lqf;
+                if (!good && qa < 1.6 * carea[c]) keep_best(qr, cov_mean, cov_p95);
             }
             if (!good)
                 log("component ", c, ": attempt ", attempt, " rejected (faces=", job.faces, " ok=", qr.ok, " quads=",
                     qr.Q.size(), " area ratio=", qa / carea[c], " cover mean/p95=", cov_mean, "/", cov_p95, ")");
+            // thin parts: the IM extractor at the nominal budget keeps the face count on target,
+            // growing the integer-grid budget overshoots it
+            if (!good && attempt == 0 && qr.ok && try_im(std::max(budget, 16))) good = true;
         }
-        // second extractor: Instant Meshes (robust on scans / thin parts, more singularities)
-        bool used_im = false;
-        if (!good && job.F.rows() > 0) {
-            std::vector<double> iv(3 * job.V.rows());
-            std::vector<int> ifc(3 * job.F.rows());
-            for (int i = 0; i < job.V.rows(); ++i)
-                for (int k = 0; k < 3; ++k) iv[3 * i + k] = job.V(i, k);
-            for (int f = 0; f < job.F.rows(); ++f)
-                for (int k = 0; k < 3; ++k) ifc[3 * f + k] = job.F(f, k);
-            for (int im_try = 0; im_try < 3 && !good; ++im_try) {
+        // Best of both extractors on large, dense components (scans): the integer-grid result is
+        // replaced by the Instant Meshes one only if it has clearly fewer singularities.
+        if (good && dense_input && job.F.rows() > 50000) {
+            QFResult keep = qr;
+            int s_qf = count_singularities((int)qr.V.rows(), qr.Q);
+            MatrixXd sv = job.V;
+            MatrixXi sf = job.F;
+            job.V = comp_V0;
+            job.F = comp_F0;
+            int im_before = R.components_im;
+            if (try_im(budget)) {
+                int s_im = count_singularities((int)qr.V.rows(), qr.Q);
+                double r_qf = s_qf / std::max(1.0, (double)keep.Q.size()), r_im = s_im / std::max(1.0, (double)qr.Q.size());
+                if (r_im < 0.85 * r_qf) {
+                    log("component ", c, ": Instant Meshes result kept (", s_im, " vs ", s_qf, " singularities)");
+                } else {
+                    qr = keep;
+                    R.components_im = im_before;
+                    log("component ", c, ": integer-grid result kept (", s_qf, " vs ", s_im, " singularities)");
+                }
+            } else {
+                qr = keep;
+            }
+            job.V = sv;
+            job.F = sf;
+        }
+        // second extractor: Instant Meshes, at growing budgets (on the original component mesh)
+        if (!good) {
+            job.V = comp_V0;
+            job.F = comp_F0;
+        }
+        for (int im_try = 0; im_try < 3 && !good; ++im_try) {
             int im_faces = std::max(budget, 16) * (im_try == 0 ? 1 : (im_try == 1 ? 4 : 16));
             if (im_try > 0 && im_faces > (int)job.F.rows() / 2) break;
-            auto te0 = Clock::now();
-            IMResult ir = run_instant_meshes(iv, ifc, im_faces, p.feature_angle, boundary_hard);
-            t_extract += secs(te0, Clock::now());
-            if (ir.ok) {
-                QFResult alt;
-                alt.V.resize(ir.V.size() / 3, 3);
-                for (int i = 0; i < alt.V.rows(); ++i)
-                    for (int k = 0; k < 3; ++k) alt.V(i, k) = ir.V[3 * i + k];
-                alt.Q = ir.Q;
-                double cm = 0, c95 = 0;
-                coverage_distance(job.V, job.F, alt.V, alt.Q, cm, c95);
-                if (cm < 0.25 * Lqf && c95 < 1.0 * Lqf) {
-                    qr = alt;
-                    qr.ok = true;
-                    good = true;
-                    used_im = true;
-                    R.components_im++;
-                    log("component ", c, ": solved by the Instant Meshes extractor (", qr.Q.size(), " quads)");
-                } else {
-                    log("component ", c, ": Instant Meshes extractor rejected (cover mean/p95=", cm, "/", c95, ")");
-                }
-            }
-            }
+            good = try_im(im_faces);
         }
-        (void)used_im;
+        // nothing passed: rather than an exact but very dense fallback, accept the best
+        // approximate extraction when it stays within a few target edge lengths (thin tubes /
+        // plates thinner than one element: below the requested resolution in one dimension)
+        if (!good && best_rej_p95 < 3.0 * Lqf && best_rej_mean < 0.6 * Lqf) {
+            qr = best_rej;
+            qr.ok = true;
+            good = true;
+            R.components_approx++;
+            log("component ", c, ": accepted best approximate extraction (cover mean/p95=", best_rej_mean, "/", best_rej_p95,
+                ", ", qr.Q.size(), " quads) - part thinner than the target element size");
+        }
         int base = (int)outV.size();
         if (good) {
             for (int i = 0; i < qr.V.rows(); ++i) outV.push_back(qr.V.row(i));
@@ -488,10 +614,15 @@ Result quadremesh(const TriMesh& input, const Params& p) {
             {
                 const MatrixXd& BV = (PF.rows() > 0 && PF.rows() < job.F.rows()) ? PV : job.V;
                 const MatrixXi& BF = (PF.rows() > 0 && PF.rows() < job.F.rows()) ? PF : job.F;
+                // decimate first so the fallback still follows the face budget
+                // (pairs -> 4 quads, so ~budget/2 triangles give ~budget quads)
+                MatrixXd DV = BV;
+                MatrixXi DF = BF;
+                decimate_qem(DV, DF, std::max(8, budget / 2));
                 QuadMesh fm;
-                fm.V = BV;
-                fm.Q.resize(BF.rows(), 4);
-                for (int f = 0; f < BF.rows(); ++f) fm.Q.row(f) << BF(f, 0), BF(f, 1), BF(f, 2), -1;
+                fm.V = DV;
+                fm.Q.resize(DF.rows(), 4);
+                for (int f = 0; f < DF.rows(); ++f) fm.Q.row(f) << DF(f, 0), DF(f, 1), DF(f, 2), -1;
                 PostStats tmp;
                 merge_triangle_pairs(fm, tmp, 0.2);
                 split_to_pure_quads(fm);
@@ -505,7 +636,7 @@ Result quadremesh(const TriMesh& input, const Params& p) {
             log("component ", c, ": fallback tri->quad split (", fl.size(), " tris, budget ", budget, ")");
         }
     }
-    log("solver: components=", nc, " below-resolution parts skipped=", skipped_small, " instant-meshes=", R.components_im, " fallback=", R.components_fallback, " field singularities=", total_sing,
+    log("solver: components=", nc, " below-resolution parts skipped=", skipped_small, " instant-meshes=", R.components_im, " approximate=", R.components_approx, " fallback=", R.components_fallback, " field singularities=", total_sing,
         " raw quads=", outQ.size());
     auto t3 = Clock::now();
 
@@ -517,9 +648,17 @@ Result quadremesh(const TriMesh& input, const Params& p) {
     for (size_t i = 0; i < outQ.size(); ++i)
         for (int j = 0; j < 4; ++j) qm.Q(i, j) = outQ[i][j];
     PostStats pst;
+    auto sing_now = [&]() {
+        std::vector<std::array<int, 4>> qq(qm.Q.rows());
+        for (int i = 0; i < qm.Q.rows(); ++i) qq[i] = {qm.Q(i, 0), qm.Q(i, 1), qm.Q(i, 2), qm.Q(i, 3)};
+        return count_singularities((int)qm.V.rows(), qq);
+    };
+    log("singularities: raw ", sing_now());
     cleanup(qm, pst);
+    log("singularities: after cleanup ", sing_now());
     merge_triangle_pairs(qm, pst);
     cleanup(qm, pst);
+    log("singularities: after triangle merge ", sing_now());
     if (adaptive) {
         MatrixXd SV = wm.V;
         MatrixXi SF = wm.F;

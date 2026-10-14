@@ -170,6 +170,7 @@ class Parametrizer {
     std::vector<int> ext_sharp_edges;  // per half-edge (3*f+j) feature flags from our detector
     int use_ext_sharp = 0;
     int skip_subdivide = 0;            // input already refined by quadremesh preprocessing
+    MatrixXd ext_normals;              // optional externally smoothed vertex normals (3 x n)
 };
 
 extern void generate_adjacency_matrix_uniform(const MatrixXi& F, const VectorXi& V2E,

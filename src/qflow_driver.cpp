@@ -34,6 +34,7 @@ QFResult run_quadriflow(const QFJob& job) {
     P->flag_adaptive_scale = adaptive ? 1 : 0;
     P->hierarchy.rng_seed = (int)job.seed;
 
+    if (job.normals.rows() == n) P->ext_normals = job.normals.transpose();
     P->Initialize(job.faces);
     qflow::Hierarchy& H = P->hierarchy;
     const bool same = H.mV[0].cols() == n;
