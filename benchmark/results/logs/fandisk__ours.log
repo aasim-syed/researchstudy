@@ -1,0 +1,2 @@
+/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/fandisk.obj -o benchmark/results/meshes/fandisk__ours.obj -f 5000 -a 35.0 --no-uv
+quadremesh: 12946 faces -> 5391 quads/tris (4.32s) -> benchmark/results/meshes/fandisk__ours.obj

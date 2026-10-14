@@ -1,0 +1,97 @@
+{
+"method": "ours_learned",
+"faces": {
+  "total": 4567,
+  "quads": 4567,
+  "triangles": 0,
+  "vertices": 4569,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.9134
+},
+"quality": {
+  "scaled_jacobian": {
+    "mean": 0.967329,
+    "min": -0.23243,
+    "p05": 0.863631,
+    "median": 0.98772,
+    "p95": 0.99935,
+    "max": 0.999969,
+    "std": 0.0629975
+  },
+  "scaled_jacobian_quads": {
+    "mean": 0.967329,
+    "min": -0.23243,
+    "p05": 0.863631,
+    "median": 0.98772,
+    "p95": 0.99935,
+    "max": 0.999969,
+    "std": 0.0629975
+  },
+  "frac_sj_below_0.5": 0.00218962,
+  "inverted_or_degenerate": 1,
+  "planarity": {
+    "mean": 0.0137345,
+    "min": 1.72624e-10,
+    "p05": 0.000610156,
+    "median": 0.00822296,
+    "p95": 0.0447696,
+    "max": 0.168867,
+    "std": 0.0164762
+  },
+  "aspect_ratio": {
+    "mean": 1.28101,
+    "min": 1.00343,
+    "p05": 1.03814,
+    "median": 1.22071,
+    "p95": 1.72976,
+    "max": 4.94634,
+    "std": 0.288122
+  },
+  "edge_length_rel": {
+    "mean": 1,
+    "min": 0.236094,
+    "p05": 0.724361,
+    "median": 0.997808,
+    "p95": 1.29163,
+    "max": 1.99153,
+    "std": 0.17704
+  },
+  "edge_length_mean_pct_diag": 1.37095
+},
+"topology": {
+  "singularities": 88,
+  "boundary_irregular": 0,
+  "singularities_per_1k_faces": 19.2687,
+  "interior_vertices": 4569,
+  "boundary_vertices": 0,
+  "boundary_edges": 0,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+    "3": 48,
+    "4": 4481,
+    "5": 40
+  }
+},
+"distance": {
+  "mean_pct": 0.0313898,
+  "out_to_in_mean_pct": 0.0300947,
+  "in_to_out_mean_pct": 0.0326848,
+  "rms_pct": 0.0605421,
+  "hausdorff_pct": 1.9291,
+  "area_ratio": 0.990594
+},
+"features": {
+  "feature_coverage": 0.844291,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.844291,
+  "feature_length_pct_diag": 202.89,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 260,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+},
+"runtime_s": 7.992,
+"input_faces": 23424
+}

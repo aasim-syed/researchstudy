@@ -1,0 +1,97 @@
+{
+"method": "ours",
+"faces": {
+  "total": 4815,
+  "quads": 4815,
+  "triangles": 0,
+  "vertices": 4817,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.963
+},
+"quality": {
+  "scaled_jacobian": {
+    "mean": 0.942375,
+    "min": 0.0697968,
+    "p05": 0.788089,
+    "median": 0.970075,
+    "p95": 0.997082,
+    "max": 0.999931,
+    "std": 0.0787203
+  },
+  "scaled_jacobian_quads": {
+    "mean": 0.942375,
+    "min": 0.0697968,
+    "p05": 0.788089,
+    "median": 0.970075,
+    "p95": 0.997082,
+    "max": 0.999931,
+    "std": 0.0787203
+  },
+  "frac_sj_below_0.5": 0.00311526,
+  "inverted_or_degenerate": 0,
+  "planarity": {
+    "mean": 0.0317965,
+    "min": 5.52643e-07,
+    "p05": 0.00186386,
+    "median": 0.0214818,
+    "p95": 0.0969787,
+    "max": 0.316706,
+    "std": 0.0338044
+  },
+  "aspect_ratio": {
+    "mean": 1.34258,
+    "min": 1.00622,
+    "p05": 1.05428,
+    "median": 1.23573,
+    "p95": 1.97598,
+    "max": 13.8153,
+    "std": 0.408065
+  },
+  "edge_length_rel": {
+    "mean": 1,
+    "min": 0.192219,
+    "p05": 0.646927,
+    "median": 1.0046,
+    "p95": 1.30783,
+    "max": 3.48524,
+    "std": 0.203228
+  },
+  "edge_length_mean_pct_diag": 1.20323
+},
+"topology": {
+  "singularities": 188,
+  "boundary_irregular": 0,
+  "singularities_per_1k_faces": 39.0447,
+  "interior_vertices": 4817,
+  "boundary_vertices": 0,
+  "boundary_edges": 0,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+    "3": 98,
+    "4": 4629,
+    "5": 90
+  }
+},
+"distance": {
+  "mean_pct": 0.0924898,
+  "out_to_in_mean_pct": 0.0790097,
+  "in_to_out_mean_pct": 0.10597,
+  "rms_pct": 0.170804,
+  "hausdorff_pct": 3.21175,
+  "area_ratio": 0.931835
+},
+"features": {
+  "feature_coverage": 0.252882,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.252882,
+  "feature_length_pct_diag": 54.6224,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 198,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+},
+"runtime_s": 7.238,
+"input_faces": 99976
+}

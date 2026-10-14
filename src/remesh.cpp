@@ -8,6 +8,7 @@
 
 #include <algorithm>
 
+#include "im_driver.h"
 #include "qflow_driver.h"
 #include "quadremesh/features.h"
 #include "quadremesh/field.h"
@@ -149,7 +150,30 @@ Result quadremesh(const TriMesh& input, const Params& p) {
     log("target: L=", L, " field faces=", qf_total, p.pure_quad ? " (pure-quad split x4)" : "");
 
     // ---------------------------------------------------------------- features
-    FeatureSet fs = detect_features(wm.V, wm.F, p.feature_angle, p.min_feature_length * Lqf, 0.3 * Lqf);
+    FeatureSet fs = detect_features(wm.V, wm.F, p.feature_angle, p.min_feature_length * Lqf, 1.0 * Lqf);
+    // Feature budget: a quad mesh with N faces can carry roughly O(sqrt(N)) edge loops; when the
+    // detected feature network is far denser than the resolution (typical for raw scans), keep
+    // only the strongest/longest creases (raise angle and minimum chain length) - otherwise the
+    // integer solve is over-constrained, slow and produces poor elements.
+    {
+        auto feature_len = [&](const FeatureSet& f) {
+            double l = 0;
+            for (int i = 0; i < f.segments.rows(); ++i) l += (f.segments.row(i).head<3>() - f.segments.row(i).tail<3>()).norm();
+            return l;
+        };
+        const double budget = 0.04 * qf_total * Lqf;
+        double ang = p.feature_angle, ml = p.min_feature_length;
+        for (int it = 0; it < 4 && p.feature_angle > 0 && feature_len(fs) > budget; ++it) {
+            ang = std::min(ang + 10.0, 80.0);
+            ml *= 2.0;
+            fs = detect_features(wm.V, wm.F, ang, ml * Lqf, 1.0 * Lqf);
+            log("features: network denser than resolution -> angle ", ang, ", min length ", ml, " L");
+        }
+        if (p.feature_angle > 0 && feature_len(fs) > budget) {
+            fs = detect_features(wm.V, wm.F, 0.0, 0.0);
+            log("features: still denser than resolution (raw scan) -> hard feature constraints disabled");
+        }
+    }
     if (p.strokes_as_edges && !p.strokes.empty()) {
         std::vector<std::vector<Vector3d>> st;
         for (auto& stroke : p.strokes) {
@@ -197,6 +221,8 @@ Result quadremesh(const TriMesh& input, const Params& p) {
     }
 
     // ---------------------------------------------------------------- refine for the solver
+    MatrixXd prepV;  // pre-refinement mesh (refinement keeps vertex ids and appends new ones)
+    MatrixXi prepF;
     {
         double avg = 0;
         EdgeTopology topo;
@@ -204,6 +230,8 @@ Result quadremesh(const TriMesh& input, const Params& p) {
         for (auto& e : topo.ev) avg += (wm.V.row(e.first) - wm.V.row(e.second)).norm();
         avg /= std::max<size_t>(1, topo.ev.size());
         double target_len = std::min(Lqf / 2, avg * 2);
+        prepV = wm.V;
+        prepF = wm.F;
         refine_long_edges(wm, target_len);
         log("refine: max edge ", target_len, " -> V=", wm.V.rows(), " F=", wm.F.rows());
     }
@@ -285,8 +313,11 @@ Result quadremesh(const TriMesh& input, const Params& p) {
     R.field_N = N;
     int total_sing = 0;
     double t_extract = 0;
+    int skipped_small = 0;
     for (int c = 0; c < nc; ++c) {
         const auto& fl = cfaces[c];
+        // parts smaller than a few target quads cannot be represented at this resolution
+        if (carea[c] < 4.0 * Lqf * Lqf) { skipped_small++; continue; }
         std::vector<int> vmap(wm.V.rows(), -1), vlist;
         MatrixXi Fc(fl.size(), 3);
         for (size_t k = 0; k < fl.size(); ++k)
@@ -327,15 +358,45 @@ Result quadremesh(const TriMesh& input, const Params& p) {
         bool good = false;
         // thin tubes / plates need several quads across: grow the budget geometrically
         static const int growth[5] = {1, 3, 9, 27, 81};
-        for (int attempt = 0; attempt < 5 && !good; ++attempt) {
-            job.faces = budget * growth[attempt];
-            if (attempt > 0 && job.faces > (int)job.F.rows() / 2) break;
+        // attempts 0-4: full constraints, growing budget; 5-6: no feature constraints (tiny or
+        // degenerate parts where the hard constraints are unsatisfiable)
+        const FieldConstraints full_cons = job.cons;
+        const std::vector<int> full_sharp = job.sharp_he;
+        for (int attempt = 0; attempt < 8 && !good; ++attempt) {
+            if (attempt < 5) {
+                job.faces = budget * growth[attempt];
+                if (attempt > 0 && job.faces > (int)job.F.rows() / 2) continue;
+            } else if (attempt == 7) {
+                // last solver attempt: finer input tessellation (long edges relative to the
+                // lattice make the integer stage's edge subdivision fail on some scans)
+                WorkMesh jm;
+                jm.V = job.V;
+                jm.F = job.F;
+                jm.A.resize(job.V.rows(), 0);
+                refine_long_edges(jm, 0.2 * Lqf);
+                job.V = jm.V;
+                job.F = jm.F;
+                job.faces = std::max(budget, 24);
+                job.sharp_he.assign(3 * job.F.rows(), 0);
+                job.cons.dir = MatrixXd::Zero(job.V.rows(), 3);
+                job.cons.w = VectorXd::Zero(job.V.rows());
+                job.cons.pos.assign(job.V.rows(), 0);
+            } else {
+                job.faces = std::max(budget, 24) * (attempt == 5 ? 1 : 4);
+                job.sharp_he.assign(job.sharp_he.size(), 0);
+                job.cons.w.setZero();
+                std::fill(job.cons.pos.begin(), job.cons.pos.end(), 0);
+            }
             auto te0 = Clock::now();
             try {
                 qr = run_quadriflow(job);
             } catch (const std::exception& e) {
                 log("component ", c, ": solver exception ", e.what());
                 qr.ok = false;
+                // an internal inconsistency comes from the hard constraints, not the resolution:
+                // go straight to the unconstrained attempts
+                if (attempt < 4) attempt = 4;
+                if (job.F.rows() > 200000) attempt = 8;  // large scan component: go to the second extractor
             }
             t_extract += secs(te0, Clock::now());
             good = qr.ok && (int)qr.Q.size() >= std::min(4, budget);
@@ -355,6 +416,43 @@ Result quadremesh(const TriMesh& input, const Params& p) {
                 log("component ", c, ": attempt ", attempt, " rejected (faces=", job.faces, " ok=", qr.ok, " quads=",
                     qr.Q.size(), " area ratio=", qa / carea[c], " cover mean/p95=", cov_mean, "/", cov_p95, ")");
         }
+        // second extractor: Instant Meshes (robust on scans / thin parts, more singularities)
+        bool used_im = false;
+        if (!good && job.F.rows() > 0) {
+            std::vector<double> iv(3 * job.V.rows());
+            std::vector<int> ifc(3 * job.F.rows());
+            for (int i = 0; i < job.V.rows(); ++i)
+                for (int k = 0; k < 3; ++k) iv[3 * i + k] = job.V(i, k);
+            for (int f = 0; f < job.F.rows(); ++f)
+                for (int k = 0; k < 3; ++k) ifc[3 * f + k] = job.F(f, k);
+            for (int im_try = 0; im_try < 3 && !good; ++im_try) {
+            int im_faces = std::max(budget, 16) * (im_try == 0 ? 1 : (im_try == 1 ? 4 : 16));
+            if (im_try > 0 && im_faces > (int)job.F.rows() / 2) break;
+            auto te0 = Clock::now();
+            IMResult ir = run_instant_meshes(iv, ifc, im_faces, p.feature_angle, boundary_hard);
+            t_extract += secs(te0, Clock::now());
+            if (ir.ok) {
+                QFResult alt;
+                alt.V.resize(ir.V.size() / 3, 3);
+                for (int i = 0; i < alt.V.rows(); ++i)
+                    for (int k = 0; k < 3; ++k) alt.V(i, k) = ir.V[3 * i + k];
+                alt.Q = ir.Q;
+                double cm = 0, c95 = 0;
+                coverage_distance(job.V, job.F, alt.V, alt.Q, cm, c95);
+                if (cm < 0.25 * Lqf && c95 < 1.0 * Lqf) {
+                    qr = alt;
+                    qr.ok = true;
+                    good = true;
+                    used_im = true;
+                    R.components_im++;
+                    log("component ", c, ": solved by the Instant Meshes extractor (", qr.Q.size(), " quads)");
+                } else {
+                    log("component ", c, ": Instant Meshes extractor rejected (cover mean/p95=", cm, "/", c95, ")");
+                }
+            }
+            }
+        }
+        (void)used_im;
         int base = (int)outV.size();
         if (good) {
             for (int i = 0; i < qr.V.rows(); ++i) outV.push_back(qr.V.row(i));
@@ -366,14 +464,48 @@ Result quadremesh(const TriMesh& input, const Params& p) {
         } else {
             MatrixXd OV;
             std::vector<std::array<int, 4>> OQ;
-            tri_to_quads(job.V, job.F, OV, OQ);
+            // last resort on the *unrefined* faces of this component (3 quads per triangle)
+            std::vector<int> pmap(prepV.rows(), -1);
+            std::vector<std::array<int, 3>> pf;
+            MatrixXd PVc;
+            std::vector<int> pv;
+            for (int f = 0; f < prepF.rows(); ++f) {
+                if (vmap[prepF(f, 0)] < 0) continue;  // vertex of another component
+                std::array<int, 3> t;
+                for (int j = 0; j < 3; ++j) {
+                    int v = prepF(f, j);
+                    if (pmap[v] < 0) { pmap[v] = (int)pv.size(); pv.push_back(v); }
+                    t[j] = pmap[v];
+                }
+                pf.push_back(t);
+            }
+            MatrixXd PV(pv.size(), 3);
+            for (size_t i = 0; i < pv.size(); ++i) PV.row(i) = prepV.row(pv[i]);
+            MatrixXi PF(pf.size(), 3);
+            for (size_t i = 0; i < pf.size(); ++i) PF.row(i) << pf[i][0], pf[i][1], pf[i][2];
+            // pair triangles into quads (best shape first), then split every face into quads:
+            // conforming, exact geometry, much better shaped than splitting each triangle
+            {
+                const MatrixXd& BV = (PF.rows() > 0 && PF.rows() < job.F.rows()) ? PV : job.V;
+                const MatrixXi& BF = (PF.rows() > 0 && PF.rows() < job.F.rows()) ? PF : job.F;
+                QuadMesh fm;
+                fm.V = BV;
+                fm.Q.resize(BF.rows(), 4);
+                for (int f = 0; f < BF.rows(); ++f) fm.Q.row(f) << BF(f, 0), BF(f, 1), BF(f, 2), -1;
+                PostStats tmp;
+                merge_triangle_pairs(fm, tmp, 0.2);
+                split_to_pure_quads(fm);
+                OV = fm.V;
+                OQ.clear();
+                for (int f = 0; f < fm.Q.rows(); ++f) OQ.push_back({fm.Q(f, 0), fm.Q(f, 1), fm.Q(f, 2), fm.Q(f, 3)});
+            }
             for (int i = 0; i < OV.rows(); ++i) outV.push_back(OV.row(i));
             for (auto q : OQ) outQ.push_back({q[0] + base, q[1] + base, q[2] + base, q[3] + base});
             R.components_fallback++;
             log("component ", c, ": fallback tri->quad split (", fl.size(), " tris, budget ", budget, ")");
         }
     }
-    log("solver: components=", nc, " fallback=", R.components_fallback, " field singularities=", total_sing,
+    log("solver: components=", nc, " below-resolution parts skipped=", skipped_small, " instant-meshes=", R.components_im, " fallback=", R.components_fallback, " field singularities=", total_sing,
         " raw quads=", outQ.size());
     auto t3 = Clock::now();
 

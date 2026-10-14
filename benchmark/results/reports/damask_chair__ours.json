@@ -1,0 +1,97 @@
+{
+"method": "ours",
+"faces": {
+  "total": 11256,
+  "quads": 11256,
+  "triangles": 0,
+  "vertices": 11361,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 2.2512
+},
+"quality": {
+  "scaled_jacobian": {
+    "mean": 0.902475,
+    "min": -0.743409,
+    "p05": 0.385326,
+    "median": 0.997582,
+    "p95": 0.999997,
+    "max": 1,
+    "std": 0.20427
+  },
+  "scaled_jacobian_quads": {
+    "mean": 0.902475,
+    "min": -0.743409,
+    "p05": 0.385326,
+    "median": 0.997582,
+    "p95": 0.999997,
+    "max": 1,
+    "std": 0.20427
+  },
+  "frac_sj_below_0.5": 0.0754264,
+  "inverted_or_degenerate": 30,
+  "planarity": {
+    "mean": 0.0148617,
+    "min": 0,
+    "p05": 2.1055e-07,
+    "median": 0.000161881,
+    "p95": 0.0911883,
+    "max": 0.447904,
+    "std": 0.0356976
+  },
+  "aspect_ratio": {
+    "mean": 1.7813,
+    "min": 1.00311,
+    "p05": 1.05314,
+    "median": 1.49105,
+    "p95": 3.37224,
+    "max": 94.0619,
+    "std": 2.05023
+  },
+  "edge_length_rel": {
+    "mean": 1,
+    "min": 0.00569227,
+    "p05": 0.245222,
+    "median": 0.445125,
+    "p95": 2.49595,
+    "max": 5.55907,
+    "std": 0.854795
+  },
+  "edge_length_mean_pct_diag": 0.828821
+},
+"topology": {
+  "singularities": 296,
+  "boundary_irregular": 52,
+  "singularities_per_1k_faces": 26.2971,
+  "interior_vertices": 11191,
+  "boundary_vertices": 170,
+  "boundary_edges": 170,
+  "nonmanifold_edges": 0,
+  "components": 22,
+  "valence_histogram": {
+    "3": 217,
+    "4": 10895,
+    "5": 79
+  }
+},
+"distance": {
+  "mean_pct": 0.0536461,
+  "out_to_in_mean_pct": 0.0516275,
+  "in_to_out_mean_pct": 0.0556647,
+  "rms_pct": 0.103118,
+  "hausdorff_pct": 1.00572,
+  "area_ratio": 0.972836
+},
+"features": {
+  "feature_coverage": 0.842747,
+  "boundary_coverage": 0.747479,
+  "combined_coverage": 0.835946,
+  "feature_length_pct_diag": 6063.14,
+  "boundary_length_pct_diag": 466.079,
+  "feature_segments": 4616,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+},
+"runtime_s": 13.683,
+"input_faces": 39936
+}

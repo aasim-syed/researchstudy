@@ -1,5 +1,27 @@
 {
  "per_method": {
+  "ours": {
+   "models": 13,
+   "succeeded": 13,
+   "quad_ratio": 1.0,
+   "sj_mean": 0.9055418461538461,
+   "dist_mean_pct": 0.048946407692307695,
+   "feature_coverage": 0.6147195384615385,
+   "singularities": 1675.6153846153845,
+   "sing_per_1k": 53.82631615384616,
+   "runtime_s": 9.460615384615384
+  },
+  "ours_learned": {
+   "models": 13,
+   "succeeded": 13,
+   "quad_ratio": 1.0,
+   "sj_mean": 0.9137162307692308,
+   "dist_mean_pct": 0.04919902384615385,
+   "feature_coverage": 0.6203323076923077,
+   "singularities": 1674.6923076923076,
+   "sing_per_1k": 54.48736384615385,
+   "runtime_s": 13.141384615384615
+  },
   "instant_meshes": {
    "models": 15,
    "succeeded": 15,
@@ -34,5 +56,14 @@
    "runtime_s": 7.126625
   }
  },
- "success_criteria": {}
+ "success_criteria": {
+  "quad_ratio>=0.98": true,
+  "mean_scaled_jacobian>=0.8": true,
+  "mean_distance<0.5%": true,
+  "feature_coverage>=0.9": false,
+  "fewer_singularities_than_instant_meshes": true,
+  "fewer_singularities_models": "13/13",
+  "singularities_ours_total": 21783,
+  "singularities_im_total": 3603
+ }
 }

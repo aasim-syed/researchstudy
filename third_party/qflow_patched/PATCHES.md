@@ -26,3 +26,7 @@ constraints, guidance strokes) are injected through the existing `mCQ/mCQw/mCO/m
 7. `qflow_quiet.hpp` also maps QuadriFlow's internal `exit()` calls (consistency asserts in
    subdivision / flip fixing / integer solve) to C++ exceptions; the driver catches them and
    retries the component at another resolution or falls back.
+8. `parametrizer-mesh.cpp` - `FixValence` loops are bounded (it could spin forever on some
+   non-manifold boundary configurations of large scans).
+9. `parametrizer-flip.cpp` - `FixHoles` boundary walks are bounded (infinite loop on non-manifold quad fans).
+10. `subdivide.cpp` - unbounded rotation search in `subdivide_edgeDiff` (spins forever on inconsistent data) now raises.

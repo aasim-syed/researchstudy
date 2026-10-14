@@ -148,15 +148,19 @@ void Parametrizer::FixHoles() {
         std::vector<int> loop_edges;
         int current_e = i;
 
-        while (detected_boundary[current_e] == 0) {
+        bool walk_ok = true;  // quadremesh patch: bounded walks (non-manifold fans can cycle)
+        while (detected_boundary[current_e] == 0 && walk_ok) {
             detected_boundary[current_e] = 1;
             loop_edges.push_back(current_e);
             current_e = current_e / 4 * 4 + (current_e + 1) % 4;
+            int guard = 0;
             while (E2E_compact[current_e] != -1) {
                 current_e = E2E_compact[current_e];
                 current_e = current_e / 4 * 4 + (current_e + 1) % 4;
+                if (++guard > 64) { walk_ok = false; break; }
             }
         }
+        if (!walk_ok) continue;
         std::vector<int> loop_vertices(loop_edges.size());
         for (int j = 0; j < loop_edges.size(); ++j) {
             loop_vertices[j] = F_compact[loop_edges[j] / 4][loop_edges[j] % 4];

@@ -111,7 +111,7 @@ FeatureSet detect_features(const MatrixXd& V, const MatrixXi& F, double angle_de
                 std::vector<int> queue = {f0};
                 stamp[f0] = tag;
                 Vector3d acc = Vector3d::Zero();
-                for (size_t qi = 0; qi < queue.size() && qi < 300; ++qi) {
+                for (size_t qi = 0; qi < queue.size() && qi < 2500; ++qi) {
                     int f = queue[qi];
                     acc += fn[f] * face_area(V, F, f);
                     for (int j = 0; j < 3; ++j) {

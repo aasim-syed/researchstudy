@@ -389,7 +389,8 @@ void subdivide_edgeDiff(MatrixXi &F, MatrixXd &V, MatrixXd &N, MatrixXd &Q, Matr
             
             auto Dsp1 = diffs[e1 / 3 * 3 + (e1 + 2) % 3];
             int orient = 0;
-            while (rshift90(D01, orient) != Ds10) orient += 1;
+            while (orient < 4 && rshift90(D01, orient) != Ds10) orient += 1;  // quadremesh patch: bounded
+            if (orient == 4) exit(0);  // -> exception (inconsistent edge data)
             Vector2i Dsn0 = rshift90(D0n, orient);
             
             F.col(f1) << vn, v0, v1p;

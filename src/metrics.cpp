@@ -282,7 +282,7 @@ std::string evaluate(const TriMesh& input, const QuadMesh& out, const EvalParams
 
     // ---------------------------------------------------------- feature coverage
     {
-        FeatureSet fs = detect_features(clean.V, clean.F, ep.feature_angle, ep.min_feature_length * L, 0.3 * L);
+        FeatureSet fs = detect_features(clean.V, clean.F, ep.feature_angle, ep.min_feature_length * L, 1.0 * L);
         // output edge segments
         std::vector<std::pair<int, int>> oe;
         for (auto& kv : ecount) oe.push_back(kv.first);

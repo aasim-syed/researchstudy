@@ -5,6 +5,7 @@
 #include <cmath>
 #include <map>
 #include <queue>
+#include <set>
 #include <unordered_map>
 
 #include "quadremesh/geometry.h"
@@ -83,56 +84,7 @@ void compact_vertices(WorkMesh& m) {
     if (!m.vtag.empty()) m.vtag = tag2;
 }
 
-WorkMesh preprocess(const MatrixXd& V, const MatrixXi& F, const MatrixXd& A, const Params& p, PrepStats& st) {
-    WorkMesh m;
-    const double diag = std::max(bbox_diagonal(V), 1e-12);
-    // ---------------------------------------------------------------- 1. weld
-    int nu = 0;
-    std::vector<int> remap = weld(V, 1e-7 * diag, nu);
-    st.welded = (int)V.rows() - nu;
-    m.V.resize(nu, 3);
-    m.A.resize(nu, A.cols());
-    std::vector<int> cnt(nu, 0);
-    m.A.setZero();
-    for (int i = 0; i < V.rows(); ++i) {
-        if (cnt[remap[i]] == 0) m.V.row(remap[i]) = V.row(i);
-        if (A.cols()) m.A.row(remap[i]) += A.row(i);
-        cnt[remap[i]]++;
-    }
-    if (A.cols())
-        for (int i = 0; i < nu; ++i) m.A.row(i) /= std::max(cnt[i], 1);
-
-    // ---------------------------------------------------------------- 2. degenerate + duplicates
-    std::vector<std::array<int, 3>> faces;
-    faces.reserve(F.rows());
-    const double area_eps = 1e-14 * diag * diag;
-    for (int f = 0; f < F.rows(); ++f) {
-        std::array<int, 3> t = {remap[F(f, 0)], remap[F(f, 1)], remap[F(f, 2)]};
-        if (t[0] == t[1] || t[1] == t[2] || t[0] == t[2]) { st.degenerate++; continue; }
-        Vector3d a = m.V.row(t[0]), b = m.V.row(t[1]), c = m.V.row(t[2]);
-        if ((b - a).cross(c - a).norm() * 0.5 < area_eps) { st.degenerate++; continue; }
-        faces.push_back(t);
-    }
-    {
-        std::vector<std::pair<std::array<int, 3>, int>> keys;
-        keys.reserve(faces.size());
-        for (int f = 0; f < (int)faces.size(); ++f) {
-            auto k = faces[f];
-            std::sort(k.begin(), k.end());
-            keys.push_back({k, f});
-        }
-        std::sort(keys.begin(), keys.end());
-        std::vector<char> keep(faces.size(), 1);
-        for (size_t i = 1; i < keys.size(); ++i)
-            if (keys[i].first == keys[i - 1].first) { keep[keys[i].second] = 0; st.duplicate++; }
-        std::vector<std::array<int, 3>> f2;
-        for (size_t f = 0; f < faces.size(); ++f)
-            if (keep[f]) f2.push_back(faces[f]);
-        faces.swap(f2);
-    }
-    rebuild(m, faces);
-    compact_vertices(m);
-
+void repair_manifold(WorkMesh& m, PrepStats& st) {
     // ---------------------------------------------------------------- 3. non-manifold edges + orientation
     // Decide which face pairs are "glued" across each edge.
     const int nf = (int)m.F.rows();
@@ -272,18 +224,74 @@ WorkMesh preprocess(const MatrixXd& V, const MatrixXi& F, const MatrixXd& A, con
         m.F = F2;
     }
 
+}
+
+WorkMesh preprocess(const MatrixXd& V, const MatrixXi& F, const MatrixXd& A, const Params& p, PrepStats& st) {
+    WorkMesh m;
+    const double diag = std::max(bbox_diagonal(V), 1e-12);
+    // ---------------------------------------------------------------- 1. weld
+    int nu = 0;
+    std::vector<int> remap = weld(V, 1e-7 * diag, nu);
+    st.welded = (int)V.rows() - nu;
+    m.V.resize(nu, 3);
+    m.A.resize(nu, A.cols());
+    std::vector<int> cnt(nu, 0);
+    m.A.setZero();
+    for (int i = 0; i < V.rows(); ++i) {
+        if (cnt[remap[i]] == 0) m.V.row(remap[i]) = V.row(i);
+        if (A.cols()) m.A.row(remap[i]) += A.row(i);
+        cnt[remap[i]]++;
+    }
+    if (A.cols())
+        for (int i = 0; i < nu; ++i) m.A.row(i) /= std::max(cnt[i], 1);
+
+    // ---------------------------------------------------------------- 2. degenerate + duplicates
+    std::vector<std::array<int, 3>> faces;
+    faces.reserve(F.rows());
+    const double area_eps = 1e-14 * diag * diag;
+    for (int f = 0; f < F.rows(); ++f) {
+        std::array<int, 3> t = {remap[F(f, 0)], remap[F(f, 1)], remap[F(f, 2)]};
+        if (t[0] == t[1] || t[1] == t[2] || t[0] == t[2]) { st.degenerate++; continue; }
+        Vector3d a = m.V.row(t[0]), b = m.V.row(t[1]), c = m.V.row(t[2]);
+        if ((b - a).cross(c - a).norm() * 0.5 < area_eps) { st.degenerate++; continue; }
+        faces.push_back(t);
+    }
+    {
+        std::vector<std::pair<std::array<int, 3>, int>> keys;
+        keys.reserve(faces.size());
+        for (int f = 0; f < (int)faces.size(); ++f) {
+            auto k = faces[f];
+            std::sort(k.begin(), k.end());
+            keys.push_back({k, f});
+        }
+        std::sort(keys.begin(), keys.end());
+        std::vector<char> keep(faces.size(), 1);
+        for (size_t i = 1; i < keys.size(); ++i)
+            if (keys[i].first == keys[i - 1].first) { keep[keys[i].second] = 0; st.duplicate++; }
+        std::vector<std::array<int, 3>> f2;
+        for (size_t f = 0; f < faces.size(); ++f)
+            if (keep[f]) f2.push_back(faces[f]);
+        faces.swap(f2);
+    }
+    rebuild(m, faces);
+    compact_vertices(m);
+
+    repair_manifold(m, st);
+
     // ---------------------------------------------------------------- 5. fill small holes
     {
         EdgeTopology t2;
         t2.build(m.F);
         // boundary half-edges: next vertex map
         std::unordered_map<int, int> nextv;
+        std::set<int> ambiguous;
         std::vector<int> bstart;
         for (size_t e = 0; e < t2.ev.size(); ++e)
             if (t2.ehe[e].size() == 1) {
                 int h = t2.ehe[e][0];
                 int a = m.F(h / 3, h % 3), b = m.F(h / 3, (h % 3 + 1) % 3);
                 // hole loop runs opposite to the face orientation
+                if (nextv.count(b)) ambiguous.insert(b);
                 nextv[b] = a;
                 bstart.push_back(b);
             }
@@ -301,6 +309,7 @@ WorkMesh preprocess(const MatrixXd& V, const MatrixXi& F, const MatrixXd& A, con
             bool ok = true;
             while (!visited.count(v)) {
                 visited[v] = 1;
+                if (ambiguous.count(v)) { ok = false; break; }
                 loop.push_back(v);
                 auto it = nextv.find(v);
                 if (it == nextv.end()) { ok = false; break; }
@@ -347,6 +356,9 @@ WorkMesh preprocess(const MatrixXd& V, const MatrixXi& F, const MatrixXd& A, con
             m.F = F2;
         }
     }
+
+    // hole filling can touch non-manifold boundary vertices: repair again
+    repair_manifold(m, st);
 
     // ---------------------------------------------------------------- 6. tiny components, outward orientation
     {

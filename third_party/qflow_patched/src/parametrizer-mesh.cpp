@@ -330,7 +330,7 @@ void Parametrizer::ComputeVertexArea() {
 void Parametrizer::FixValence()
 {
     // Remove Valence 2
-    while (true) {
+    for (int fv_pass = 0; fv_pass < 64; ++fv_pass) {  // quadremesh patch: bounded
         bool update = false;
         std::vector<int> marks(V2E_compact.size(), 0);
         std::vector<int> erasedF(F_compact.size(), 0);
@@ -340,11 +340,12 @@ void Parametrizer::FixValence()
                 continue;
             int deid = deid0;
             std::vector<int> dedges;
+            int fv_steps1 = 0;
             do {
                 dedges.push_back(deid);
                 int deid1 = deid / 4 * 4 + (deid + 3) % 4;
                 deid = E2E_compact[deid1];
-            } while (deid != deid0 && deid != -1);
+            } while (deid != deid0 && deid != -1 && ++fv_steps1 < 100000);
             if (dedges.size() == 2) {
                 int v1 = F_compact[dedges[0]/4][(dedges[0] + 1)%4];
                 int v2 = F_compact[dedges[0]/4][(dedges[0] + 2)%4];
@@ -394,14 +395,15 @@ void Parametrizer::FixValence()
             if (groups.count(deid))
                 continue;
             int deid0 = deid;
+            int fv_steps2 = 0;
             do {
                 groups[deid] = group_id;
                 deid = deid / 4 * 4 + (deid + 3) % 4;
                 deid = E2E_compact[deid];
-            } while (deid != deid0 && deid != -1);
+            } while (deid != deid0 && deid != -1 && ++fv_steps2 < 100000);
             if (deid == -1) {
                 deid = deid0;
-                while (E2E_compact[deid] != -1) {
+                for (int fv_guard = 0; E2E_compact[deid] != -1 && fv_guard < 100000; ++fv_guard) {  // quadremesh patch
                     deid = E2E_compact[deid];
                     deid = deid / 4 * 4 + (deid + 1) % 4;
                     groups[deid] = group_id;
@@ -427,7 +429,7 @@ void Parametrizer::FixValence()
                               nonManifold_compact);
     
     // Decrease Valence
-    while (true) {
+    for (int fv_pass = 0; fv_pass < 64; ++fv_pass) {  // quadremesh patch: bounded
         bool update = false;
         std::vector<int> marks(V2E_compact.size(), 0);
         std::vector<int> valences(V2E_compact.size(), 0);
@@ -437,6 +439,7 @@ void Parametrizer::FixValence()
                 continue;
             int deid = deid0;
             int count = 0;
+            int fv_steps3 = 0;
             do {
                 count += 1;
                 int deid1 = E2E_compact[deid];
@@ -445,7 +448,7 @@ void Parametrizer::FixValence()
                     break;
                 }
                 deid = deid1 / 4 * 4 + (deid1 + 1) % 4;
-            } while (deid != deid0 && deid != -1);
+            } while (deid != deid0 && deid != -1 && ++fv_steps3 < 100000);
             if (deid == -1)
                 count += 1;
             valences[i] = count;
@@ -466,6 +469,7 @@ void Parametrizer::FixValence()
             int deid = deid0;
             std::vector<int> loop_vertices, loop_dedges;;
             bool marked = false;
+            int fv_steps4 = 0;
             do {
                 int v = F_compact[deid/4][(deid+1)%4];
                 loop_dedges.push_back(deid);
@@ -476,7 +480,7 @@ void Parametrizer::FixValence()
                 if (deid1 == -1)
                     break;
                 deid = deid1 / 4 * 4 + (deid1 + 1) % 4;
-            } while (deid != deid0 && deid != -1);
+            } while (deid != deid0 && deid != -1 && ++fv_steps4 < 100000);
             if (marked)
                 continue;
 
@@ -565,6 +569,7 @@ void Parametrizer::FixValence()
             if (deid0 == -1)
                 continue;
             int deid = deid0;
+            int fv_steps5 = 0;
             do {
                 masks[deid] = 1;
                 deid = E2E_compact[deid];
@@ -572,7 +577,7 @@ void Parametrizer::FixValence()
                     break;
                 }
                 deid = deid / 4 * 4 + (deid + 1) % 4;
-            } while (deid != deid0 && deid != -1);
+            } while (deid != deid0 && deid != -1 && ++fv_steps5 < 100000);
         }
         std::vector<std::vector<int> > v_dedges(V2E_compact.size());
         for (int i = 0; i < F_compact.size(); ++i) {
@@ -588,13 +593,14 @@ void Parametrizer::FixValence()
             continue;
         int deid = deid0;
         int count = 0;
+        int fv_steps6 = 0;
         do {
             count += 1;
             int deid1 = E2E_compact[deid];
             if (deid1 == -1)
                 break;
             deid = deid1 / 4 * 4 + (deid1 + 1) % 4;
-        } while (deid != deid0 && deid != -1);
+        } while (deid != deid0 && deid != -1 && ++fv_steps6 < 100000);
         if (pts.count(count) == 0)
             pts[count] = 1;
         else

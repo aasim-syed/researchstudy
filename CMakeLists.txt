@@ -29,12 +29,31 @@ target_include_directories(qflow PUBLIC ${QF}/src ${QF}/3rd/pcg32 ${QF}/3rd/pss 
 target_compile_options(qflow PRIVATE -w -include ${QF}/src/qflow_quiet.hpp)
 target_link_libraries(qflow PUBLIC lemon)
 
+# ---------------------------------------------------------------- Instant Meshes core (fallback extractor)
+set(IM ${TP}/instant-meshes)
+set(TBB_BUILD_SHARED OFF CACHE BOOL "" FORCE)
+set(TBB_BUILD_TBBMALLOC OFF CACHE BOOL "" FORCE)
+set(TBB_BUILD_TBBMALLOC_PROXY OFF CACHE BOOL "" FORCE)
+set(TBB_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(TBB_INSTALL_TARGETS OFF CACHE BOOL "" FORCE)
+add_subdirectory(${IM}/ext/tbb ${CMAKE_BINARY_DIR}/tbb EXCLUDE_FROM_ALL)
+set_target_properties(tbb_static PROPERTIES POSITION_INDEPENDENT_CODE ON)
+add_library(imcore STATIC
+  ${IM}/src/adjacency.cpp ${IM}/src/bvh.cpp ${IM}/src/dedge.cpp ${IM}/src/extract.cpp ${IM}/src/field.cpp
+  ${IM}/src/hierarchy.cpp ${IM}/src/meshstats.cpp ${IM}/src/normal.cpp ${IM}/src/subdivide.cpp
+  ${IM}/src/serializer.cpp ${IM}/src/smoothcurve.cpp ${IM}/src/cleanup.cpp ${IM}/src/reorder.cpp
+  ${IM}/src/meshio.cpp ${IM}/ext/rply/rply.c)
+target_include_directories(imcore PUBLIC ${IM}/src ${IM}/ext/pcg32 ${IM}/ext/dset ${IM}/ext/pss ${IM}/ext/tbb/include
+                                         ${IM}/ext/half ${IM}/ext/rply ${EIGEN_DIR})
+target_compile_options(imcore PRIVATE -w $<$<COMPILE_LANGUAGE:CXX>:-include ${IM}/im_compat.h>)
+target_link_libraries(imcore PUBLIC tbb_static pthread)
+
 # ---------------------------------------------------------------- core
 add_library(quadremesh_core STATIC
   src/io.cpp src/geometry.cpp src/preprocess.cpp src/features.cpp src/field.cpp
-  src/qflow_driver.cpp src/postprocess.cpp src/transfer.cpp src/metrics.cpp src/remesh.cpp)
+  src/qflow_driver.cpp src/im_driver.cpp src/postprocess.cpp src/transfer.cpp src/metrics.cpp src/remesh.cpp)
 target_include_directories(quadremesh_core PUBLIC include ${EIGEN_DIR} PRIVATE src ${LIBIGL_DIR}/include ${TP}/cgltf)
-target_link_libraries(quadremesh_core PUBLIC qflow)
+target_link_libraries(quadremesh_core PUBLIC qflow imcore)
 target_compile_options(quadremesh_core PRIVATE -Wall -Wno-sign-compare -Wno-unused-variable -Wno-int-in-bool-context -Wno-maybe-uninitialized)
 
 add_executable(quadremesh apps/quadremesh_cli.cpp)
