@@ -1,0 +1,152 @@
+[
+ {
+  "name": "bunny",
+  "file": "models/bunny.obj",
+  "category": "organic scan",
+  "notes": "range scan, open boundaries (holes at base)",
+  "source": "stanford-bunny.obj",
+  "source_faces": 69451,
+  "faces": 69451,
+  "vertices": 34834
+ },
+ {
+  "name": "fandisk",
+  "file": "models/fandisk.obj",
+  "category": "CAD",
+  "notes": "sharp features, corners",
+  "source": "fandisk.obj",
+  "source_faces": 12946,
+  "faces": 12946,
+  "vertices": 6475
+ },
+ {
+  "name": "fandisk_noisy",
+  "file": "models/fandisk_noisy.obj",
+  "category": "robustness",
+  "notes": "fandisk + 0.15% noise, 4 holes, non-manifold fin",
+  "source": "fandisk.obj",
+  "source_faces": 12946,
+  "faces": 12925,
+  "vertices": 6476
+ },
+ {
+  "name": "rocker_arm",
+  "file": "models/rocker_arm.obj",
+  "category": "CAD",
+  "notes": "genus-1 mechanical part, sharp+smooth",
+  "source": "rocker-arm.obj",
+  "source_faces": 20088,
+  "faces": 20088,
+  "vertices": 10044
+ },
+ {
+  "name": "armadillo",
+  "file": "models/armadillo.obj",
+  "category": "organic",
+  "notes": "high-frequency detail",
+  "source": "armadillo.obj",
+  "source_faces": 99976,
+  "faces": 99976,
+  "vertices": 49990
+ },
+ {
+  "name": "spot",
+  "file": "models/spot.obj",
+  "category": "organic",
+  "notes": "smooth, has source UVs (attribute transfer test)",
+  "source": "spot.obj",
+  "source_faces": 5856,
+  "faces": 23424,
+  "vertices": 12297
+ },
+ {
+  "name": "beetle",
+  "file": "models/beetle.obj",
+  "category": "CAD/vehicle",
+  "notes": "car body, sharp creases, non-watertight",
+  "source": "beetle.obj",
+  "source_faces": 2053,
+  "faces": 32848,
+  "vertices": 17301
+ },
+ {
+  "name": "nefertiti",
+  "file": "models/nefertiti.obj",
+  "category": "photogrammetry scan",
+  "notes": "dense scan",
+  "source": "nefertiti.obj",
+  "source_faces": 99938,
+  "faces": 99938,
+  "vertices": 49971
+ },
+ {
+  "name": "igea",
+  "file": "models/igea.obj",
+  "category": "scan",
+  "notes": "dense scan, 269K faces",
+  "source": "igea.obj",
+  "source_faces": 268686,
+  "faces": 268686,
+  "vertices": 134345
+ },
+ {
+  "name": "sheen_chair",
+  "file": "models/sheen_chair.obj",
+  "category": "furniture",
+  "notes": "multi-component chair, UVs",
+  "source": "SheenChair.glb",
+  "source_faces": 39936,
+  "faces": 39936,
+  "vertices": 22459
+ },
+ {
+  "name": "damask_chair",
+  "file": "models/damask_chair.obj",
+  "category": "furniture",
+  "notes": "73 components, thin parts",
+  "source": "ChairDamaskPurplegold.glb",
+  "source_faces": 9984,
+  "faces": 39936,
+  "vertices": 22463
+ },
+ {
+  "name": "velvet_sofa",
+  "file": "models/velvet_sofa.obj",
+  "category": "furniture",
+  "notes": "sofa, open parts",
+  "source": "GlamVelvetSofa.glb",
+  "source_faces": 4196,
+  "faces": 16784,
+  "vertices": 10372
+ },
+ {
+  "name": "leather_sofa",
+  "file": "models/leather_sofa.obj",
+  "category": "furniture",
+  "notes": "sofa with wooden frame",
+  "source": "SheenWoodLeatherSofa.glb",
+  "source_faces": 46492,
+  "faces": 46492,
+  "vertices": 139476
+ },
+ {
+  "name": "fountain_scan",
+  "file": "models/fountain_scan.obj",
+  "category": "scene scan",
+  "notes": "RGB-D fused scene, ~1M faces, noisy, open, many components",
+  "source": "integrated.ply",
+  "source_faces": 1033745,
+  "faces": 1033745,
+  "vertices": 536872
+ },
+ {
+  "name": "lounge_room",
+  "file": "models/lounge_room.obj",
+  "category": "room-scale scan",
+  "notes": "Lounge RGB-D sequence fused with TSDF + marching cubes",
+  "source": "LoungeRGBDImages",
+  "source_faces": 999999,
+  "faces": 999999,
+  "vertices": 533447
+ }
+]

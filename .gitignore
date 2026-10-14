@@ -1,0 +1,12 @@
+build/
+third_party/eigen/
+third_party/libigl/
+third_party/pybind11/
+third_party/cgltf/
+third_party/QuadriFlow/
+data/raw/
+data/models/
+data/train/
+benchmark/results/meshes/
+*.so
+__pycache__/
