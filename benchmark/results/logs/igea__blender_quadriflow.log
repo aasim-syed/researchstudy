@@ -1,0 +1,5 @@
+/home/claude/bpyenv/bin/python /home/claude/quadremesh/benchmark/blender_quadriflow.py /home/claude/quadremesh/data/models/igea.obj benchmark/results/meshes/igea__blender_quadriflow.obj 5000
+OBJ import of 'igea.obj' took 180.78 ms
+Info: Removed 0 vertices
+Warning: QuadriFlow: The mesh needs to be manifold and have face normals that point in a consistent direction
+QUADRIFLOW_FAILED {'CANCELLED'}

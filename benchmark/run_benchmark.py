@@ -25,6 +25,15 @@ QF_CLI = os.environ.get("QF_CLI", os.path.join(ROOT, "third_party/QuadriFlow/bui
 BLENDER_PY = os.environ.get("BLENDER_PY", "/home/claude/bpyenv/bin/python")
 FEATURE_ANGLE = 35.0
 
+OURS_LEARNED_SNIPPET = r"""
+import sys
+sys.path.insert(0, %r)
+from quadremesh import quadremesh
+src, dst, target, angle = sys.argv[1], sys.argv[2], int(sys.argv[3]), float(sys.argv[4])
+quadremesh(src, target_faces=target, feature_angle=angle, learned_field=True, output=dst, report=False,
+           transfer_uv=False)
+""" % os.path.join(ROOT, "python")
+
 IM_SNIPPET = r"""
 import sys, numpy as np, trimesh, pynanoinstantmeshes as p
 src, dst, target, angle = sys.argv[1], sys.argv[2], int(sys.argv[3]), float(sys.argv[4])
@@ -61,6 +70,8 @@ def run(cmd, timeout, log):
 def method_cmd(method, src, dst, target):
     if method == "ours":
         return [QUADREMESH, src, "-o", dst, "-f", str(target), "-a", str(FEATURE_ANGLE), "--no-uv"]
+    if method == "ours_learned":
+        return [sys.executable, "-c", OURS_LEARNED_SNIPPET, src, dst, str(target), str(FEATURE_ANGLE)]
     if method == "instant_meshes":
         return [sys.executable, "-c", IM_SNIPPET, src, dst, str(target), str(FEATURE_ANGLE)]
     if method == "quadriflow":

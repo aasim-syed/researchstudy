@@ -1,0 +1,5 @@
+/home/claude/bpyenv/bin/python /home/claude/quadremesh/benchmark/blender_quadriflow.py /home/claude/quadremesh/data/models/fandisk_noisy.obj benchmark/results/meshes/fandisk_noisy__blender_quadriflow.obj 5000
+OBJ import of 'fandisk_noisy.obj' took 7.74 ms
+Info: Removed 0 vertices
+Warning: QuadriFlow: The mesh needs to be manifold and have face normals that point in a consistent direction
+QUADRIFLOW_FAILED {'CANCELLED'}

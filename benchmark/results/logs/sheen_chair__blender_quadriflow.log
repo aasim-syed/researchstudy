@@ -1,0 +1,8 @@
+/home/claude/bpyenv/bin/python /home/claude/quadremesh/benchmark/blender_quadriflow.py /home/claude/quadremesh/data/models/sheen_chair.obj benchmark/results/meshes/sheen_chair__blender_quadriflow.obj 5000
+OBJ import of 'sheen_chair.obj' took 48.66 ms
+Info: Removed 2004 vertices
+Info: QuadriFlow: Remeshing completed
+Writing to benchmark/results/meshes/sheen_chair__blender_quadriflow.obj
+OBJ export of 'sheen_chair__blender_quadriflow.obj' took 2.62 ms
+Info: File exported successfully
+faces 4268

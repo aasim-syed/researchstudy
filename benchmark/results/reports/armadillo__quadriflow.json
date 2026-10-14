@@ -1,0 +1,97 @@
+{
+"method": "quadriflow",
+"faces": {
+  "total": 4108,
+  "quads": 4108,
+  "triangles": 0,
+  "vertices": 4110,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.8216
+},
+"quality": {
+  "scaled_jacobian": {
+    "mean": 0.928412,
+    "min": -0.72803,
+    "p05": 0.727324,
+    "median": 0.967094,
+    "p95": 0.997317,
+    "max": 0.999856,
+    "std": 0.108988
+  },
+  "scaled_jacobian_quads": {
+    "mean": 0.928412,
+    "min": -0.72803,
+    "p05": 0.727324,
+    "median": 0.967094,
+    "p95": 0.997317,
+    "max": 0.999856,
+    "std": 0.108988
+  },
+  "frac_sj_below_0.5": 0.0109542,
+  "inverted_or_degenerate": 3,
+  "planarity": {
+    "mean": 0.039421,
+    "min": 1.69199e-06,
+    "p05": 0.00251532,
+    "median": 0.0275668,
+    "p95": 0.116475,
+    "max": 0.316629,
+    "std": 0.0387832
+  },
+  "aspect_ratio": {
+    "mean": 1.36538,
+    "min": 1.00876,
+    "p05": 1.05354,
+    "median": 1.24896,
+    "p95": 2.06079,
+    "max": 4.66849,
+    "std": 0.370144
+  },
+  "edge_length_rel": {
+    "mean": 1,
+    "min": 0.323062,
+    "p05": 0.709739,
+    "median": 0.955193,
+    "p95": 1.44994,
+    "max": 2.95772,
+    "std": 0.237466
+  },
+  "edge_length_mean_pct_diag": 1.3332
+},
+"topology": {
+  "singularities": 168,
+  "boundary_irregular": 0,
+  "singularities_per_1k_faces": 40.8958,
+  "interior_vertices": 4110,
+  "boundary_vertices": 0,
+  "boundary_edges": 0,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+    "3": 88,
+    "4": 3942,
+    "5": 80
+  }
+},
+"distance": {
+  "mean_pct": 0.092326,
+  "out_to_in_mean_pct": 0.0847627,
+  "in_to_out_mean_pct": 0.0998893,
+  "rms_pct": 0.156711,
+  "hausdorff_pct": 2.65926,
+  "area_ratio": 0.956379
+},
+"features": {
+  "feature_coverage": 0.124304,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.124304,
+  "feature_length_pct_diag": 54.6224,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 198,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+},
+"runtime_s": 5.668,
+"input_faces": 99976
+}

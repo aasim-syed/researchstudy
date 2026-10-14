@@ -1,0 +1,8 @@
+/home/claude/bpyenv/bin/python /home/claude/quadremesh/benchmark/blender_quadriflow.py /home/claude/quadremesh/data/models/rocker_arm.obj benchmark/results/meshes/rocker_arm__blender_quadriflow.obj 5000
+OBJ import of 'rocker_arm.obj' took 13.35 ms
+Info: Removed 0 vertices
+Info: QuadriFlow: Remeshing completed
+Writing to benchmark/results/meshes/rocker_arm__blender_quadriflow.obj
+OBJ export of 'rocker_arm__blender_quadriflow.obj' took 3.09 ms
+Info: File exported successfully
+faces 4735

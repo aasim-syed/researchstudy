@@ -23,3 +23,6 @@ constraints, guidance strokes) are injected through the existing `mCQ/mCQw/mCO/m
 6. `hierarchy.cpp` - `propagateConstraints` summed child weights, so coarse-level weights exceeded 1
    and the blend `(1-w)*field + w*constraint` extrapolated (unstable with soft constraints).
    Weights are now `min(1, max(w0, w1))`.
+7. `qflow_quiet.hpp` also maps QuadriFlow's internal `exit()` calls (consistency asserts in
+   subdivision / flip fixing / integer solve) to C++ exceptions; the driver catches them and
+   retries the component at another resolution or falls back.

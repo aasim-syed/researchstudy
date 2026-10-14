@@ -1,0 +1,8 @@
+/home/claude/bpyenv/bin/python /home/claude/quadremesh/benchmark/blender_quadriflow.py /home/claude/quadremesh/data/models/armadillo.obj benchmark/results/meshes/armadillo__blender_quadriflow.obj 5000
+OBJ import of 'armadillo.obj' took 103.93 ms
+Info: Removed 0 vertices
+Info: QuadriFlow: Remeshing completed
+Writing to benchmark/results/meshes/armadillo__blender_quadriflow.obj
+OBJ export of 'armadillo__blender_quadriflow.obj' took 4.77 ms
+Info: File exported successfully
+faces 4184

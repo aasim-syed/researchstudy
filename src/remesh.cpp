@@ -248,6 +248,25 @@ Result quadremesh(const TriMesh& input, const Params& p) {
         }
         scale = density_to_scale(wm.V, wm.F, d, p.max_density_ratio);
     }
+    // Density is realised by solving the field at the coarse end of the size range and then
+    // refining faces that are larger than the local target (a singularity-free field cannot
+    // carry a non-harmonic density variation, so the integer solve stays uniform).
+    double coarse_factor = 1.0;
+    if (adaptive) {
+        std::vector<std::pair<double, double>> sa;
+        VectorXd Av = VectorXd::Zero(wm.V.rows());
+        for (int f = 0; f < wm.F.rows(); ++f)
+            for (int j = 0; j < 3; ++j) Av[wm.F(f, j)] += face_area(wm.V, wm.F, f) / 3;
+        double at = 0;
+        for (int i = 0; i < wm.V.rows(); ++i) { sa.push_back({scale[i], Av[i]}); at += Av[i]; }
+        std::sort(sa.begin(), sa.end());
+        double acc = 0;
+        for (auto& x : sa) {
+            acc += x.second;
+            if (acc >= 0.85 * at) { coarse_factor = std::max(1.0, x.first); break; }
+        }
+        log("density: scale range ", scale.minCoeff(), "..", scale.maxCoeff(), " coarse factor ", coarse_factor);
+    }
 
     // ---------------------------------------------------------------- per component solve
     std::vector<int> comp;
@@ -291,11 +310,7 @@ Result quadremesh(const TriMesh& input, const Params& p) {
             job.cons.w[i] = cons.w[vlist[i]];
             job.cons.pos[i] = cons.pos[vlist[i]];
         }
-        if (adaptive) {
-            job.scale.resize(vlist.size());
-            for (size_t i = 0; i < vlist.size(); ++i) job.scale[i] = scale[vlist[i]];
-        }
-        int budget = (int)std::lround(qf_total * carea[c] / work_area);
+        int budget = (int)std::lround(qf_total * carea[c] / work_area / (coarse_factor * coarse_factor));
         budget = std::max(budget, p.min_component_faces);
         job.preserve_boundary = boundary_hard;
         job.seed = p.seed;
@@ -373,6 +388,18 @@ Result quadremesh(const TriMesh& input, const Params& p) {
     cleanup(qm, pst);
     merge_triangle_pairs(qm, pst);
     cleanup(qm, pst);
+    if (adaptive) {
+        MatrixXd SV = wm.V;
+        MatrixXi SF = wm.F;
+        MatrixXd SA = scale;
+        auto target = [&](const MatrixXd& P) -> VectorXd {
+            return (transfer_vertex_attributes(SV, SF, SA, P).col(0) * Lqf).eval();
+        };
+        int nref = refine_to_size(qm, target, 3);
+        merge_triangle_pairs(qm, pst);
+        cleanup(qm, pst);
+        log("density refinement: ", nref, " faces split -> ", qm.Q.rows(), " faces");
+    }
     if (p.pure_quad) {
         split_to_pure_quads(qm);
         log("pure-quad split -> ", qm.Q.rows(), " quads");

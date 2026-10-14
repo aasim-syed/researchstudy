@@ -115,19 +115,18 @@ def _load(path):
     return np.asarray(m.vertices, np.float64), np.asarray(m.faces, np.int64)
 
 
-def make_samples(paths, per_mesh=3, max_faces=60000, seed=0):
+def make_samples(paths, per_mesh=3, max_faces=12000, seed=0):
     rng = np.random.default_rng(seed)
     samples = []
     for p in paths:
         V, F = _load(p)
-        if len(F) > max_faces:  # keep training cheap: random face subset is not ok; decimate by skipping
-            import trimesh
-            m = trimesh.Trimesh(V, F, process=False)
-            try:
-                m = m.simplify_quadric_decimation(face_count=max_faces)
-                V, F = np.asarray(m.vertices), np.asarray(m.faces)
-            except Exception:
-                pass
+        if len(F) > max_faces:  # keep training cheap: quadric decimation
+            import pymeshlab
+            ms = pymeshlab.MeshSet()
+            ms.add_mesh(pymeshlab.Mesh(V, F))
+            ms.meshing_decimation_quadric_edge_collapse(targetfacenum=max_faces, preservetopology=True)
+            V = ms.current_mesh().vertex_matrix().astype(np.float64)
+            F = ms.current_mesh().face_matrix().astype(np.int64)
         clean = compute_geometry(V, F)
         zt, wt = target_field(clean)
         Vn = (V - clean.center) / clean.scale
@@ -170,10 +169,10 @@ def train(data_dir, out, epochs=60, lr=3e-3, device="auto", seed=0):
             opt.zero_grad()
             loss.backward()
             opt.step()
-            tot += float(loss)
+            tot += float(loss.detach())
         sched.step()
         hist.append(tot / len(tens))
-        if ep % 10 == 0 or ep == epochs - 1:
+        if ep % 5 == 0 or ep == epochs - 1:
             print(f"epoch {ep:3d} loss {hist[-1]:.4f}", flush=True)
     os.makedirs(os.path.dirname(out), exist_ok=True)
     torch.save(dict(config=cfg, state=model.state_dict(), history=hist), out)
@@ -202,7 +201,8 @@ def evaluate_alignment(paths, checkpoint=None, device="auto", sigma=0.003, seed=
             a = np.abs((a + np.pi) % (2 * np.pi) - np.pi) / 4.0
             m = wt > 0.3
             return float(np.rad2deg(a[m]).mean()) if m.any() else float("nan")
-        rows.append((os.path.basename(p), err(raw), err(z)))
+        coarse = np.where(np.linalg.norm(noisy.cand[:, 3], axis=1, keepdims=True) > 0.5, noisy.cand[:, 3], noisy.cand[:, 2])
+        rows.append((os.path.basename(p), err(raw), err(coarse), err(z)))
     return rows
 
 
@@ -212,7 +212,7 @@ def main():
     t = sub.add_parser("train")
     t.add_argument("--data", default="data/train")
     t.add_argument("--out", default=DEFAULT_CKPT)
-    t.add_argument("--epochs", type=int, default=60)
+    t.add_argument("--epochs", type=int, default=40)
     t.add_argument("--device", default="auto")
     e = sub.add_parser("eval")
     e.add_argument("meshes", nargs="+")
@@ -223,8 +223,9 @@ def main():
         train(a.data, a.out, epochs=a.epochs, device=a.device)
         print(f"training took {time.time() - t0:.0f}s")
     elif a.cmd == "eval":
-        for name, raw, lrn in evaluate_alignment(a.meshes, a.ckpt):
-            print(f"{name:25s} raw-curvature {raw:6.2f} deg   learned {lrn:6.2f} deg")
+        print(f"{'mesh':22s} {'fine curv.':>10s} {'smoothed curv.':>15s} {'learned':>8s}   (mean 4-RoSy angle error, deg)")
+        for name, raw, coarse, lrn in evaluate_alignment(a.meshes, a.ckpt):
+            print(f"{name:22s} {raw:10.2f} {coarse:15.2f} {lrn:8.2f}")
 
 
 if __name__ == "__main__":

@@ -20,7 +20,7 @@ static void usage() {
         "  -e, --edge-length X      target edge length in input units (overrides --faces)\n"
         "features / structure:\n"
         "  -a, --feature-angle DEG  sharp-feature dihedral threshold (default 35, 0 = off)\n"
-        "  --min-feature-length K   drop feature chains shorter than K x edge length (1.5)\n"
+        "  --min-feature-length K   drop feature chains shorter than K x edge length (3.0)\n"
         "  --no-boundary            do not constrain open boundaries\n"
         "  --curvature-weight W     principal-curvature alignment strength 0..1 (0.35)\n"
         "  --strokes FILE           guidance polylines: 'x y z' per line, blank line between strokes\n"

@@ -1,0 +1,5 @@
+/home/claude/bpyenv/bin/python /home/claude/quadremesh/benchmark/blender_quadriflow.py /home/claude/quadremesh/data/models/leather_sofa.obj benchmark/results/meshes/leather_sofa__blender_quadriflow.obj 5000
+OBJ import of 'leather_sofa.obj' took 78.24 ms
+Info: Removed 119808 vertices
+Warning: QuadriFlow: The mesh needs to be manifold and have face normals that point in a consistent direction
+QUADRIFLOW_FAILED {'CANCELLED'}

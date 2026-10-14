@@ -1,0 +1,38 @@
+{
+ "per_method": {
+  "instant_meshes": {
+   "models": 15,
+   "succeeded": 15,
+   "quad_ratio": 1.0,
+   "sj_mean": 0.9348063999999999,
+   "dist_mean_pct": 0.31553640666666666,
+   "feature_coverage": 0.2208382,
+   "singularities": 318.8,
+   "sing_per_1k": 99.75364666666665,
+   "runtime_s": 3.3404000000000003
+  },
+  "quadriflow": {
+   "models": 15,
+   "succeeded": 12,
+   "quad_ratio": 1.0,
+   "sj_mean": 0.9519934166666667,
+   "dist_mean_pct": 0.05438281666666667,
+   "feature_coverage": 0.3561276666666667,
+   "singularities": 79.33333333333333,
+   "sing_per_1k": 17.76608,
+   "runtime_s": 7.1705
+  },
+  "blender_quadriflow": {
+   "models": 15,
+   "succeeded": 8,
+   "quad_ratio": 1.0,
+   "sj_mean": 0.963409125,
+   "dist_mean_pct": 0.0511306,
+   "feature_coverage": 0.289991975,
+   "singularities": 78.625,
+   "sing_per_1k": 17.3177125,
+   "runtime_s": 7.126625
+  }
+ },
+ "success_criteria": {}
+}

@@ -1,0 +1,98 @@
+{
+"method": "instant_meshes",
+"faces": {
+  "total": 4894,
+  "quads": 4894,
+  "triangles": 0,
+  "vertices": 4896,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.9788
+},
+"quality": {
+  "scaled_jacobian": {
+    "mean": 0.973807,
+    "min": -1.22127e-06,
+    "p05": 0.85316,
+    "median": 0.99582,
+    "p95": 0.999738,
+    "max": 0.99999,
+    "std": 0.0829615
+  },
+  "scaled_jacobian_quads": {
+    "mean": 0.973807,
+    "min": -1.22127e-06,
+    "p05": 0.85316,
+    "median": 0.99582,
+    "p95": 0.999738,
+    "max": 0.99999,
+    "std": 0.0829615
+  },
+  "frac_sj_below_0.5": 0.00429097,
+  "inverted_or_degenerate": 10,
+  "planarity": {
+    "mean": 0.0136387,
+    "min": 1.29221e-11,
+    "p05": 0.000192077,
+    "median": 0.00888441,
+    "p95": 0.0441012,
+    "max": 0.191021,
+    "std": 0.0151527
+  },
+  "aspect_ratio": {
+    "mean": 1.1606,
+    "min": 1.00172,
+    "p05": 1.0156,
+    "median": 1.076,
+    "p95": 1.6484,
+    "max": 6.63103,
+    "std": 0.27881
+  },
+  "edge_length_rel": {
+    "mean": 1,
+    "min": 0.253651,
+    "p05": 0.839559,
+    "median": 1.00755,
+    "p95": 1.13485,
+    "max": 1.68197,
+    "std": 0.103747
+  },
+  "edge_length_mean_pct_diag": 1.39192
+},
+"topology": {
+  "singularities": 147,
+  "boundary_irregular": 0,
+  "singularities_per_1k_faces": 30.0368,
+  "interior_vertices": 4896,
+  "boundary_vertices": 0,
+  "boundary_edges": 0,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+    "3": 79,
+    "4": 4749,
+    "5": 65,
+    "6": 3
+  }
+},
+"distance": {
+  "mean_pct": 0.0921811,
+  "out_to_in_mean_pct": 0.0899082,
+  "in_to_out_mean_pct": 0.0944539,
+  "rms_pct": 0.133775,
+  "hausdorff_pct": 1.08113,
+  "area_ratio": 0.97828
+},
+"features": {
+  "feature_coverage": 0.132153,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.132153,
+  "feature_length_pct_diag": 42.2745,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 127,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+},
+"runtime_s": 3.384,
+"input_faces": 268686
+}

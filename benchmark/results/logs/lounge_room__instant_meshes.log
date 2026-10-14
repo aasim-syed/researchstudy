@@ -1,0 +1,94 @@
+/usr/bin/python3 -c 
+import sys, numpy as np, trimesh, pynanoinstantmeshes as p
+src, dst, target, angle = sys.argv[1], sys.argv[2], int(sys.argv[3]), float(sys.argv[4])
+m = trimesh.load(src, force='mesh', process=False)
+# Instant Meshes' pure-quad mode extracts a quad-dominant mesh and subdivides it once,
+# so the requested count is target/4 to land on `target` output faces.
+v, f = p.remesh(m.vertices.astype(np.float32), m.faces.astype(np.uint32), -1,
+                face_count=max(1, target // 4), creaseAngle=angle, align_to_boundaries=True,
+                deterministic=True)
+with open(dst, 'w') as fh:
+    fh.write(''.join('v %.9g %.9g %.9g\n' % tuple(x) for x in v))
+    fh.write(''.join('f ' + ' '.join(str(int(i) + 1) for i in q) + '\n' for q in f))
+ /home/claude/quadremesh/data/models/lounge_room.obj benchmark/results/meshes/lounge_room__instant_meshes.obj 15000 35.0
+(6 colors, took 0.0ms)
+  Collapsing .. done. (2985 -> 2387 vertices, took 0.0ms)
+    Coloring .. done. (7 colors, took 0.0ms)
+  Collapsing .. done. (2387 -> 2062 vertices, took 0.0ms)
+    Coloring .. done. (6 colors, took 0.0ms)
+  Collapsing .. done. (2062 -> 1876 vertices, took 0.0ms)
+    Coloring .. done. (6 colors, took 0.0ms)
+  Collapsing .. done. (1876 -> 1771 vertices, took 0.0ms)
+    Coloring .. done. (6 colors, took 0.0ms)
+  Collapsing .. done. (1771 -> 1709 vertices, took 0.0ms)
+    Coloring .. done. (5 colors, took 0.0ms)
+  Collapsing .. done. (1709 -> 1666 vertices, took 0.0ms)
+    Coloring .. done. (5 colors, took 0.0ms)
+  Collapsing .. done. (1666 -> 1641 vertices, took 0.0ms)
+    Coloring .. done. (6 colors, took 0.0ms)
+  Collapsing .. done. (1641 -> 1622 vertices, took 0.0ms)
+    Coloring .. done. (5 colors, took 0.0ms)
+  Collapsing .. done. (1622 -> 1610 vertices, took 0.0ms)
+    Coloring .. done. (6 colors, took 0.0ms)
+  Collapsing .. done. (1610 -> 1601 vertices, took 0.0ms)
+    Coloring .. done. (4 colors, took 0.0ms)
+  Collapsing .. done. (1601 -> 1595 vertices, took 0.0ms)
+    Coloring .. done. (4 colors, took 0.0ms)
+  Collapsing .. done. (1595 -> 1590 vertices, took 0.0ms)
+    Coloring .. done. (4 colors, took 0.0ms)
+  Collapsing .. done. (1590 -> 1586 vertices, took 0.0ms)
+    Coloring .. done. (4 colors, took 0.0ms)
+  Collapsing .. done. (1586 -> 1584 vertices, took 0.0ms)
+    Coloring .. done. (3 colors, took 0.0ms)
+  Collapsing .. done. (1584 -> 1582 vertices, took 0.0ms)
+    Coloring .. done. (3 colors, took 0.0ms)
+Hierarchy construction took 922.0ms.
+Setting to random solution .. done. (took 34.0ms)
+Allocating memory for constraints ..
+Propagating constraints .. done. (took 40.0ms)
+Preprocessing is done. (total time excluding file I/O: 1.7s)
+Optimizing orientation field .. Propagating updated solution.. done. (took 40.0ms)
+done. (took 1.9s)
+Orientation field has 16734 singularities.
+Optimizing position field .. done. (took 4.3s)
+Step 1: Classifying 3067580 edges in parallel .. done. (took 388.0ms)
+Step 2: Collapsing 1374719 edges .. done. (ignored 15413 conflicting edges, took 633.0ms)
+Step 3: Assigning vertices .. done. (4603 vertices, took 15.0ms)
+Step 3a: Removing spurious vertices .. done. (removed 895 vertices, took 0.0ms)
+Step 4: Assigning positions to vertices .. done. (took 166.0ms)
+Step 5: Snapping and removing unnecessary edges ..... done. (snapped 280 vertices, removed 294 edges, took 13.0ms)
+Step 6: Orienting edges .. done. (took 0.0ms)
+Step 7: Extracting faces .. done. (3112 faces, took 3.0ms)
+Step 8: Filling holes .. Not trying to fill a hole of degree 7
+Not trying to fill a hole of degree 8
+Not trying to fill a hole of degree 17
+Not trying to fill a hole of degree 9
+Not trying to fill a hole of degree 13
+Not trying to fill a hole of degree 7
+Not trying to fill a hole of degree 11
+Not trying to fill a hole of degree 23
+Not trying to fill a hole of degree 20
+Not trying to fill a hole of degree 10
+Not trying to fill a hole of degree 10
+Not trying to fill a hole of degree 9
+Not trying to fill a hole of degree 16
+Not trying to fill a hole of degree 15
+Not trying to fill a hole of degree 15
+Not trying to fill a hole of degree 7
+Not trying to fill a hole of degree 36
+Not trying to fill a hole of degree 14
+Not trying to fill a hole of degree 44
+Not trying to fill a hole of degree 9
+Not trying to fill a hole of degree 24
+Not trying to fill a hole of degree 10
+Not trying to fill a hole of degree 237
+Not trying to fill a hole of degree 7
+Not trying to fill a hole of degree 35
+Not trying to fill a hole of degree 17
+done. (25 holes, took 0.0ms)
+Intermediate mesh statistics: degree 3: 255 faces, degree 4: 2730 faces, degree 5: 113 faces, degree 6: 25 faces, degree 7: 7 faces, degree 8: 7 faces
+Step 9: Regular subdivision into pure quad mesh .. done. (took 3.0ms)
+Step 12: Reordering mesh for efficient access .. done. (took 15.0ms)
+Extraction is done. (total time: 1.2s)
+Faces 12597, 4
+Verts 13341, 3

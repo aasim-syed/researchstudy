@@ -81,6 +81,11 @@ double SurfaceRef::dist2_corner(const Vector3d& p, Vector3d* c) const {
     if (c) *c = cc.transpose();
     return d;
 }
+MatrixXd SurfaceRef::corner_points() const {
+    MatrixXd P(impl->CE.rows(), 3);
+    for (int i = 0; i < impl->CE.rows(); ++i) P.row(i) = impl->V.row(impl->CE(i, 0));
+    return P;
+}
 bool SurfaceRef::has_features() const { return impl->FE.rows() > 0; }
 bool SurfaceRef::has_boundary() const { return impl->BE.rows() > 0; }
 int SurfaceRef::sym_axis() const { return impl->axis; }
@@ -297,6 +302,113 @@ void split_to_pure_quads(QuadMesh& m) {
     from_faces(m, out);
 }
 
+int refine_to_size(QuadMesh& m, const std::function<VectorXd(const MatrixXd&)>& target, int max_levels) {
+    int total = 0;
+    for (int level = 0; level < max_levels; ++level) {
+        std::vector<Face> f = to_faces(m);
+        const int nf = (int)f.size();
+        MatrixXd C(nf, 3);
+        VectorXd h(nf);
+        for (int i = 0; i < nf; ++i) {
+            int n = fsize(f[i]);
+            Vector3d c = Vector3d::Zero();
+            for (int k = 0; k < n; ++k) c += m.V.row(f[i][k]).transpose();
+            C.row(i) = (c / n).transpose();
+            double a = 0;
+            for (int k = 1; k + 1 < n; ++k) {
+                Vector3d p0 = m.V.row(f[i][0]), p1 = m.V.row(f[i][k]), p2 = m.V.row(f[i][k + 1]);
+                a += 0.5 * (p1 - p0).cross(p2 - p0).norm();
+            }
+            h[i] = std::sqrt(std::max(a, 0.0));
+        }
+        VectorXd t = target(C);
+        std::vector<char> mark(nf, 0);
+        int nmark = 0;
+        for (int i = 0; i < nf; ++i)
+            if (h[i] > 1.45 * t[i]) mark[i] = 1, nmark++;
+        if (!nmark) break;
+        // edge -> faces
+        std::map<std::pair<int, int>, std::vector<int>> ef;
+        for (int i = 0; i < nf; ++i)
+            for (int k = 0; k < fsize(f[i]); ++k) {
+                int a = f[i][k], b = f[i][(k + 1) % fsize(f[i])];
+                ef[{std::min(a, b), std::max(a, b)}].push_back(i);
+            }
+        auto edge_split = [&](int i, int k) {  // is edge k of face i split by a marked neighbour?
+            int a = f[i][k], b = f[i][(k + 1) % fsize(f[i])];
+            for (int g : ef[{std::min(a, b), std::max(a, b)}])
+                if (g != i && mark[g]) return true;
+            return false;
+        };
+        // closure: only the three hanging-node templates are allowed on unmarked faces
+        for (bool changed = true; changed;) {
+            changed = false;
+            for (int i = 0; i < nf; ++i) {
+                if (mark[i]) continue;
+                int ns = 0;
+                for (int k = 0; k < fsize(f[i]); ++k) ns += edge_split(i, k);
+                if ((fsize(f[i]) == 4 && ns >= 3) || (fsize(f[i]) == 3 && ns >= 1)) { mark[i] = 1; changed = true; }
+            }
+        }
+        // split
+        std::map<std::pair<int, int>, int> mid;
+        std::vector<Vector3d> nv;
+        const int n0 = (int)m.V.rows();
+        auto midpoint = [&](int a, int b) {
+            auto key = std::make_pair(std::min(a, b), std::max(a, b));
+            auto it = mid.find(key);
+            if (it != mid.end()) return it->second;
+            int id = n0 + (int)nv.size();
+            nv.push_back(0.5 * (m.V.row(a) + m.V.row(b)).transpose());
+            mid[key] = id;
+            return id;
+        };
+        std::vector<Face> out;
+        for (int i = 0; i < nf; ++i) {
+            if (!mark[i]) continue;
+            int n = fsize(f[i]);
+            int ci = n0 + (int)nv.size();
+            nv.push_back(C.row(i).transpose());
+            for (int k = 0; k < n; ++k)
+                out.push_back({f[i][k], midpoint(f[i][k], f[i][(k + 1) % n]), ci, midpoint(f[i][(k + n - 1) % n], f[i][k])});
+        }
+        for (int i = 0; i < nf; ++i) {
+            if (mark[i]) continue;
+            const Face& q = f[i];
+            int n = fsize(q);
+            std::vector<int> sk;
+            for (int k = 0; k < n; ++k)
+                if (edge_split(i, k)) sk.push_back(k);
+            if (sk.empty()) { out.push_back(q); continue; }
+            if (sk.size() == 1) {
+                int k = sk[0];
+                int a = q[k], b = q[(k + 1) % 4], c = q[(k + 2) % 4], d = q[(k + 3) % 4], mm = midpoint(a, b);
+                out.push_back({mm, b, c, d});
+                out.push_back({a, mm, d, -1});
+            } else if ((sk[1] - sk[0]) == 2) {  // opposite edges
+                int k = sk[0];
+                int a = q[k], b = q[(k + 1) % 4], c = q[(k + 2) % 4], d = q[(k + 3) % 4];
+                int m1 = midpoint(a, b), m2 = midpoint(c, d);
+                out.push_back({a, m1, m2, d});
+                out.push_back({m1, b, c, m2});
+            } else {  // adjacent edges k, k+1 (cyclic)
+                int k = (sk[0] == 0 && sk[1] == 3) ? 3 : sk[0];
+                int a = q[k], b = q[(k + 1) % 4], c = q[(k + 2) % 4], d = q[(k + 3) % 4];
+                int m1 = midpoint(a, b), m2 = midpoint(b, c);
+                out.push_back({m1, b, m2, c});
+                out.push_back({a, m1, c, d});
+            }
+        }
+        MatrixXd V2(n0 + nv.size(), 3);
+        V2.topRows(n0) = m.V;
+        for (size_t k = 0; k < nv.size(); ++k) V2.row(n0 + k) = nv[k].transpose();
+        m.V = V2;
+        from_faces(m, out);
+        total += nmark;
+    }
+    return total;
+}
+
 void relax_and_project(QuadMesh& m, const SurfaceRef& ref, double L, int iterations, PostStats& st) {
     const int nv = (int)m.V.rows();
     std::vector<Face> f = to_faces(m);
@@ -373,6 +485,31 @@ void relax_and_project(QuadMesh& m, const SurfaceRef& ref, double L, int iterati
         }
         try_move(v, ref.project_surface(p), before);
     }
+    // corner recovery: every input corner gets the nearest boundary/feature output vertex
+    // (within 0.75 L) snapped onto it, even if extraction chamfered the corner
+    {
+        MatrixXd CP = ref.corner_points();
+        for (int k = 0; k < CP.rows(); ++k) {
+            Vector3d c = CP.row(k).transpose();
+            int best = -1;
+            double bd = (0.75 * L) * (0.75 * L);
+            for (int v = 0; v < nv; ++v) {
+                if (type[v] != 1 && type[v] != 2 && type[v] != 4) continue;
+                double d = (m.V.row(v).transpose() - c).squaredNorm();
+                if (d < bd) { bd = d; best = v; }
+            }
+            if (best < 0 || type[best] == 4) continue;
+            double before = local_min_sj(best);
+            Vector3d old = m.V.row(best);
+            m.V.row(best) = c.transpose();
+            if (local_min_sj(best) > std::min(before, 0.0) - 1e-9) {
+                type[best] = 4;
+                st.corner_vertices++;
+            } else {
+                m.V.row(best) = old.transpose();
+            }
+        }
+    }
     // a feature vertex slides along the curve only between two nearby feature neighbours
     std::vector<std::vector<int>> fnbr(nv);
     for (int v = 0; v < nv; ++v)
@@ -389,21 +526,40 @@ void relax_and_project(QuadMesh& m, const SurfaceRef& ref, double L, int iterati
                 if (scaled_jacobian(m.V, f[fi][0], f[fi][1], f[fi][2], f[fi][3]) > 0.15) continue;
                 for (int j = 0; j < fsize(f[fi]); ++j) {
                     int v = f[fi][j];
-                    if (type[v] != 0 || nbr[v].empty()) continue;
-                    Vector3d avg = Vector3d::Zero();
-                    for (int u : nbr[v]) avg += m.V.row(u).transpose();
-                    avg /= nbr[v].size();
+                    if (type[v] == 4 || nbr[v].empty()) continue;
                     double before = local_min_sj(v);
                     Vector3d old = m.V.row(v);
-                    m.V.row(v) = ref.project_surface(avg).transpose();
-                    if (local_min_sj(v) > before + 1e-9) moved++;
-                    else m.V.row(v) = old.transpose();
+                    // candidate targets: 1-ring average and incident-face centroid average,
+                    // constrained to the vertex's curve / surface
+                    Vector3d avg = Vector3d::Zero(), fc = Vector3d::Zero();
+                    for (int u : nbr[v]) avg += m.V.row(u).transpose();
+                    avg /= nbr[v].size();
+                    for (int g : vf[v]) {
+                        Vector3d c = Vector3d::Zero();
+                        for (int k = 0; k < fsize(f[g]); ++k) c += m.V.row(f[g][k]).transpose();
+                        fc += c / fsize(f[g]);
+                    }
+                    fc /= std::max<size_t>(1, vf[v].size());
+                    double best = before;
+                    Vector3d bestp = old;
+                    for (const Vector3d& t : {avg, fc, Vector3d(0.5 * (avg + old)), Vector3d(0.5 * (fc + old))}) {
+                        Vector3d np, c;
+                        if (type[v] == 1) { ref.dist2_feature(t, &c); np = c; }
+                        else if (type[v] == 2) { ref.dist2_boundary(t, &c); np = c; }
+                        else if (type[v] == 3) { np = ref.project_surface(t); np[axis] = off; }
+                        else np = ref.project_surface(t);
+                        m.V.row(v) = np.transpose();
+                        double q = local_min_sj(v);
+                        if (q > best + 1e-9) { best = q; bestp = np; }
+                    }
+                    m.V.row(v) = bestp.transpose();
+                    if (best > before + 1e-9) moved++;
                 }
             }
             if (!moved) break;
         }
     };
-    untangle(10);
+    untangle(20);
     for (int it = 0; it < iterations; ++it) {
         for (int v = 0; v < nv; ++v) {
             if (type[v] == 4) continue;
@@ -444,7 +600,7 @@ void relax_and_project(QuadMesh& m, const SurfaceRef& ref, double L, int iterati
             }
         }
     }
-    untangle(10);
+    untangle(20);
 }
 
 void mirror_and_weld(QuadMesh& m, int axis, double offset, double tol) {

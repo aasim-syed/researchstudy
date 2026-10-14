@@ -48,7 +48,7 @@ struct Params {
 
     // ---- features -----------------------------------------------------------------
     double feature_angle = 35.0;        // dihedral threshold in degrees (<= 0 disables)
-    double min_feature_length = 1.5;    // drop feature chains shorter than this x edge length
+    double min_feature_length = 3.0;    // drop feature chains shorter than this x edge length
     bool preserve_boundary = true;
 
     // ---- field design -------------------------------------------------------------

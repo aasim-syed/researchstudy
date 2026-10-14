@@ -1,0 +1,88 @@
+/usr/bin/python3 -c 
+import sys, numpy as np, trimesh, pynanoinstantmeshes as p
+src, dst, target, angle = sys.argv[1], sys.argv[2], int(sys.argv[3]), float(sys.argv[4])
+m = trimesh.load(src, force='mesh', process=False)
+# Instant Meshes' pure-quad mode extracts a quad-dominant mesh and subdivides it once,
+# so the requested count is target/4 to land on `target` output faces.
+v, f = p.remesh(m.vertices.astype(np.float32), m.faces.astype(np.uint32), -1,
+                face_count=max(1, target // 4), creaseAngle=angle, align_to_boundaries=True,
+                deterministic=True)
+with open(dst, 'w') as fh:
+    fh.write(''.join('v %.9g %.9g %.9g\n' % tuple(x) for x in v))
+    fh.write(''.join('f ' + ' '.join(str(int(i) + 1) for i in q) + '\n' for q in f))
+ /home/claude/quadremesh/data/models/igea.obj benchmark/results/meshes/igea__instant_meshes.obj 5000 35.0
+ Vertex count           = 1250
+   Face count             = 1250
+   Edge length            = 0.00433616
+Input mesh is too coarse for the desired output edge length (max input mesh edge length=0.00193413), subdividing ..
+Building a directed edge data structure .. done. (took 36.0ms)
+Subdividing mesh .. done. (split 292 edges, took 8.0ms, new V=134637, F=269270, took 8.0ms)
+Building a directed edge data structure .. done. (took 31.0ms)
+Generating adjacency matrix .. done. (took 6.0ms)
+Computing vertex & crease normals .. done. (846 crease vertices, took 14.0ms)
+Computing dual vertex areas .. done. (took 6.0ms)
+Processing level 0 ..
+    Coloring .. done. (7 colors, took 12.0ms)
+Building multiresolution hierarchy ..
+  Collapsing .. done. (134637 -> 72415 vertices, took 86.0ms)
+    Coloring .. done. (7 colors, took 6.0ms)
+  Collapsing .. done. (72415 -> 39184 vertices, took 59.0ms)
+    Coloring .. done. (7 colors, took 4.0ms)
+  Collapsing .. done. (39184 -> 21207 vertices, took 27.0ms)
+    Coloring .. done. (7 colors, took 1.0ms)
+  Collapsing .. done. (21207 -> 11511 vertices, took 14.0ms)
+    Coloring .. done. (7 colors, took 0.0ms)
+  Collapsing .. done. (11511 -> 6252 vertices, took 7.0ms)
+    Coloring .. done. (6 colors, took 0.0ms)
+  Collapsing .. done. (6252 -> 3414 vertices, took 4.0ms)
+    Coloring .. done. (6 colors, took 0.0ms)
+  Collapsing .. done. (3414 -> 1867 vertices, took 2.0ms)
+    Coloring .. done. (6 colors, took 0.0ms)
+  Collapsing .. done. (1867 -> 1028 vertices, took 1.0ms)
+    Coloring .. done. (6 colors, took 0.0ms)
+  Collapsing .. done. (1028 -> 555 vertices, took 0.0ms)
+    Coloring .. done. (6 colors, took 0.0ms)
+  Collapsing .. done. (555 -> 303 vertices, took 0.0ms)
+    Coloring .. done. (6 colors, took 0.0ms)
+  Collapsing .. done. (303 -> 165 vertices, took 0.0ms)
+    Coloring .. done. (6 colors, took 0.0ms)
+  Collapsing .. done. (165 -> 89 vertices, took 0.0ms)
+    Coloring .. done. (6 colors, took 0.0ms)
+  Collapsing .. done. (89 -> 49 vertices, took 0.0ms)
+    Coloring .. done. (5 colors, took 0.0ms)
+  Collapsing .. done. (49 -> 26 vertices, took 0.0ms)
+    Coloring .. done. (5 colors, took 0.0ms)
+  Collapsing .. done. (26 -> 14 vertices, took 0.0ms)
+    Coloring .. done. (5 colors, took 0.0ms)
+  Collapsing .. done. (14 -> 7 vertices, took 0.0ms)
+    Coloring .. done. (4 colors, took 0.0ms)
+  Collapsing .. done. (7 -> 4 vertices, took 0.0ms)
+    Coloring .. done. (3 colors, took 0.0ms)
+  Collapsing .. done. (4 -> 2 vertices, took 0.0ms)
+    Coloring .. done. (2 colors, took 0.0ms)
+  Collapsing .. done. (2 -> 1 vertices, took 0.0ms)
+    Coloring .. done. (1 colors, took 0.0ms)
+Hierarchy construction took 220.0ms.
+Setting to random solution .. done. (took 10.0ms)
+Allocating memory for constraints ..
+Propagating constraints .. done. (took 5.0ms)
+Preprocessing is done. (total time excluding file I/O: 361.0ms)
+Optimizing orientation field .. Propagating updated solution.. done. (took 8.0ms)
+done. (took 457.0ms)
+Orientation field has 22 singularities.
+Optimizing position field .. done. (took 1.0s)
+Step 1: Classifying 807810 edges in parallel .. done. (took 91.0ms)
+Step 2: Collapsing 349997 edges .. done. (ignored 372 conflicting edges, took 133.0ms)
+Step 3: Assigning vertices .. done. (1254 vertices, took 3.0ms)
+Step 3a: Removing spurious vertices .. done. (removed 38 vertices, took 0.0ms)
+Step 4: Assigning positions to vertices .. done. (took 37.0ms)
+Step 5: Snapping and removing unnecessary edges ... done. (snapped 15 vertices, removed 4 edges, took 1.0ms)
+Step 6: Orienting edges .. done. (took 0.0ms)
+Step 7: Extracting faces .. done. (1234 faces, took 0.0ms)
+Step 8: Filling holes .. done. (0 holes, took 0.0ms)
+Intermediate mesh statistics: degree 3: 57 faces, degree 4: 1162 faces, degree 5: 15 faces
+Step 9: Regular subdivision into pure quad mesh .. done. (took 0.0ms)
+Step 12: Reordering mesh for efficient access .. done. (took 6.0ms)
+Extraction is done. (total time: 275.0ms)
+Faces 4894, 4
+Verts 4896, 3

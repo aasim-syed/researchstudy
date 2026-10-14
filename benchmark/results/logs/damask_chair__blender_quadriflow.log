@@ -1,0 +1,5 @@
+/home/claude/bpyenv/bin/python /home/claude/quadremesh/benchmark/blender_quadriflow.py /home/claude/quadremesh/data/models/damask_chair.obj benchmark/results/meshes/damask_chair__blender_quadriflow.obj 5000
+OBJ import of 'damask_chair.obj' took 56.13 ms
+Info: Removed 2012 vertices
+Warning: QuadriFlow: The mesh needs to be manifold and have face normals that point in a consistent direction
+QUADRIFLOW_FAILED {'CANCELLED'}

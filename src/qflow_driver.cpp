@@ -1,5 +1,7 @@
 #include "qflow_driver.h"
 
+#include <cstdio>
+#include <cstdlib>
 #include <memory>
 
 #include "config.hpp"
@@ -111,21 +113,44 @@ QFResult run_quadriflow(const QFJob& job) {
     }
     P->ComputeOrientationSingularities();
     res.orientation_singularities = (int)P->singularities.size();
-
-    if (adaptive) {
-        P->EstimateSlope();
-        if (same) H.mExtS = job.scale;
-    }
-    qflow::Optimizer::optimize_scale(H, P->rho, P->flag_adaptive_scale);
-    P->flag_adaptive_scale = 1;
-    qflow::Optimizer::optimize_positions(H, P->flag_adaptive_scale);
-    P->ComputePositionSingularities();
-    P->ComputeIndexMap();
-
-    if (same) {
+    if (same) {  // capture now: ComputeIndexMap later subdivides the hierarchy mesh
         res.fieldQ = H.mQ[0].transpose();
         res.fieldN = H.mN[0].transpose();
     }
+
+    if (adaptive) {
+        // slope (conformal scale gradient) estimation traces geodesics and can fail near
+        // boundaries; the scale solve works without it (K = 0 -> plain smooth scale field)
+        try {
+            P->EstimateSlope();
+        } catch (const std::exception&) {
+            for (auto& K : H.mK) K.setZero();
+        }
+        if (same) H.mExtS = job.scale;
+    }
+    qflow::Optimizer::optimize_scale(H, P->rho, P->flag_adaptive_scale);
+    if (adaptive && std::getenv("QRM_DEBUG_SCALE")) {
+        std::fprintf(stderr, "scale target min %g max %g | solved S min %g max %g | mScale %g\n", job.scale.minCoeff(),
+                     job.scale.maxCoeff(), H.mS[0].minCoeff(), H.mS[0].maxCoeff(), H.mScale);
+    }
+    if (adaptive) {
+        // upstream only solves the scale on the finest level; the coarse levels of the position
+        // solve then run at uniform scale and erase the density map. Restrict S upwards.
+        for (size_t l = 0; l + 1 < H.mS.size(); ++l) {
+            const auto& up = H.mToUpper[l];
+            for (int i = 0; i < up.cols(); ++i) {
+                Eigen::Vector2d acc = H.mS[l].col(up(0, i));
+                int cnt = 1;
+                if (up(1, i) >= 0) { acc += H.mS[l].col(up(1, i)); cnt++; }
+                H.mS[l + 1].col(i) = acc / cnt;
+            }
+        }
+    }
+    P->flag_adaptive_scale = 1;
+    qflow::Optimizer::optimize_positions(H, P->flag_adaptive_scale);
+    P->ComputePositionSingularities();
+    P->ComputeIndexMap(adaptive ? 1 : 0);
+
     res.V.resize(P->O_compact.size(), 3);
     for (size_t i = 0; i < P->O_compact.size(); ++i) {
         Eigen::Vector3d t = P->O_compact[i] * P->normalize_scale + P->normalize_offset;

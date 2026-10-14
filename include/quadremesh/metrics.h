@@ -15,7 +15,7 @@ double planarity_error(const MatrixXd& V, int a, int b, int c, int d);
 
 struct EvalParams {
     double feature_angle = 35.0;      // same detector as the pipeline
-    double min_feature_length = 1.5;  // x element size L
+    double min_feature_length = 3.0;  // x element size L
     double coverage_tol = 0.1;        // x L, distance tolerance for feature coverage
     double coverage_angle = 25.0;     // degrees, edge direction tolerance
     int samples = 200000;             // surface samples per direction for distance error

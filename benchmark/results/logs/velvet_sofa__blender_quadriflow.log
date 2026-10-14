@@ -1,0 +1,8 @@
+/home/claude/bpyenv/bin/python /home/claude/quadremesh/benchmark/blender_quadriflow.py /home/claude/quadremesh/data/models/velvet_sofa.obj benchmark/results/meshes/velvet_sofa__blender_quadriflow.obj 5000
+OBJ import of 'velvet_sofa.obj' took 29.89 ms
+Info: Removed 1861 vertices
+Info: QuadriFlow: Remeshing completed
+Writing to benchmark/results/meshes/velvet_sofa__blender_quadriflow.obj
+OBJ export of 'velvet_sofa__blender_quadriflow.obj' took 2.80 ms
+Info: File exported successfully
+faces 4538

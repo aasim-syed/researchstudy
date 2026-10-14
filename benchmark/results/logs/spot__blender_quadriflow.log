@@ -1,0 +1,8 @@
+/home/claude/bpyenv/bin/python /home/claude/quadremesh/benchmark/blender_quadriflow.py /home/claude/quadremesh/data/models/spot.obj benchmark/results/meshes/spot__blender_quadriflow.obj 5000
+OBJ import of 'spot.obj' took 39.05 ms
+Info: Removed 583 vertices
+Info: QuadriFlow: Remeshing completed
+Writing to benchmark/results/meshes/spot__blender_quadriflow.obj
+OBJ export of 'spot__blender_quadriflow.obj' took 2.83 ms
+Info: File exported successfully
+faces 4554

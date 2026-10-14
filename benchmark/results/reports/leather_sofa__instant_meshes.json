@@ -1,0 +1,98 @@
+{
+"method": "instant_meshes",
+"faces": {
+  "total": 844,
+  "quads": 844,
+  "triangles": 0,
+  "vertices": 1116,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.1688
+},
+"quality": {
+  "scaled_jacobian": {
+    "mean": 0.70717,
+    "min": -0.0190979,
+    "p05": 0.512338,
+    "median": 0.713855,
+    "p95": 0.846815,
+    "max": 0.992484,
+    "std": 0.120469
+  },
+  "scaled_jacobian_quads": {
+    "mean": 0.70717,
+    "min": -0.0190979,
+    "p05": 0.512338,
+    "median": 0.713855,
+    "p95": 0.846815,
+    "max": 0.992484,
+    "std": 0.120469
+  },
+  "frac_sj_below_0.5": 0.0414692,
+  "inverted_or_degenerate": 2,
+  "planarity": {
+    "mean": 9.42083e-08,
+    "min": 3.43685e-11,
+    "p05": 9.24184e-10,
+    "median": 7.9036e-08,
+    "p95": 2.38692e-07,
+    "max": 4.09508e-07,
+    "std": 7.65329e-08
+  },
+  "aspect_ratio": {
+    "mean": 2.35344,
+    "min": 1.26311,
+    "p05": 1.46432,
+    "median": 2.3557,
+    "p95": 3.27001,
+    "max": 9.91917,
+    "std": 0.838484
+  },
+  "edge_length_rel": {
+    "mean": 1,
+    "min": 0.170291,
+    "p05": 0.536726,
+    "median": 0.932256,
+    "p95": 1.54936,
+    "max": 2.19426,
+    "std": 0.331151
+  },
+  "edge_length_mean_pct_diag": 1.56851
+},
+"topology": {
+  "singularities": 681,
+  "boundary_irregular": 0,
+  "singularities_per_1k_faces": 806.872,
+  "interior_vertices": 1116,
+  "boundary_vertices": 0,
+  "boundary_edges": 0,
+  "nonmanifold_edges": 0,
+  "components": 136,
+  "valence_histogram": {
+    "2": 413,
+    "3": 265,
+    "4": 435,
+    "5": 3
+  }
+},
+"distance": {
+  "mean_pct": 3.42079,
+  "out_to_in_mean_pct": 0.000902797,
+  "in_to_out_mean_pct": 6.84068,
+  "rms_pct": 5.82704,
+  "hausdorff_pct": 23.1249,
+  "area_ratio": 0.0840089
+},
+"features": {
+  "feature_coverage": 0.0031208,
+  "boundary_coverage": 0,
+  "combined_coverage": 0.00142196,
+  "feature_length_pct_diag": 2380.73,
+  "boundary_length_pct_diag": 2844.28,
+  "feature_segments": 2121,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+},
+"runtime_s": 2.927,
+"input_faces": 46492
+}

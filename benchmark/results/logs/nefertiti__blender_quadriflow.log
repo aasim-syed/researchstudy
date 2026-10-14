@@ -1,0 +1,8 @@
+/home/claude/bpyenv/bin/python /home/claude/quadremesh/benchmark/blender_quadriflow.py /home/claude/quadremesh/data/models/nefertiti.obj benchmark/results/meshes/nefertiti__blender_quadriflow.obj 5000
+OBJ import of 'nefertiti.obj' took 76.75 ms
+Info: Removed 0 vertices
+Info: QuadriFlow: Remeshing completed
+Writing to benchmark/results/meshes/nefertiti__blender_quadriflow.obj
+OBJ export of 'nefertiti__blender_quadriflow.obj' took 5.26 ms
+Info: File exported successfully
+faces 5218

@@ -1,0 +1,5 @@
+/home/claude/bpyenv/bin/python /home/claude/quadremesh/benchmark/blender_quadriflow.py /home/claude/quadremesh/data/models/fountain_scan.obj benchmark/results/meshes/fountain_scan__blender_quadriflow.obj 15000
+OBJ import of 'fountain_scan.obj' took 1063.42 ms
+Info: Removed 3 vertices
+Warning: QuadriFlow: The mesh needs to be manifold and have face normals that point in a consistent direction
+QUADRIFLOW_FAILED {'CANCELLED'}

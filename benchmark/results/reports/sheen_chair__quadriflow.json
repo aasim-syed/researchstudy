@@ -1,0 +1,97 @@
+{
+"method": "quadriflow",
+"faces": {
+  "total": 4541,
+  "quads": 4541,
+  "triangles": 0,
+  "vertices": 5387,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.9082
+},
+"quality": {
+  "scaled_jacobian": {
+    "mean": 0.963358,
+    "min": -0.968294,
+    "p05": 0.84766,
+    "median": 0.995524,
+    "p95": 0.999939,
+    "max": 0.999999,
+    "std": 0.130378
+  },
+  "scaled_jacobian_quads": {
+    "mean": 0.963358,
+    "min": -0.968294,
+    "p05": 0.84766,
+    "median": 0.995524,
+    "p95": 0.999939,
+    "max": 0.999999,
+    "std": 0.130378
+  },
+  "frac_sj_below_0.5": 0.017397,
+  "inverted_or_degenerate": 17,
+  "planarity": {
+    "mean": 0.00864902,
+    "min": 4.65802e-08,
+    "p05": 7.1739e-05,
+    "median": 0.00285973,
+    "p95": 0.0396006,
+    "max": 0.222681,
+    "std": 0.016986
+  },
+  "aspect_ratio": {
+    "mean": 1.65122,
+    "min": 1.00239,
+    "p05": 1.0302,
+    "median": 1.1632,
+    "p95": 2.12525,
+    "max": 124.092,
+    "std": 4.8081
+  },
+  "edge_length_rel": {
+    "mean": 1,
+    "min": 0.00930826,
+    "p05": 0.70557,
+    "median": 1.00356,
+    "p95": 1.28088,
+    "max": 2.64176,
+    "std": 0.18911
+  },
+  "edge_length_mean_pct_diag": 1.57447
+},
+"topology": {
+  "singularities": 37,
+  "boundary_irregular": 32,
+  "singularities_per_1k_faces": 8.14799,
+  "interior_vertices": 3755,
+  "boundary_vertices": 1632,
+  "boundary_edges": 1632,
+  "nonmanifold_edges": 0,
+  "components": 30,
+  "valence_histogram": {
+    "3": 30,
+    "4": 3718,
+    "5": 7
+  }
+},
+"distance": {
+  "mean_pct": 0.074429,
+  "out_to_in_mean_pct": 0.0668942,
+  "in_to_out_mean_pct": 0.0819639,
+  "rms_pct": 0.14221,
+  "hausdorff_pct": 1.45883,
+  "area_ratio": 0.924688
+},
+"features": {
+  "feature_coverage": 0.66766,
+  "boundary_coverage": 0.743423,
+  "combined_coverage": 0.697449,
+  "feature_length_pct_diag": 949.067,
+  "boundary_length_pct_diag": 614.945,
+  "feature_segments": 1085,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+},
+"runtime_s": 12.99,
+"input_faces": 39936
+}

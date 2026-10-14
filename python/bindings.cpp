@@ -141,7 +141,7 @@ PYBIND11_MODULE(_quadremesh, m) {
             return js;
         },
         py::arg("V"), py::arg("F"), py::arg("QV"), py::arg("Q"), py::arg("target_faces") = -1,
-        py::arg("feature_angle") = 35.0, py::arg("min_feature_length") = 1.5, py::arg("samples") = 200000,
+        py::arg("feature_angle") = 35.0, py::arg("min_feature_length") = 3.0, py::arg("samples") = 200000,
         py::arg("runtime") = -1.0, py::arg("method") = "", "Quality report (JSON string).");
 
     m.def(
