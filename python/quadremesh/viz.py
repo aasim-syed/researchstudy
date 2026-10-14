@@ -176,7 +176,7 @@ def side_by_side(meshes, out_png, title="", azim=35, elev=20):
     fig, axes = plt.subplots(1, len(meshes), figsize=(4.2 * len(meshes), 4.4), dpi=150)
     axes = np.atleast_1d(axes)
     for ax, (label, V, Q) in zip(axes, meshes):
-        if V is None:
+        if V is None or Q is None or len(Q) == 0:
             ax.text(0.5, 0.5, f"{label}\nfailed", ha="center", va="center")
             ax.axis("off")
             continue

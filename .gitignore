@@ -11,3 +11,4 @@ benchmark/results/meshes/
 *.so
 __pycache__/
 third_party/instant-meshes/
+data/models

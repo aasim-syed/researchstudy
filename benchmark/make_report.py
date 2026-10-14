@@ -39,9 +39,17 @@ VIEW = {"bunny": (-30, 10), "fandisk": (40, 25), "fandisk_noisy": (40, 25), "roc
         "lounge_room": (30, 60)}
 
 
-def b64(path):
-    with open(path, "rb") as fh:
-        return "data:image/png;base64," + base64.b64encode(fh.read()).decode()
+def b64(path, max_w=1500):
+    """Embed as a downscaled JPEG so the self-contained report stays e-mailable."""
+    import io
+
+    from PIL import Image
+    im = Image.open(path).convert("RGB")
+    if im.width > max_w:
+        im = im.resize((max_w, int(im.height * max_w / im.width)), Image.LANCZOS)
+    buf = io.BytesIO()
+    im.save(buf, "JPEG", quality=82, optimize=True)
+    return "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode()
 
 
 def charts(rows, path):
@@ -82,6 +90,11 @@ def main():
         if only and name not in only:
             continue
         az, el = VIEW.get(name, (35, 20))
+        panel = os.path.join(OUT, f"{name}_ours_panel.png")
+        comp = os.path.join(OUT, f"{name}_compare.png")
+        if os.path.exists(panel) and os.path.exists(comp) and not os.environ.get("FORCE"):
+            imgs[name] = (panel, comp)
+            continue
         src = os.path.join(ROOT, "data", entry["file"])
         target = 15000 if entry["category"] in ("scene scan", "room-scale scan") else 5000
         # ours: rerun through the Python API to get the field for the panel (deterministic)
@@ -91,9 +104,10 @@ def main():
         plot_quality_panel(r.vertices, r.faces, panel, title=f"{name}: quadremesh, {len(r.faces)} faces",
                            field=field, features=r.feature_edges, azim=az, elev=el)
         meshes = []
+        status = {r["method"]: r["status"] for r in rows if r["model"] == name}
         for m in METHODS:
             p = os.path.join(RES, "meshes", f"{name}__{m}.obj")
-            if os.path.exists(p):
+            if os.path.exists(p) and status.get(m) == "ok":
                 V, Q = core.load_quad_obj(p)
                 meshes.append((LABEL[m], V, Q))
             else:
@@ -154,6 +168,13 @@ def write_html(rows, agg, manifest, imgs):
         panel, comp = imgs[name]
         h.append(f"<h2>{name}</h2><p>{entry['category']} - {entry['notes']} - {entry['faces']} input faces</p>")
         h.append(f"<img src='{b64(panel)}'><img src='{b64(comp)}'>")
+    demos = [("Adaptive density", "demo_density.png"), ("Symmetry hint", "demo_symmetry.png"),
+             ("Guidance strokes", "demo_strokes.png"), ("UV transfer + pure-quad", "demo_uv_purequad.png")]
+    h.append("<h2>User controls</h2>")
+    for title, f in demos:
+        pth = os.path.join(OUT, f)
+        if os.path.exists(pth):
+            h.append(f"<h3>{title}</h3><img src='{b64(pth)}'>")
     h.append("</body></html>")
     with open(os.path.join(OUT, "visual_report.html"), "w") as fh:
         fh.write("\n".join(h))

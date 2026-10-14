@@ -25,6 +25,7 @@ print(res.quad_ratio, res.report["quality"]["scaled_jacobian"]["mean"])
 | 3. field design | hard constraints: features, boundaries, strokes. soft guidance: principal curvature (scale-aware tensor fit), learned / external field; soft guidance is applied by an angle-limited pass so it cannot add singularities | `src/field.cpp`, `src/qflow_driver.cpp` |
 | 4. sizing | target count or edge length; adaptive density map (per-vertex, sphere regions, curvature-driven) → scale field | `src/field.cpp` |
 | 5. integer grid + extraction | multiresolution orientation / position fields, min-cost-flow singularity optimisation, quad extraction (vendored, patched QuadriFlow); per connected component with coverage-checked retries for thin parts | `third_party/qflow_patched` |
+| 5b. fallbacks | Instant Meshes extractor (second choice; best-of-two on dense scans), best approximate result for parts thinner than an element, QEM-decimated exact fallback | `src/im_driver.cpp`, `src/decimate.cpp` |
 | 6. post-process | cleanup, triangle-pair merging, optional pure-quad split, feature/boundary/corner snapping, guarded tangential relaxation + reprojection, untangling | `src/postprocess.cpp` |
 | 7. symmetry | remesh one half (clipped at the plane, plane boundary preserved), mirror and weld | `src/preprocess.cpp`, `src/postprocess.cpp` |
 | 8. attributes | per-corner UV transfer with UV-chart consistency; generic per-vertex attribute transfer | `src/transfer.cpp` |
@@ -32,6 +33,21 @@ print(res.quad_ratio, res.report["quality"]["scaled_jacobian"]["mean"])
 
 Deterministic: single-threaded solver, seeded PCG RNG, sort-based topology. The test suite checks
 bit-identical output for repeated runs.
+
+## Results (15-model benchmark, equal target face count)
+
+| | quadremesh | Instant Meshes | QuadriFlow | Blender QF |
+|---|---|---|---|---|
+| models processed | **15/15** | 15/15 | 12/15 | 8/15 |
+| quad ratio | **100 %** | 100 % | 100 % | 100 % |
+| mean scaled Jacobian (≥ 0.8) | **0.932** | 0.935 | 0.952* | 0.963* |
+| mean distance error (< 0.5 %) | **0.060 %** | 0.316 % | 0.054 %* | 0.051 %* |
+| feature coverage (≥ 90 %) | 44 % | 22 % | 36 %* | 29 %* |
+| singularities / 1k faces | **31.4** | 99.8 | 17.8* | 17.3* |
+
+\* over the models that method could process. Fewer singularities than Instant Meshes on 14/15
+models (3 072 vs 4 782 in total). Feature coverage reaches 94 % on CAD but not on organic
+scans / dense carvings - see `docs/technical_writeup.pdf` for the full analysis.
 
 ## Build
 
@@ -104,5 +120,5 @@ docs/                 write-up and visual report       tests/  C++ and Python te
 
 ## Licenses
 
-quadremesh code: MIT. Vendored QuadriFlow: its own license (`third_party/qflow_patched/LICENSE.txt`).
+quadremesh code: MIT. Vendored QuadriFlow: its own license (`third_party/qflow_patched/LICENSE.txt`). Instant Meshes (fetched by `scripts/fetch_deps.sh`): BSD.
 Benchmark models keep their original licenses (Stanford, Khronos sample assets, Open3D datasets).
