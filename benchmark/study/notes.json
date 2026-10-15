@@ -17,7 +17,8 @@
   "it14_coverage_mode_density",
   "it15_coverage_search",
   "it16_snap_default",
-  "it17_max_coverage"
+  "it17_default_guarded",
+  "it18_max_coverage"
  ],
  "it0_no_feature_paths": [
   "Baseline before any coverage-specific post-processing: hard feature constraints in the field + proximity snapping of vertices to creases (the default before edge-path recovery). Reproduced with the current code by disabling path recovery (QRM_NO_FEATURE_PATHS=1)."
@@ -94,9 +95,13 @@
  "it16_snap_default": [
   "Diagnosis (evaluator sample dump on it14): on furniture/CAD 81-88 % of the crease length has an output edge within 0.1 L and 96-99 % of that is covered; nearly all misses are edges running alongside the crease 0.1-0.35 L away. On organic scans a large share is within 0.1 L but crossing at > 25 deg.",
   "Change: near-miss snapping (vertex moves only): for each uncovered crease point, the best edge within 0.5 L whose direction is within 75 deg gets both end points moved onto the crease; kept only if the edge then covers the point, no incident face drops below min(0.1, its SJ before), and no end point already carries a covering edge of another crease point; moved vertices are pinned in later relaxation. Coverage tolerance during re-solves uses the requested face count (it previously used the reduced solve budget's L).",
-  "New default: path recovery over all creases (it9) + feature-adaptive size (it13) + near-miss snapping. --legacy restores the earlier defaults (it0-it15 are reproduced with --legacy prepended)."
+  "New default: path recovery over all creases (it9) + feature-adaptive size (it13) + near-miss snapping. --legacy restores the earlier defaults (it0-it15 are reproduced with --legacy prepended).",
+  "Observed: 0.506 -> 0.637 over all 15 (it9 -> it16), 0.575 -> 0.725 on the 13 non-scan models; quads 100 %, SJ 0.902, 14/15 below Instant Meshes. Damask chair's mean SJ falls to 0.776 (< 0.8) because of the feature-adaptive size on its dense carvings."
  ],
- "it17_max_coverage": [
-  "Coverage mode (budgeted loops / refinement / curved splits) + the new defaults + coverage search (4 candidates scored with the evaluator)."
+ "it17_default_guarded": [
+  "Two fixes on it16. (1) Snapping protection made precise: a vertex that already carries a covering edge may move if every crease point it was covering is still covered afterwards (it16 never moved such vertices). (2) Quality guard: if the mean SJ of the result is below 0.81, the solve is repeated with half the feature-adaptive strength, then without it."
+ ],
+ "it18_max_coverage": [
+  "Coverage mode (budgeted loops / refinement / curved splits) + it17 defaults + coverage search (4 candidates scored with the evaluator code; quad >= 98 %, SJ >= 0.8, distance < 0.5 %, <= +10 singularities/1k over the first candidate)."
  ]
 }

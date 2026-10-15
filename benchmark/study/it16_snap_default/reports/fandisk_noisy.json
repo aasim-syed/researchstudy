@@ -1,0 +1,98 @@
+{
+ "method": "it16_snap_default",
+ "faces": {
+  "total": 3828,
+  "quads": 3828,
+  "triangles": 0,
+  "vertices": 3832,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.7656
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.91657,
+   "min": -1,
+   "p05": 0.613695,
+   "median": 0.97607,
+   "p95": 0.997995,
+   "max": 0.999894,
+   "std": 0.175647
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.91657,
+   "min": -1,
+   "p05": 0.613695,
+   "median": 0.97607,
+   "p95": 0.997995,
+   "max": 0.999894,
+   "std": 0.175647
+  },
+  "frac_sj_below_0.5": 0.0352665,
+  "inverted_or_degenerate": 26,
+  "planarity": {
+   "mean": 0.0244334,
+   "min": 4.62711e-16,
+   "p05": 0.00164459,
+   "median": 0.0185665,
+   "p95": 0.0626993,
+   "max": 0.32372,
+   "std": 0.0256046
+  },
+  "aspect_ratio": {
+   "mean": 1044930.0,
+   "min": 1.00722,
+   "p05": 1.06563,
+   "median": 1.30248,
+   "p95": 2.62374,
+   "max": 1000000000.0,
+   "std": 32308500.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.597713,
+   "median": 0.958094,
+   "p95": 1.51145,
+   "max": 7.62229,
+   "std": 0.337071
+  },
+  "edge_length_mean_pct_diag": 1.66059
+ },
+ "topology": {
+  "singularities": 118,
+  "boundary_irregular": 11,
+  "singularities_per_1k_faces": 30.8255,
+  "interior_vertices": 3820,
+  "boundary_vertices": 12,
+  "boundary_edges": 12,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "3": 62,
+   "4": 3702,
+   "5": 56
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0616692,
+  "out_to_in_mean_pct": 0.0645281,
+  "in_to_out_mean_pct": 0.0588103,
+  "rms_pct": 0.132463,
+  "hausdorff_pct": 4.40801,
+  "area_ratio": 0.987708
+ },
+ "features": {
+  "feature_coverage": 0.800545,
+  "boundary_coverage": 0.246746,
+  "combined_coverage": 0.777824,
+  "feature_length_pct_diag": 1121.35,
+  "boundary_length_pct_diag": 47.974,
+  "feature_segments": 869,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 9.1,
+ "input_faces": 12925,
+ "cmd": "build/quadremesh data/models/fandisk_noisy.obj -o benchmark/study/it16_snap_default/meshes/fandisk_noisy.obj -f 5000 -a 35 --no-uv"
+}

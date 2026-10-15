@@ -935,7 +935,37 @@ namespace qrm {
 
 // Face-count control: loop insertion / feature refinement add faces after the solve, so the
 // solve budget is re-scaled once (twice at most) to land on the requested face count.
+static Result quadremesh_matched_once(const TriMesh& input, const Params& p);
+
+static double mean_sj(const QuadMesh& m) {
+    double acc = 0;
+    int n = 0;
+    for (int f = 0; f < m.Q.rows(); ++f) {
+        if (m.Q(f, 3) < 0) continue;
+        acc += scaled_jacobian(m.V, m.Q(f, 0), m.Q(f, 1), m.Q(f, 2), m.Q(f, 3));
+        n++;
+    }
+    return n ? acc / n : 1.0;
+}
+
+// Quality guard for the feature-adaptive size: on inputs whose creases are dense (carved
+// furniture) shrinking the elements along every crease distorts most of the mesh; if the mean
+// scaled Jacobian falls below 0.81, the solve is repeated with half the strength, then without.
 static Result quadremesh_matched(const TriMesh& input, const Params& p) {
+    Result r = quadremesh_matched_once(input, p);
+    Params q = p;
+    for (int k = 0; k < 2 && q.feature_density > 0 && mean_sj(r.mesh) < 0.81; ++k) {
+        double sj = mean_sj(r.mesh);
+        q.feature_density = k == 0 ? 0.5 * p.feature_density : 0.0;
+        Result r2 = quadremesh_matched_once(input, q);
+        r2.log.insert(r2.log.begin(), "quality guard: mean SJ " + std::to_string(sj) + " < 0.81 -> feature density " +
+                                          std::to_string(q.feature_density));
+        r = std::move(r2);
+    }
+    return r;
+}
+
+static Result quadremesh_matched_once(const TriMesh& input, const Params& p) {
     Result r = quadremesh_once(input, p);
     if (p.target_edge_length > 0 || p.target_faces <= 0 || !p.match_face_count) return r;
     Params q = p;

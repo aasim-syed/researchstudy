@@ -1,0 +1,98 @@
+{
+ "method": "it16_snap_default",
+ "faces": {
+  "total": 4001,
+  "quads": 4001,
+  "triangles": 0,
+  "vertices": 4003,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.8002
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.940731,
+   "min": -0.778725,
+   "p05": 0.771978,
+   "median": 0.973392,
+   "p95": 0.997979,
+   "max": 0.999934,
+   "std": 0.10987
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.940731,
+   "min": -0.778725,
+   "p05": 0.771978,
+   "median": 0.973392,
+   "p95": 0.997979,
+   "max": 0.999934,
+   "std": 0.10987
+  },
+  "frac_sj_below_0.5": 0.0127468,
+  "inverted_or_degenerate": 5,
+  "planarity": {
+   "mean": 0.0152473,
+   "min": 1.70954e-10,
+   "p05": 0.000779112,
+   "median": 0.00944015,
+   "p95": 0.0512179,
+   "max": 0.173603,
+   "std": 0.0177874
+  },
+  "aspect_ratio": {
+   "mean": 1.38255,
+   "min": 1.00531,
+   "p05": 1.03551,
+   "median": 1.20623,
+   "p95": 2.07795,
+   "max": 42.695,
+   "std": 1.13231
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0.0364801,
+   "p05": 0.612739,
+   "median": 1.00965,
+   "p95": 1.37899,
+   "max": 3.07862,
+   "std": 0.240355
+  },
+  "edge_length_mean_pct_diag": 1.46916
+ },
+ "topology": {
+  "singularities": 92,
+  "boundary_irregular": 0,
+  "singularities_per_1k_faces": 22.9943,
+  "interior_vertices": 4003,
+  "boundary_vertices": 0,
+  "boundary_edges": 0,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "3": 50,
+   "4": 3911,
+   "5": 42
+  }
+ },
+ "distance": {
+  "mean_pct": 0.037858,
+  "out_to_in_mean_pct": 0.0370348,
+  "in_to_out_mean_pct": 0.0386811,
+  "rms_pct": 0.0629473,
+  "hausdorff_pct": 1.28502,
+  "area_ratio": 0.990008
+ },
+ "features": {
+  "feature_coverage": 0.896729,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.896729,
+  "feature_length_pct_diag": 131.743,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 150,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 15.63,
+ "input_faces": 23424,
+ "cmd": "build/quadremesh data/models/spot.obj -o benchmark/study/it16_snap_default/meshes/spot.obj -f 5000 -a 35 --no-uv"
+}

@@ -1,0 +1,98 @@
+{
+ "method": "it16_snap_default",
+ "faces": {
+  "total": 4598,
+  "quads": 4598,
+  "triangles": 0,
+  "vertices": 4603,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.9196
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.924788,
+   "min": -1,
+   "p05": 0.702098,
+   "median": 0.975943,
+   "p95": 0.998567,
+   "max": 0.999968,
+   "std": 0.17932
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.924788,
+   "min": -1,
+   "p05": 0.702098,
+   "median": 0.975943,
+   "p95": 0.998567,
+   "max": 0.999968,
+   "std": 0.17932
+  },
+  "frac_sj_below_0.5": 0.023706,
+  "inverted_or_degenerate": 43,
+  "planarity": {
+   "mean": 0.0170993,
+   "min": 0,
+   "p05": 0.000274792,
+   "median": 0.00791791,
+   "p95": 0.0720456,
+   "max": 0.271181,
+   "std": 0.0270238
+  },
+  "aspect_ratio": {
+   "mean": 1522400.0,
+   "min": 1.00266,
+   "p05": 1.03622,
+   "median": 1.20112,
+   "p95": 2.1931,
+   "max": 1000000000.0,
+   "std": 38988200.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.570604,
+   "median": 1.00791,
+   "p95": 1.37593,
+   "max": 16.0243,
+   "std": 0.349131
+  },
+  "edge_length_mean_pct_diag": 1.33873
+ },
+ "topology": {
+  "singularities": 123,
+  "boundary_irregular": 14,
+  "singularities_per_1k_faces": 26.7508,
+  "interior_vertices": 4585,
+  "boundary_vertices": 18,
+  "boundary_edges": 18,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "3": 63,
+   "4": 4462,
+   "5": 60
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0516029,
+  "out_to_in_mean_pct": 0.0515786,
+  "in_to_out_mean_pct": 0.0516272,
+  "rms_pct": 0.163691,
+  "hausdorff_pct": 2.37327,
+  "area_ratio": 0.979167
+ },
+ "features": {
+  "feature_coverage": 0.592769,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.592769,
+  "feature_length_pct_diag": 194.693,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 682,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 27.07,
+ "input_faces": 99938,
+ "cmd": "build/quadremesh data/models/nefertiti.obj -o benchmark/study/it16_snap_default/meshes/nefertiti.obj -f 5000 -a 35 --no-uv"
+}

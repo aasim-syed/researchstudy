@@ -660,6 +660,7 @@ int snap_near_creases(QuadMesh& m, const std::vector<std::vector<Vector3d>>& cha
     };
     // covered samples protect the end points of their covering edge
     std::vector<char> prot(nv, 0), cov(S.size(), 0);
+    std::vector<std::vector<int>> vs_cov(nv);  // samples each vertex currently helps cover
     for (size_t i = 0; i < S.size(); ++i) {
         if (D[i] > tl * tl) continue;
         int e0 = I[i];
@@ -670,9 +671,22 @@ int snap_near_creases(QuadMesh& m, const std::vector<std::vector<Vector3d>>& cha
             if (ecos(e, S[i].d) >= cos25 && seg_d2(S[i].p, e) <= tl * tl) {
                 cov[i] = 1;
                 prot[E(e, 0)] = prot[E(e, 1)] = 1;
+                vs_cov[E(e, 0)].push_back((int)i);
+                vs_cov[E(e, 1)].push_back((int)i);
                 break;
             }
     }
+    // is sample j covered by an edge around vertex v (v's edges and its neighbours' edges)?
+    auto covered_near = [&](int j, int v) {
+        std::vector<int> es = vinc[v];
+        for (int e : vinc[v]) {
+            int u = E(e, 0) == v ? E(e, 1) : E(e, 0);
+            es.insert(es.end(), vinc[u].begin(), vinc[u].end());
+        }
+        for (int e : es)
+            if (ecos(e, S[j].d) >= cos25 && seg_d2(S[j].p, e) <= tl * tl) return true;
+        return false;
+    };
     auto closest_on_chain = [&](int c, const Vector3d& x) {
         const auto& ch = chains[c];
         Vector3d best = ch.front();
@@ -710,8 +724,10 @@ int snap_near_creases(QuadMesh& m, const std::vector<std::vector<Vector3d>>& cha
         Vector3d qa = closest_on_chain(S[i].c, pa), qb = closest_on_chain(S[i].c, pb);
         if ((qa - qb).norm() < 0.2 * (pa - pb).norm()) continue;  // edge would collapse onto one crease point
         bool ok = true;
-        for (int v : {a, b})
-            if (prot[v] && (m.V.row(v).transpose() - (v == a ? qa : qb)).norm() > 0.02 * L) ok = false;
+        const bool strict = std::getenv("QRM_SNAP_STRICT") != nullptr;
+        if (strict)
+            for (int v : {a, b})
+                if (prot[v] && (m.V.row(v).transpose() - (v == a ? qa : qb)).norm() > 0.02 * L) ok = false;
         if (!ok) continue;
         std::set<int> fs;
         for (int v : {a, b})
@@ -720,9 +736,14 @@ int snap_near_creases(QuadMesh& m, const std::vector<std::vector<Vector3d>>& cha
         for (int f : fs) before[f] = face_sj(f);
         m.V.row(a) = qa.transpose();
         m.V.row(b) = qb.transpose();
+        const double floor_q = std::getenv("QRM_SNAP_FLOOR") ? std::atof(std::getenv("QRM_SNAP_FLOOR")) : 0.1;
         for (int f : fs)
-            if (face_sj(f) < std::min(0.1, before[f])) { ok = false; break; }
+            if (face_sj(f) < std::min(floor_q, before[f])) { ok = false; break; }
         if (ok && (ecos(best, S[i].d) < cos25 || seg_d2(S[i].p, best) > tl * tl)) ok = false;  // the snapped edge must cover
+        // crease points the moved vertices were covering must stay covered
+        for (int v : {a, b})
+            for (int j : vs_cov[v])
+                if (ok && !covered_near(j, v)) ok = false;
         if (!ok) {
             m.V.row(a) = pa.transpose();
             m.V.row(b) = pb.transpose();
@@ -730,6 +751,8 @@ int snap_near_creases(QuadMesh& m, const std::vector<std::vector<Vector3d>>& cha
         }
         prot[a] = prot[b] = 1;
         cov[i] = 1;
+        vs_cov[a].push_back((int)i);
+        vs_cov[b].push_back((int)i);
         snapped++;
         if (moved) moved->push_back(qa), moved->push_back(qb);
     }

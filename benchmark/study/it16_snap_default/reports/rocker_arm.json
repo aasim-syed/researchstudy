@@ -1,0 +1,98 @@
+{
+ "method": "it16_snap_default",
+ "faces": {
+  "total": 4815,
+  "quads": 4815,
+  "triangles": 0,
+  "vertices": 4815,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.963
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.960688,
+   "min": -1,
+   "p05": 0.860201,
+   "median": 0.986163,
+   "p95": 0.999463,
+   "max": 0.999993,
+   "std": 0.100404
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.960688,
+   "min": -1,
+   "p05": 0.860201,
+   "median": 0.986163,
+   "p95": 0.999463,
+   "max": 0.999993,
+   "std": 0.100404
+  },
+  "frac_sj_below_0.5": 0.00955348,
+  "inverted_or_degenerate": 9,
+  "planarity": {
+   "mean": 0.0147071,
+   "min": 1.61063e-15,
+   "p05": 0.000320083,
+   "median": 0.00664993,
+   "p95": 0.0581937,
+   "max": 0.25943,
+   "std": 0.0225922
+  },
+  "aspect_ratio": {
+   "mean": 415370,
+   "min": 1.00077,
+   "p05": 1.0331,
+   "median": 1.17304,
+   "p95": 1.73734,
+   "max": 1000000000.0,
+   "std": 20376400.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.67744,
+   "median": 0.995707,
+   "p95": 1.33675,
+   "max": 2.74923,
+   "std": 0.204523
+  },
+  "edge_length_mean_pct_diag": 1.40282
+ },
+ "topology": {
+  "singularities": 70,
+  "boundary_irregular": 0,
+  "singularities_per_1k_faces": 14.5379,
+  "interior_vertices": 4815,
+  "boundary_vertices": 0,
+  "boundary_edges": 0,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "3": 35,
+   "4": 4745,
+   "5": 35
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0506647,
+  "out_to_in_mean_pct": 0.0485091,
+  "in_to_out_mean_pct": 0.0528203,
+  "rms_pct": 0.105037,
+  "hausdorff_pct": 1.44323,
+  "area_ratio": 0.982096
+ },
+ "features": {
+  "feature_coverage": 0.63203,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.63203,
+  "feature_length_pct_diag": 56.1287,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 88,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 11.73,
+ "input_faces": 20088,
+ "cmd": "build/quadremesh data/models/rocker_arm.obj -o benchmark/study/it16_snap_default/meshes/rocker_arm.obj -f 5000 -a 35 --no-uv"
+}

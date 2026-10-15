@@ -1,0 +1,101 @@
+{
+ "method": "it16_snap_default",
+ "faces": {
+  "total": 5360,
+  "quads": 5360,
+  "triangles": 0,
+  "vertices": 5509,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 1.072
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.858533,
+   "min": -1,
+   "p05": 0.132721,
+   "median": 0.968788,
+   "p95": 0.999712,
+   "max": 0.999999,
+   "std": 0.268594
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.858533,
+   "min": -1,
+   "p05": 0.132721,
+   "median": 0.968788,
+   "p95": 0.999712,
+   "max": 0.999999,
+   "std": 0.268594
+  },
+  "frac_sj_below_0.5": 0.0994403,
+  "inverted_or_degenerate": 49,
+  "planarity": {
+   "mean": 0.0181235,
+   "min": 0,
+   "p05": 9.49181e-05,
+   "median": 0.00556606,
+   "p95": 0.0774129,
+   "max": 0.422178,
+   "std": 0.0309217
+  },
+  "aspect_ratio": {
+   "mean": 2052700.0,
+   "min": 1.0035,
+   "p05": 1.04342,
+   "median": 1.37882,
+   "p95": 7.93695,
+   "max": 1000000000.0,
+   "std": 45255100.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.351444,
+   "median": 0.906043,
+   "p95": 1.72598,
+   "max": 15.5039,
+   "std": 0.822204
+  },
+  "edge_length_mean_pct_diag": 1.63787
+ },
+ "topology": {
+  "singularities": 292,
+  "boundary_irregular": 35,
+  "singularities_per_1k_faces": 54.4776,
+  "interior_vertices": 5225,
+  "boundary_vertices": 284,
+  "boundary_edges": 284,
+  "nonmanifold_edges": 0,
+  "components": 13,
+  "valence_histogram": {
+   "3": 196,
+   "4": 4933,
+   "5": 68,
+   "6": 20,
+   "7": 6,
+   "8": 2
+  }
+ },
+ "distance": {
+  "mean_pct": 0.130009,
+  "out_to_in_mean_pct": 0.12349,
+  "in_to_out_mean_pct": 0.136527,
+  "rms_pct": 0.336916,
+  "hausdorff_pct": 4.36108,
+  "area_ratio": 1.01938
+ },
+ "features": {
+  "feature_coverage": 0.91228,
+  "boundary_coverage": 0.691623,
+  "combined_coverage": 0.811819,
+  "feature_length_pct_diag": 735.744,
+  "boundary_length_pct_diag": 614.945,
+  "feature_segments": 772,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 65.26,
+ "input_faces": 39936,
+ "cmd": "build/quadremesh data/models/sheen_chair.obj -o benchmark/study/it16_snap_default/meshes/sheen_chair.obj -f 5000 -a 35 --no-uv"
+}
