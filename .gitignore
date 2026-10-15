@@ -12,3 +12,4 @@ benchmark/results/meshes/
 __pycache__/
 third_party/instant-meshes/
 data/models
+build2/
