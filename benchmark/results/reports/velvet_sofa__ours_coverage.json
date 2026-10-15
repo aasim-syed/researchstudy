@@ -11,53 +11,53 @@
  },
  "quality": {
   "scaled_jacobian": {
-   "mean": 0.92231,
+   "mean": 0.922134,
    "min": -0.660367,
-   "p05": 0.60317,
-   "median": 0.980771,
-   "p95": 0.999441,
+   "p05": 0.602509,
+   "median": 0.980738,
+   "p95": 0.999448,
    "max": 0.999999,
-   "std": 0.158362
+   "std": 0.158679
   },
   "scaled_jacobian_quads": {
-   "mean": 0.923835,
+   "mean": 0.923651,
    "min": -0.660367,
-   "p05": 0.604503,
-   "median": 0.981105,
-   "p95": 0.999441,
+   "p05": 0.603481,
+   "median": 0.981051,
+   "p95": 0.999451,
    "max": 0.999999,
-   "std": 0.156738
+   "std": 0.157095
   },
-  "frac_sj_below_0.5": 0.032681,
-  "inverted_or_degenerate": 16,
+  "frac_sj_below_0.5": 0.0344423,
+  "inverted_or_degenerate": 18,
   "planarity": {
-   "mean": 0.0103037,
+   "mean": 0.0103246,
    "min": 0,
-   "p05": 1.73038e-08,
-   "median": 0.00181742,
-   "p95": 0.0495767,
+   "p05": 1.64536e-08,
+   "median": 0.0018261,
+   "p95": 0.0496258,
    "max": 0.225606,
-   "std": 0.0205923
+   "std": 0.0205099
   },
   "aspect_ratio": {
-   "mean": 4.00442,
+   "mean": 3.85869,
    "min": 1.00697,
-   "p05": 1.0626,
-   "median": 1.37295,
-   "p95": 5.08909,
+   "p05": 1.06228,
+   "median": 1.3743,
+   "p95": 5.02163,
    "max": 589.008,
-   "std": 23.291
+   "std": 23.0396
   },
   "edge_length_rel": {
    "mean": 1,
-   "min": 0.00116768,
-   "p05": 0.235967,
-   "median": 1.06109,
-   "p95": 1.6339,
-   "max": 3.58316,
-   "std": 0.429862
+   "min": 0.00116727,
+   "p05": 0.237214,
+   "median": 1.06215,
+   "p95": 1.6329,
+   "max": 3.58192,
+   "std": 0.428983
   },
-  "edge_length_mean_pct_diag": 1.24838
+  "edge_length_mean_pct_diag": 1.24882
  },
  "topology": {
   "singularities": 166,
@@ -76,25 +76,25 @@
   }
  },
  "distance": {
-  "mean_pct": 0.0277515,
-  "out_to_in_mean_pct": 0.0244677,
-  "in_to_out_mean_pct": 0.0310353,
-  "rms_pct": 0.0780526,
+  "mean_pct": 0.0275445,
+  "out_to_in_mean_pct": 0.0241838,
+  "in_to_out_mean_pct": 0.0309053,
+  "rms_pct": 0.0777416,
   "hausdorff_pct": 2.39027,
-  "area_ratio": 0.982334
+  "area_ratio": 0.982863
  },
  "features": {
-  "feature_coverage": 0.906321,
+  "feature_coverage": 0.923849,
   "boundary_coverage": 0.105847,
-  "combined_coverage": 0.883143,
+  "combined_coverage": 0.900164,
   "feature_length_pct_diag": 1072.41,
   "boundary_length_pct_diag": 31.9776,
   "feature_segments": 731,
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 146.23,
+ "runtime_s": 142,
  "input_faces": 16784,
- "cmd": "build/quadremesh data/models/velvet_sofa.obj -o benchmark/study/it22_max_coverage/meshes/velvet_sofa.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search",
- "imported_from": "benchmark/study/it22_max_coverage (flags: --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search, code 5d8dbf7)"
+ "cmd": "build/quadremesh data/models/velvet_sofa.obj -o benchmark/study/it24_max_coverage_snap2/meshes/velvet_sofa.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search",
+ "imported_from": "benchmark/study/it24_max_coverage_snap2 (flags: --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search, code dcfa6e2)"
 }

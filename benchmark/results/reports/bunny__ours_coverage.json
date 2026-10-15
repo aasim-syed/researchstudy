@@ -11,53 +11,53 @@
  },
  "quality": {
   "scaled_jacobian": {
-   "mean": 0.930444,
+   "mean": 0.929373,
    "min": -1,
-   "p05": 0.664258,
-   "median": 0.980972,
-   "p95": 0.998125,
-   "max": 0.999973,
-   "std": 0.168408
+   "p05": 0.648009,
+   "median": 0.981413,
+   "p95": 0.998181,
+   "max": 0.999972,
+   "std": 0.17129
   },
   "scaled_jacobian_quads": {
-   "mean": 0.933388,
+   "mean": 0.932265,
    "min": -1,
-   "p05": 0.681097,
-   "median": 0.981137,
-   "p95": 0.998131,
-   "max": 0.999973,
-   "std": 0.163891
+   "p05": 0.672817,
+   "median": 0.981675,
+   "p95": 0.998191,
+   "max": 0.999972,
+   "std": 0.167157
   },
-  "frac_sj_below_0.5": 0.0288158,
-  "inverted_or_degenerate": 25,
+  "frac_sj_below_0.5": 0.0306168,
+  "inverted_or_degenerate": 28,
   "planarity": {
-   "mean": 0.023876,
+   "mean": 0.023974,
    "min": 0,
-   "p05": 0.00104476,
-   "median": 0.0155101,
-   "p95": 0.0764437,
-   "max": 0.30757,
-   "std": 0.0267648
+   "p05": 0.0010376,
+   "median": 0.0154246,
+   "p95": 0.0771088,
+   "max": 0.264675,
+   "std": 0.0268688
   },
   "aspect_ratio": {
-   "mean": 1360240.0,
-   "min": 1.00228,
-   "p05": 1.03633,
-   "median": 1.19724,
-   "p95": 2.39736,
+   "mean": 1586940.0,
+   "min": 1.00276,
+   "p05": 1.0346,
+   "median": 1.19491,
+   "p95": 2.4524,
    "max": 1000000000.0,
-   "std": 36856300.0
+   "std": 39804800.0
   },
   "edge_length_rel": {
    "mean": 1,
    "min": 0,
-   "p05": 0.567264,
-   "median": 1.01624,
-   "p95": 1.32732,
-   "max": 39.0023,
-   "std": 0.480506
+   "p05": 0.563782,
+   "median": 1.02124,
+   "p95": 1.336,
+   "max": 4.92812,
+   "std": 0.265067
   },
-  "edge_length_mean_pct_diag": 1.4339
+  "edge_length_mean_pct_diag": 1.42679
  },
  "topology": {
   "singularities": 160,
@@ -78,25 +78,25 @@
   }
  },
  "distance": {
-  "mean_pct": 0.0924096,
-  "out_to_in_mean_pct": 0.0803341,
-  "in_to_out_mean_pct": 0.104485,
-  "rms_pct": 0.322077,
-  "hausdorff_pct": 9.41047,
-  "area_ratio": 0.982957
+  "mean_pct": 0.0915541,
+  "out_to_in_mean_pct": 0.0742685,
+  "in_to_out_mean_pct": 0.10884,
+  "rms_pct": 0.303113,
+  "hausdorff_pct": 4.58616,
+  "area_ratio": 0.980132
  },
  "features": {
-  "feature_coverage": 0.729634,
-  "boundary_coverage": 0.486364,
-  "combined_coverage": 0.583182,
+  "feature_coverage": 0.810248,
+  "boundary_coverage": 0.487539,
+  "combined_coverage": 0.615972,
   "feature_length_pct_diag": 89.7017,
   "boundary_length_pct_diag": 135.687,
   "feature_segments": 142,
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 61.06,
+ "runtime_s": 72.12,
  "input_faces": 69451,
- "cmd": "build/quadremesh data/models/bunny.obj -o benchmark/study/it22_max_coverage/meshes/bunny.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search",
- "imported_from": "benchmark/study/it22_max_coverage (flags: --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search, code 5d8dbf7)"
+ "cmd": "build/quadremesh data/models/bunny.obj -o benchmark/study/it24_max_coverage_snap2/meshes/bunny.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search",
+ "imported_from": "benchmark/study/it24_max_coverage_snap2 (flags: --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search, code dcfa6e2)"
 }

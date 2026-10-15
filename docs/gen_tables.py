@@ -90,12 +90,14 @@ ITS = [("it0_no_feature_paths", "field constraints + vertex snapping only (start
        ("it12_crease_cuts", "it10 + crease cuts (not adopted)"),
        ("it13_feature_density", "it9 + feature-adaptive element size"),
        ("it16_snap_default", "it13 + near-miss snapping"),
-       ("it17_default_guarded", "it16 + SJ guard, precise protection (**default**)"),
+       ("it17_default_guarded", "it16 + SJ guard, precise protection"),
        ("it18_path_subdiv_sb10", "default + path-edge subdivision, +10 sing./1k"),
        ("it19_path_subdiv_sb25", "default + path-edge subdivision, +25 sing./1k"),
        ("it20_coverage_mode_subdiv", "default + coverage mode + subdivision"),
        ("it21_im_budget", "it20 with the Instant Meshes-referenced budget"),
-       ("it22_max_coverage", "it21 + coverage search (**max coverage**)")]
+       ("it22_max_coverage", "it21 + coverage search"),
+       ("it23_default_snap2", "it17 + snapping with local relaxation and net-gain rule (**default**)"),
+       ("it24_max_coverage_snap2", "it22 with the it23 snapping (**max coverage**)")]
 
 
 def study_table():

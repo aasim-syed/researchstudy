@@ -1,0 +1,99 @@
+{
+ "method": "it24_max_coverage_snap2",
+ "faces": {
+  "total": 4678,
+  "quads": 4646,
+  "triangles": 32,
+  "vertices": 4668,
+  "quad_ratio": 0.993159,
+  "target": 5000,
+  "count_ratio": 0.9356
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.921081,
+   "min": -1,
+   "p05": 0.656105,
+   "median": 0.976299,
+   "p95": 0.998591,
+   "max": 0.999978,
+   "std": 0.172656
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.923003,
+   "min": -1,
+   "p05": 0.672695,
+   "median": 0.976525,
+   "p95": 0.9986,
+   "max": 0.999978,
+   "std": 0.170791
+  },
+  "frac_sj_below_0.5": 0.0277897,
+  "inverted_or_degenerate": 37,
+  "planarity": {
+   "mean": 0.0168626,
+   "min": 0,
+   "p05": 0.000279627,
+   "median": 0.00792697,
+   "p95": 0.0716465,
+   "max": 0.271763,
+   "std": 0.0263863
+  },
+  "aspect_ratio": {
+   "mean": 860957,
+   "min": 1.00542,
+   "p05": 1.0327,
+   "median": 1.19599,
+   "p95": 2.43605,
+   "max": 1000000000.0,
+   "std": 29329400.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.549483,
+   "median": 1.01134,
+   "p95": 1.39494,
+   "max": 16.1872,
+   "std": 0.358555
+  },
+  "edge_length_mean_pct_diag": 1.32526
+ },
+ "topology": {
+  "singularities": 158,
+  "boundary_irregular": 18,
+  "singularities_per_1k_faces": 33.7751,
+  "interior_vertices": 4645,
+  "boundary_vertices": 23,
+  "boundary_edges": 24,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "3": 66,
+   "4": 4487,
+   "5": 90,
+   "6": 2
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0541266,
+  "out_to_in_mean_pct": 0.053287,
+  "in_to_out_mean_pct": 0.0549662,
+  "rms_pct": 0.170748,
+  "hausdorff_pct": 2.37327,
+  "area_ratio": 0.978243
+ },
+ "features": {
+  "feature_coverage": 0.667185,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.667185,
+  "feature_length_pct_diag": 194.693,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 682,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 68.42,
+ "input_faces": 99938,
+ "cmd": "build/quadremesh data/models/nefertiti.obj -o benchmark/study/it24_max_coverage_snap2/meshes/nefertiti.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search"
+}

@@ -96,8 +96,8 @@
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 34.46,
+ "runtime_s": 33.98,
  "input_faces": 23424,
- "cmd": "build/quadremesh data/models/spot.obj -o benchmark/study/it22_max_coverage/meshes/spot.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search",
- "imported_from": "benchmark/study/it22_max_coverage (flags: --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search, code 5d8dbf7)"
+ "cmd": "build/quadremesh data/models/spot.obj -o benchmark/study/it24_max_coverage_snap2/meshes/spot.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search",
+ "imported_from": "benchmark/study/it24_max_coverage_snap2 (flags: --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search, code dcfa6e2)"
 }

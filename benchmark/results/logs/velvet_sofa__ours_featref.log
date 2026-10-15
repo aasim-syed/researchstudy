@@ -1,2 +1,2 @@
 /home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/velvet_sofa.obj -o /home/claude/quadremesh/benchmark/results/meshes/velvet_sofa__ours_featref.obj -f 5000 -a 35.0 --no-uv --feature-refine 2
-quadremesh: 16784 faces -> 5330 quads/tris (12.45s) -> /home/claude/quadremesh/benchmark/results/meshes/velvet_sofa__ours_featref.obj
+quadremesh: 16784 faces -> 5330 quads/tris (13.45s) -> /home/claude/quadremesh/benchmark/results/meshes/velvet_sofa__ours_featref.obj
