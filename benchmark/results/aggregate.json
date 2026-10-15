@@ -33,6 +33,17 @@
    "sing_per_1k": 86.28564,
    "runtime_s": 20.74233333333333
   },
+  "ours_coverage": {
+   "models": 15,
+   "succeeded": 15,
+   "quad_ratio": 0.9891777333333334,
+   "sj_mean": 0.9076562,
+   "dist_mean_pct": 0.06432831133333333,
+   "feature_coverage": 0.5975943,
+   "singularities": 301.26666666666665,
+   "sing_per_1k": 48.826746666666665,
+   "runtime_s": 32.61986666666667
+  },
   "instant_meshes": {
    "models": 15,
    "succeeded": 15,

@@ -1,0 +1,2 @@
+/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/beetle.obj -o /home/claude/quadremesh/benchmark/results/meshes/beetle__ours_coverage.obj -f 5000 -a 35.0 --no-uv --coverage-mode
+quadremesh: 32848 faces -> 5259 quads/tris (16.23s) -> /home/claude/quadremesh/benchmark/results/meshes/beetle__ours_coverage.obj

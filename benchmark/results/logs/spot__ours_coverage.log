@@ -1,0 +1,2 @@
+/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/spot.obj -o /home/claude/quadremesh/benchmark/results/meshes/spot__ours_coverage.obj -f 5000 -a 35.0 --no-uv --coverage-mode
+quadremesh: 23424 faces -> 4549 quads/tris (4.29s) -> /home/claude/quadremesh/benchmark/results/meshes/spot__ours_coverage.obj

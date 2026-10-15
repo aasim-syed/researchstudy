@@ -1,0 +1,2 @@
+/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/lounge_room.obj -o /home/claude/quadremesh/benchmark/results/meshes/lounge_room__ours_coverage.obj -f 15000 -a 35.0 --no-uv --coverage-mode
+quadremesh: 999999 faces -> 13519 quads/tris (153.17s) -> /home/claude/quadremesh/benchmark/results/meshes/lounge_room__ours_coverage.obj

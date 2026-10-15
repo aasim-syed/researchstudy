@@ -1,0 +1,2 @@
+/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/nefertiti.obj -o /home/claude/quadremesh/benchmark/results/meshes/nefertiti__ours_coverage.obj -f 5000 -a 35.0 --no-uv --coverage-mode
+quadremesh: 99938 faces -> 4946 quads/tris (7.80s) -> /home/claude/quadremesh/benchmark/results/meshes/nefertiti__ours_coverage.obj

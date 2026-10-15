@@ -1,0 +1,2 @@
+/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/sheen_chair.obj -o /home/claude/quadremesh/benchmark/results/meshes/sheen_chair__ours_coverage.obj -f 5000 -a 35.0 --no-uv --coverage-mode
+quadremesh: 39936 faces -> 4354 quads/tris (18.99s) -> /home/claude/quadremesh/benchmark/results/meshes/sheen_chair__ours_coverage.obj

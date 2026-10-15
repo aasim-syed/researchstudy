@@ -1,0 +1,2 @@
+/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/rocker_arm.obj -o /home/claude/quadremesh/benchmark/results/meshes/rocker_arm__ours_coverage.obj -f 5000 -a 35.0 --no-uv --coverage-mode
+quadremesh: 20088 faces -> 4724 quads/tris (5.35s) -> /home/claude/quadremesh/benchmark/results/meshes/rocker_arm__ours_coverage.obj

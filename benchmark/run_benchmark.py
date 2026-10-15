@@ -85,15 +85,19 @@ def method_cmd(method, src, dst, target):
     raise ValueError(method)
 
 
+ALL_METHODS = "ours,ours_learned,ours_featref,ours_coverage,instant_meshes,quadriflow,blender_quadriflow"
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--models", default="")
-    ap.add_argument("--methods", default="ours,ours_learned,ours_featref,ours_coverage,instant_meshes,quadriflow,blender_quadriflow")
+    ap.add_argument("--methods", default=ALL_METHODS)
     ap.add_argument("--out", default=os.path.join(ROOT, "benchmark/results"))
     ap.add_argument("--timeout", type=int, default=1500)
     ap.add_argument("--skip-existing", action="store_true")
     args = ap.parse_args()
     manifest = json.load(open(os.path.join(ROOT, "data/manifest.json")))
+    full_manifest = list(manifest)
     if args.models:
         keep = set(args.models.split(","))
         manifest = [m for m in manifest if m["name"] in keep]
@@ -121,7 +125,9 @@ def main():
                 status = "failed"
                 json.dump({"method": method, "failed": True, "runtime_s": dt}, open(rep, "w"))
             print(f"{entry['name']:15s} {method:20s} {status:8s} {dt:7.1f}s", flush=True)
-    summarize(args.out, manifest, methods)
+    # the summary always covers every model/method that has a report, so a partial re-run
+    # (a subset of models or methods) does not drop the other results from the tables
+    summarize(args.out, full_manifest, ALL_METHODS.split(","))
 
 
 def summarize(out, manifest, methods):

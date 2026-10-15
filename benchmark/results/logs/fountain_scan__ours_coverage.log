@@ -1,0 +1,2 @@
+/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/fountain_scan.obj -o /home/claude/quadremesh/benchmark/results/meshes/fountain_scan__ours_coverage.obj -f 15000 -a 35.0 --no-uv --coverage-mode
+quadremesh: 1033745 faces -> 16179 quads/tris (108.14s) -> /home/claude/quadremesh/benchmark/results/meshes/fountain_scan__ours_coverage.obj

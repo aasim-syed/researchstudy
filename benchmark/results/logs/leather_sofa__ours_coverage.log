@@ -1,0 +1,2 @@
+/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/leather_sofa.obj -o /home/claude/quadremesh/benchmark/results/meshes/leather_sofa__ours_coverage.obj -f 5000 -a 35.0 --no-uv --coverage-mode
+quadremesh: 46492 faces -> 4895 quads/tris (9.73s) -> /home/claude/quadremesh/benchmark/results/meshes/leather_sofa__ours_coverage.obj
