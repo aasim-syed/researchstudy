@@ -1,0 +1,2 @@
+/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/bunny.obj -o /home/claude/quadremesh/benchmark/results/meshes/bunny__ours_coverage.obj -f 5000 -a 35.0 --no-uv --coverage-mode
+quadremesh: 69451 faces -> 4311 quads/tris (6.32s) -> /home/claude/quadremesh/benchmark/results/meshes/bunny__ours_coverage.obj

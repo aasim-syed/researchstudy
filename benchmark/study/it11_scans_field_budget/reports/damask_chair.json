@@ -1,0 +1,102 @@
+{
+ "method": "it11_scans_field_budget",
+ "faces": {
+  "total": 4500,
+  "quads": 4448,
+  "triangles": 52,
+  "vertices": 4552,
+  "quad_ratio": 0.988444,
+  "target": 5000,
+  "count_ratio": 0.9
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.812727,
+   "min": -1,
+   "p05": 0.0645429,
+   "median": 0.974409,
+   "p95": 0.999585,
+   "max": 1,
+   "std": 0.328508
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.815567,
+   "min": -1,
+   "p05": 0.0641904,
+   "median": 0.975377,
+   "p95": 0.999596,
+   "max": 1,
+   "std": 0.32838
+  },
+  "frac_sj_below_0.5": 0.147333,
+  "inverted_or_degenerate": 68,
+  "planarity": {
+   "mean": 0.0151262,
+   "min": 0,
+   "p05": 2.10748e-06,
+   "median": 0.00495135,
+   "p95": 0.06447,
+   "max": 0.392856,
+   "std": 0.0285803
+  },
+  "aspect_ratio": {
+   "mean": 6070150.0,
+   "min": 1.00144,
+   "p05": 1.03176,
+   "median": 1.38333,
+   "p95": 24.8523,
+   "max": 1000000000.0,
+   "std": 77674300.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.218756,
+   "median": 1.00421,
+   "p95": 1.71866,
+   "max": 10.0487,
+   "std": 0.690483
+  },
+  "edge_length_mean_pct_diag": 1.82833
+ },
+ "topology": {
+  "singularities": 403,
+  "boundary_irregular": 39,
+  "singularities_per_1k_faces": 89.5556,
+  "interior_vertices": 4408,
+  "boundary_vertices": 144,
+  "boundary_edges": 144,
+  "nonmanifold_edges": 0,
+  "components": 13,
+  "valence_histogram": {
+   "2": 2,
+   "3": 233,
+   "4": 4005,
+   "5": 127,
+   "6": 30,
+   "7": 9,
+   "8": 2
+  }
+ },
+ "distance": {
+  "mean_pct": 0.113642,
+  "out_to_in_mean_pct": 0.0782371,
+  "in_to_out_mean_pct": 0.149048,
+  "rms_pct": 0.307199,
+  "hausdorff_pct": 3.41846,
+  "area_ratio": 0.964836
+ },
+ "features": {
+  "feature_coverage": 0.623906,
+  "boundary_coverage": 0.580808,
+  "combined_coverage": 0.620792,
+  "feature_length_pct_diag": 5985.21,
+  "boundary_length_pct_diag": 466.079,
+  "feature_segments": 4513,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 53.95,
+ "input_faces": 39936,
+ "cmd": "build/quadremesh data/models/damask_chair.obj -o benchmark/study/it11_scans_field_budget/meshes/damask_chair.obj -f 5000 -a 35 --no-uv --coverage-mode --field-feature-budget 1.0"
+}

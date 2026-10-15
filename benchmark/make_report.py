@@ -29,10 +29,10 @@ from quadremesh import _quadremesh as core  # noqa: E402
 RES = os.path.join(ROOT, "benchmark/results")
 OUT = os.path.join(ROOT, "docs/report")
 METHODS = ["ours", "instant_meshes", "quadriflow", "blender_quadriflow"]
-EXTRA = ["ours_learned", "ours_featref"]
-LABEL = {"ours": "quadremesh (ours)", "ours_learned": "quadremesh + learned field", "ours_featref": "quadremesh + feature refinement", "instant_meshes": "Instant Meshes", "quadriflow": "QuadriFlow",
+EXTRA = ["ours_learned", "ours_featref", "ours_coverage"]
+LABEL = {"ours": "quadremesh (ours)", "ours_learned": "quadremesh + learned field", "ours_featref": "quadremesh + feature refinement", "ours_coverage": "quadremesh --coverage-mode", "instant_meshes": "Instant Meshes", "quadriflow": "QuadriFlow",
          "blender_quadriflow": "Blender QuadriFlow"}
-COLOR = {"ours": "#2f81f7", "ours_learned": "#1b4f9c", "ours_featref": "#6cb6ff", "instant_meshes": "#e5534b", "quadriflow": "#3fb950", "blender_quadriflow": "#a371f7"}
+COLOR = {"ours": "#2f81f7", "ours_learned": "#1b4f9c", "ours_featref": "#6cb6ff", "ours_coverage": "#0a3069", "instant_meshes": "#e5534b", "quadriflow": "#3fb950", "blender_quadriflow": "#a371f7"}
 VIEW = {"bunny": (-30, 10), "fandisk": (40, 25), "fandisk_noisy": (40, 25), "rocker_arm": (30, 35), "armadillo": (200, 10),
         "spot": (60, 10), "beetle": (30, 25), "nefertiti": (90, 5), "igea": (90, 5), "sheen_chair": (35, 20),
         "damask_chair": (35, 20), "velvet_sofa": (35, 20), "leather_sofa": (35, 20), "fountain_scan": (0, 70),

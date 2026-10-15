@@ -22,27 +22,28 @@ fewer singularities than Instant Meshes at equal face count.
 | it8_hybrid_sb25 | `--partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 25` | 15 | 0.989 | 0.911 | 0.063 | **0.584** | 48.4 | 4531 | 0.96 | 10/15 |
 | it9_trace_all | `--trace-all` | 15 | 1.000 | 0.925 | 0.077 | **0.506** | 33.4 | 3132 | 0.95 | 14/15 |
 | it10_coverage_mode | `--trace-all --partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 25` | 15 | 0.989 | 0.908 | 0.064 | **0.598** | 48.8 | 4519 | 0.96 | 9/15 |
+| it11_scans_field_budget | `--coverage-mode --field-feature-budget 1.0` | 4 | 0.986 | 0.860 | 0.080 | **0.373** | 70.2 | 2392 | 0.96 | 1/4 |
 | *Instant Meshes* | – | 15 | 1.000 | 0.935 | 0.316 | *0.221* | 99.8 | 4782 | 0.91 | – |
 
 ## Per-model feature coverage
 
-| model | it0_no_feature_paths | it1_feature_paths | it2_feature_refine | it3_loops_extra_faces | it4_loops_equal_faces | it5_partial_loops | it6_partial_loops_curved_splits | it7_hybrid_sb10 | it8_hybrid_sb25 | it9_trace_all | it10_coverage_mode | Instant Meshes |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| bunny | 0.26 | 0.41 | 0.64 | 0.41 | 0.41 | 0.41 | 0.56 | 0.57 | 0.65 | 0.41 | 0.65 | 0.10 |
-| fandisk | 0.94 | 0.98 | 0.98 | 0.98 | 0.98 | 0.98 | 0.98 | 0.99 | 0.99 | 0.98 | 0.99 | 0.76 |
-| fandisk_noisy | 0.72 | 0.76 | 0.84 | 0.77 | 0.77 | 0.75 | 0.75 | 0.76 | 0.78 | 0.76 | 0.78 | 0.37 |
-| rocker_arm | 0.28 | 0.40 | 0.68 | 0.40 | 0.40 | 0.40 | 0.53 | 0.59 | 0.68 | 0.40 | 0.68 | 0.10 |
-| armadillo | 0.09 | 0.13 | 0.24 | 0.13 | 0.13 | 0.13 | 0.16 | 0.20 | 0.20 | 0.13 | 0.20 | 0.10 |
-| spot | 0.82 | 0.88 | 0.88 | 0.88 | 0.88 | 0.88 | 0.96 | 0.94 | 0.96 | 0.88 | 0.96 | 0.36 |
-| beetle | 0.50 | 0.51 | 0.51 | 0.72 | 0.58 | 0.63 | 0.63 | 0.62 | 0.67 | 0.51 | 0.67 | 0.12 |
-| nefertiti | 0.27 | 0.40 | 0.55 | 0.40 | 0.40 | 0.40 | 0.43 | 0.45 | 0.52 | 0.40 | 0.52 | 0.07 |
-| igea | 0.16 | 0.35 | 0.60 | 0.35 | 0.35 | 0.35 | 0.39 | 0.50 | 0.51 | 0.35 | 0.51 | 0.13 |
-| sheen_chair | 0.75 | 0.81 | 0.66 | 0.80 | 0.71 | 0.82 | 0.76 | 0.77 | 0.79 | 0.75 | 0.79 | 0.48 |
-| damask_chair | 0.43 | 0.43 | 0.42 | 0.46 | 0.43 | 0.40 | 0.36 | 0.36 | 0.45 | 0.55 | 0.58 | 0.30 |
-| velvet_sofa | 0.61 | 0.65 | 0.82 | 0.72 | 0.62 | 0.79 | 0.80 | 0.73 | 0.75 | 0.65 | 0.75 | 0.39 |
-| leather_sofa | 0.73 | 0.70 | 0.09 | 0.75 | 0.64 | 0.68 | 0.72 | 0.78 | 0.73 | 0.70 | 0.73 | 0.00 |
-| fountain_scan | 0.03 | 0.03 | 0.03 | 0.03 | 0.03 | 0.03 | 0.04 | 0.04 | 0.04 | 0.07 | 0.09 | 0.01 |
-| lounge_room | 0.02 | 0.02 | 0.03 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.04 | 0.05 | 0.02 |
+| model | it0_no_feature_paths | it1_feature_paths | it2_feature_refine | it3_loops_extra_faces | it4_loops_equal_faces | it5_partial_loops | it6_partial_loops_curved_splits | it7_hybrid_sb10 | it8_hybrid_sb25 | it9_trace_all | it10_coverage_mode | it11_scans_field_budget | Instant Meshes |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| bunny | 0.26 | 0.41 | 0.64 | 0.41 | 0.41 | 0.41 | 0.56 | 0.57 | 0.65 | 0.41 | 0.65 | – | 0.10 |
+| fandisk | 0.94 | 0.98 | 0.98 | 0.98 | 0.98 | 0.98 | 0.98 | 0.99 | 0.99 | 0.98 | 0.99 | – | 0.76 |
+| fandisk_noisy | 0.72 | 0.76 | 0.84 | 0.77 | 0.77 | 0.75 | 0.75 | 0.76 | 0.78 | 0.76 | 0.78 | – | 0.37 |
+| rocker_arm | 0.28 | 0.40 | 0.68 | 0.40 | 0.40 | 0.40 | 0.53 | 0.59 | 0.68 | 0.40 | 0.68 | – | 0.10 |
+| armadillo | 0.09 | 0.13 | 0.24 | 0.13 | 0.13 | 0.13 | 0.16 | 0.20 | 0.20 | 0.13 | 0.20 | – | 0.10 |
+| spot | 0.82 | 0.88 | 0.88 | 0.88 | 0.88 | 0.88 | 0.96 | 0.94 | 0.96 | 0.88 | 0.96 | – | 0.36 |
+| beetle | 0.50 | 0.51 | 0.51 | 0.72 | 0.58 | 0.63 | 0.63 | 0.62 | 0.67 | 0.51 | 0.67 | – | 0.12 |
+| nefertiti | 0.27 | 0.40 | 0.55 | 0.40 | 0.40 | 0.40 | 0.43 | 0.45 | 0.52 | 0.40 | 0.52 | – | 0.07 |
+| igea | 0.16 | 0.35 | 0.60 | 0.35 | 0.35 | 0.35 | 0.39 | 0.50 | 0.51 | 0.35 | 0.51 | – | 0.13 |
+| sheen_chair | 0.75 | 0.81 | 0.66 | 0.80 | 0.71 | 0.82 | 0.76 | 0.77 | 0.79 | 0.75 | 0.79 | – | 0.48 |
+| damask_chair | 0.43 | 0.43 | 0.42 | 0.46 | 0.43 | 0.40 | 0.36 | 0.36 | 0.45 | 0.55 | 0.58 | 0.62 | 0.30 |
+| velvet_sofa | 0.61 | 0.65 | 0.82 | 0.72 | 0.62 | 0.79 | 0.80 | 0.73 | 0.75 | 0.65 | 0.75 | – | 0.39 |
+| leather_sofa | 0.73 | 0.70 | 0.09 | 0.75 | 0.64 | 0.68 | 0.72 | 0.78 | 0.73 | 0.70 | 0.73 | 0.73 | 0.00 |
+| fountain_scan | 0.03 | 0.03 | 0.03 | 0.03 | 0.03 | 0.03 | 0.04 | 0.04 | 0.04 | 0.07 | 0.09 | 0.09 | 0.01 |
+| lounge_room | 0.02 | 0.02 | 0.03 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.04 | 0.05 | 0.05 | 0.02 |
 
 Code provenance: it0-it8 ran on the working tree between commits f0a388b and the commit that adds this note; it5/it6 used an earlier triangle budget (1.2 %, loops limited to 0.6 of it) and face-count threshold (1.08x). From it9 on, each run's meta.json records the exact commit.
 
@@ -104,4 +105,9 @@ Code provenance: it0-it8 ran on the working tree between commits f0a388b and the
 - flags: `--trace-all --partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 25` · code: `f2fdc85` · run: 2026-10-15T09:37:58
 - it8 (hybrid, singularity budget 25) + full-set path recovery (it9).
 - Observed: best mean coverage so far, 0.598 (it8: 0.584), quad 0.989, SJ 0.908, distance 0.064 %; cost: 48.8 singularities/1k and only 9/15 models below Instant Meshes. Still far from the 0.90 target: the misses concentrate on organic scans (armadillo, igea, nefertiti) and room scans, whose 35-degree 'creases' are mostly sculpting/scan noise shorter than one element.
+
+### it11_scans_field_budget
+- flags: `--coverage-mode --field-feature-budget 1.0` · code: `c626651` · run: 2026-10-15T09:52:35
+- Scans and the dense-crease chair only (4 models - not comparable to the 15-model means above). Hypothesis: on these inputs the field is given only a fraction of the creases (feature budget 0.06 for scans, 0.3 otherwise), so loops are not aligned with the rest. Change: coverage mode + give the field all creases (--field-feature-budget 1.0).
+- Observed (vs it10 on the same 4 models): damask_chair 0.585 -> 0.624 coverage but 361 -> 403 singularities; leather_sofa, fountain_scan and lounge_room are bit-identical, because the dense-scan path keeps its fixed 0.06 field budget regardless of the flag (the integer solve is unstable on 1M-face scans with more constraints). So the hypothesis is untested on the scans and gives a coverage-for-singularities trade on the chair. Not adopted.
 

@@ -61,6 +61,7 @@
  ],
  "code_note": "it0-it8 ran on the working tree between commits f0a388b and the commit that adds this note; it5/it6 used an earlier triangle budget (1.2 %, loops limited to 0.6 of it) and face-count threshold (1.08x). From it9 on, each run's meta.json records the exact commit.",
  "it11_scans_field_budget": [
-  "Scans and the dense-crease chair only (4 models - not comparable to the 15-model means above). Hypothesis: on these inputs the field is given only a fraction of the creases (feature budget 0.06 for scans, 0.3 otherwise), so loops are not aligned with the rest. Change: coverage mode + give the field all creases (--field-feature-budget 1.0)."
+  "Scans and the dense-crease chair only (4 models - not comparable to the 15-model means above). Hypothesis: on these inputs the field is given only a fraction of the creases (feature budget 0.06 for scans, 0.3 otherwise), so loops are not aligned with the rest. Change: coverage mode + give the field all creases (--field-feature-budget 1.0).",
+  "Observed (vs it10 on the same 4 models): damask_chair 0.585 -> 0.624 coverage but 361 -> 403 singularities; leather_sofa, fountain_scan and lounge_room are bit-identical, because the dense-scan path keeps its fixed 0.06 field budget regardless of the flag (the integer solve is unstable on 1M-face scans with more constraints). So the hypothesis is untested on the scans and gives a coverage-for-singularities trade on the chair. Not adopted."
  ]
 }
