@@ -18,7 +18,10 @@
   "it15_coverage_search",
   "it16_snap_default",
   "it17_default_guarded",
-  "it18_max_coverage"
+  "it18_path_subdiv_sb10",
+  "it19_path_subdiv_sb25",
+  "it20_coverage_mode_subdiv",
+  "it21_max_coverage"
  ],
  "it0_no_feature_paths": [
   "Baseline before any coverage-specific post-processing: hard feature constraints in the field + proximity snapping of vertices to creases (the default before edge-path recovery). Reproduced with the current code by disabling path recovery (QRM_NO_FEATURE_PATHS=1)."
@@ -99,9 +102,20 @@
   "Observed: 0.506 -> 0.637 over all 15 (it9 -> it16), 0.575 -> 0.725 on the 13 non-scan models; quads 100 %, SJ 0.902, 14/15 below Instant Meshes. Damask chair's mean SJ falls to 0.776 (< 0.8) because of the feature-adaptive size on its dense carvings."
  ],
  "it17_default_guarded": [
-  "Two fixes on it16. (1) Snapping protection made precise: a vertex that already carries a covering edge may move if every crease point it was covering is still covered afterwards (it16 never moved such vertices). (2) Quality guard: if the mean SJ of the result is below 0.81, the solve is repeated with half the feature-adaptive strength, then without it."
+  "Two fixes on it16. (1) Snapping protection made precise: a vertex that already carries a covering edge may move if every crease point it was covering is still covered afterwards (it16 never moved such vertices). (2) Quality guard: if the mean SJ of the result is below 0.81, the solve is repeated with half the feature-adaptive strength, then without it.",
+  "Observed: 0.648 over 15, 0.737 on the 13 non-scan models; every model meets quad >= 98 %, SJ >= 0.8 (damask 0.816) and distance < 0.5 %; 14/15 below Instant Meshes (lounge, solved by the Instant Meshes fallback, is the exception as in every iteration). This is the new default."
  ],
- "it18_max_coverage": [
-  "Coverage mode (budgeted loops / refinement / curved splits) + it17 defaults + coverage search (4 candidates scored with the evaluator code; quad >= 98 %, SJ >= 0.8, distance < 0.5 %, <= +10 singularities/1k over the first candidate)."
+ "it18_path_subdiv_sb10": [
+  "Bound (measured on the crease polylines): the fraction of crease length within 25 deg of the chord through +-0.5 L is 0.43 (armadillo), 0.66 (igea), 0.67 (nefertiti), 0.83 (bunny), 0.76 (rocker arm) - edges of length ~L cannot cover more on these scans; with chords of 0.5 L it is 0.74-1.00 and with 0.25 L 0.98-1.00. Furniture/CAD creases are 0.96-1.00 already at L.",
+  "Change: path-edge subdivision - every recovered path edge whose chord misses its piece of the crease is split into 3 at crease points (edges ranked by the crease length the split recovers); the quad on each side becomes a hexagon that is split into 2 quads with the diagonal from the first new vertex on one side and from the second on the other (no valence-2 vertices). Pure quads; costs about 4 irregular vertices per split edge, applied in chunks within the singularity budget (+10 per 1k target faces here)."
+ ],
+ "it19_path_subdiv_sb25": [
+  "it18 with a singularity budget of +25 per 1k target faces."
+ ],
+ "it20_coverage_mode_subdiv": [
+  "Coverage mode (budgeted loops / refinement / curved splits, +25 singularities per 1k) + path-edge subdivision, on the new defaults."
+ ],
+ "it21_max_coverage": [
+  "it20 + coverage search (4 candidates scored with the evaluator code; quad >= 98 %, SJ >= 0.8, distance < 0.5 %, <= +10 singularities/1k over the first candidate). 4x runtime."
  ]
 }

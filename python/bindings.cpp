@@ -37,6 +37,7 @@ Params params_from_kwargs(const py::kwargs& kw) {
         else if (k == "crease_cuts") p.crease_cuts = v.cast<bool>();
         else if (k == "coverage_search") p.coverage_search = v.cast<bool>();
         else if (k == "snap_near") p.snap_near = v.cast<double>();
+        else if (k == "path_subdivision") p.path_subdivision = v.cast<int>();
         else if (k == "legacy") {
             if (v.cast<bool>()) { p.trace_all_features = false; p.feature_density = 0; p.snap_near = 0; }
         }

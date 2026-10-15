@@ -64,6 +64,7 @@ struct Params {
     bool crease_cuts = false;
     bool coverage_search = false;
     int coverage_target_faces = 0;       // internal: face count the coverage tolerance refers to (0 = target_faces)
+    int path_subdivision = 0;            // 3 / 5: split path edges that miss their crease into this many pieces
     double snap_near = 0.5;              // >0: snap edges within this many L onto uncovered creases
     std::vector<Vector3d> density_focus;  // input-space points that get extra density (error-driven)
     double density_focus_strength = 8.0;

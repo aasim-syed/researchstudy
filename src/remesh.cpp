@@ -736,7 +736,7 @@ static Result quadremesh_once(const TriMesh& input, const Params& p) {
     // Every coverage operation (edge-loop insertion, local refinement, curved-crease splits) is
     // applied tentatively and kept only if the mesh stays inside two budgets: triangles (quad
     // ratio) and irregular vertices (singularities). Both are topological, so checks are cheap.
-    if (!std::getenv("QRM_NOPOST") && (p.feature_loops || p.feature_refine_rounds > 0 || p.curved_feature_splits || p.crease_cuts || p.snap_near > 0)) {
+    if (!std::getenv("QRM_NOPOST") && (p.feature_loops || p.feature_refine_rounds > 0 || p.curved_feature_splits || p.crease_cuts || p.snap_near > 0 || p.path_subdivision > 0)) {
         const int T = std::max(1, p.target_faces);
         auto ntris = [&]() { int t = 0; for (int i = 0; i < qm.Q.rows(); ++i) t += qm.Q(i, 3) < 0; return t; };
         auto nsing = [&]() {
@@ -876,6 +876,34 @@ static Result quadremesh_once(const TriMesh& input, const Params& p) {
                     " over budget; coverage ", cov / std::max(tot, 1e-30), " -> ", cov2 / std::max(tot2, 1e-30), ", ", qm.Q.rows(), " faces");
                 if (!ok) break;
             }
+        }
+        // 4b. path-edge subdivision: path edges whose chord misses a curved / zigzag crease are
+        // split into 3 (or 5) pieces at crease points; the faces on both sides stay quads
+        if (p.path_subdivision > 0) {
+            relax_and_project(qm, ref, L, p.smooth_iterations, pst);
+            double c0 = 0, t0 = 0;
+            const auto all_chains = ref.feature_chains(0.0);
+            uncovered_crease_runs(qm, all_chains, Lc, 1e9, 0, 0.1, 25.0, &c0, &t0);
+            int total = 0, chunk = std::max(4, (int)(0.004 * T));
+            for (int pass = 0; pass < 200; ++pass) {
+                QuadMesh backup = qm;
+                PostStats bst = pst;
+                std::vector<Vector3d> addv;
+                // edges already handled are covered now, so each pass picks new ones
+                int ns = subdivide_path_edges(qm, pst.paths, pst.path_chains, Lc, p.path_subdivision, chunk, &addv);
+                if (!ns) break;
+                cleanup(qm, pst);
+                if (!within()) { qm = backup; pst = bst; rejected++; if (chunk <= 4) break; chunk /= 2; continue; }
+                accepted++;
+                total += ns;
+                pst.pinned.insert(pst.pinned.end(), addv.begin(), addv.end());
+                // the path vertex lists are stale after re-splitting: re-trace before the next pass
+                relax_and_project(qm, ref, L, p.smooth_iterations, pst);
+            }
+            double c1 = 0, t1 = 0;
+            uncovered_crease_runs(qm, all_chains, Lc, 1e9, 0, 0.1, 25.0, &c1, &t1);
+            log("path subdivision: ", total, " edges -> ", qm.Q.rows(), " faces; coverage ", c0 / std::max(t0, 1e-30), " -> ",
+                c1 / std::max(t1, 1e-30));
         }
         // 5. near-miss snapping: edges running alongside an uncovered crease are moved onto it
         if (p.snap_near > 0) {

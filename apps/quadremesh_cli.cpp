@@ -29,6 +29,7 @@ static void usage() {
         "  --feature-density K      smaller elements near creases inside the field solve (8, 0 = off)\n"
         "  --feature-density-width W  width of that zone in edge lengths (1.5)\n"
         "  --max-density-ratio R    clamp of the density variation, max/min (8)\n"
+        "  --path-subdiv K          split crease path edges that miss the crease into K (3/5) pieces (0 = off)\n"
         "  --snap-near D            move edges within D x edge length onto uncovered creases (0.5, 0 = off)\n"
         "  --coverage-search        solve with several crease-size settings, keep the best-scoring result\n"
         "  --crease-cuts            cut the mesh along creases still uncovered after the steps above\n"
@@ -125,6 +126,7 @@ int main(int argc, char** argv) {
         else if (a == "--crease-cuts") p.crease_cuts = true;
         else if (a == "--coverage-search") p.coverage_search = true;
         else if (a == "--snap-near") p.snap_near = std::stod(next());
+        else if (a == "--path-subdiv") p.path_subdivision = std::stoi(next());
         else if (a == "--feature-density") p.feature_density = std::stod(next());
         else if (a == "--max-density-ratio") p.max_density_ratio = std::stod(next());
         else if (a == "--feature-density-width") p.feature_density_width = std::stod(next());

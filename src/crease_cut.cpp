@@ -759,4 +759,137 @@ int snap_near_creases(QuadMesh& m, const std::vector<std::vector<Vector3d>>& cha
     return snapped;
 }
 
+
+int subdivide_path_edges(QuadMesh& m, const std::vector<std::vector<int>>& paths,
+                         const std::vector<std::vector<Vector3d>>& chains, double L, int pieces, int max_edges,
+                         std::vector<Vector3d>* added) {
+    if (pieces < 3 || pieces % 2 == 0 || paths.size() != chains.size()) return 0;
+    std::vector<Poly> polys = polys_of(m);
+    std::vector<Vector3d> V(m.V.rows());
+    for (int i = 0; i < m.V.rows(); ++i) V[i] = m.V.row(i).transpose();
+    std::map<std::pair<int, int>, std::vector<int>> edge_faces;
+    for (int f = 0; f < (int)polys.size(); ++f)
+        for (size_t j = 0; j < polys[f].size(); ++j) {
+            int a = polys[f][j], b = polys[f][(j + 1) % polys[f].size()];
+            edge_faces[{std::min(a, b), std::max(a, b)}].push_back(f);
+        }
+    const double tol = 0.09 * L, cosa = std::cos(23.0 * M_PI / 180.0);
+    // candidates from all paths, best first (uncovered crease length the subdivision recovers)
+    struct Cand { double gain; int a, b; std::vector<Vector3d> pts; };
+    std::vector<Cand> cands;
+    for (size_t pi = 0; pi < paths.size(); ++pi) {
+        const auto& C = chains[pi];
+        if (C.size() < 2) continue;
+        std::vector<double> cum(C.size(), 0.0);
+        for (size_t k = 1; k < C.size(); ++k) cum[k] = cum[k - 1] + (C[k] - C[k - 1]).norm();
+        auto param = [&](const Vector3d& x) {
+            double best = 1e300, t = 0;
+            for (size_t k = 0; k + 1 < C.size(); ++k) {
+                Vector3d ab = C[k + 1] - C[k];
+                double l2 = ab.squaredNorm();
+                double u = l2 > 0 ? std::clamp((x - C[k]).dot(ab) / l2, 0.0, 1.0) : 0.0;
+                double d = (C[k] + u * ab - x).squaredNorm();
+                if (d < best) best = d, t = cum[k] + u * std::sqrt(l2);
+            }
+            return t;
+        };
+        auto at = [&](double t) {
+            size_t k = std::upper_bound(cum.begin(), cum.end(), t) - cum.begin();
+            if (k == 0) return C.front();
+            if (k >= C.size()) return C.back();
+            double u = (t - cum[k - 1]) / std::max(cum[k] - cum[k - 1], 1e-30);
+            return Vector3d(C[k - 1] + u * (C[k] - C[k - 1]));
+        };
+        auto dir = [&](double t) {
+            size_t k = std::upper_bound(cum.begin(), cum.end(), t) - cum.begin();
+            k = std::max<size_t>(1, std::min(k, C.size() - 1));
+            Vector3d d = C[k] - C[k - 1];
+            return d.norm() > 0 ? Vector3d(d.normalized()) : Vector3d(1, 0, 0);
+        };
+        // covered length of the crease piece [t0, t1] by the polyline through Q
+        auto poly_cov = [&](const std::vector<Vector3d>& Q, double t0, double t1) {
+            int ns = std::max(2, (int)std::ceil((t1 - t0) / (0.05 * L)));
+            double ok = 0;
+            for (int i = 0; i < ns; ++i) {
+                double t = t0 + (t1 - t0) * (i + 0.5) / ns;
+                Vector3d q = at(t), d = dir(t);
+                for (size_t k = 0; k + 1 < Q.size(); ++k) {
+                    Vector3d ab = Q[k + 1] - Q[k];
+                    double l = ab.norm();
+                    if (l <= 0) continue;
+                    Vector3d u = ab / l;
+                    double sp = std::clamp((q - Q[k]).dot(u), 0.0, l);
+                    if ((Q[k] + sp * u - q).norm() <= tol && std::abs(d.dot(u)) >= cosa) { ok += (t1 - t0) / ns; break; }
+                }
+            }
+            return ok;
+        };
+        const auto& P = paths[pi];
+        for (size_t k = 0; k + 1 < P.size(); ++k) {
+            int a = P[k], b = P[k + 1];
+            double ta = param(V[a]), tb = param(V[b]);
+            double t0 = std::min(ta, tb), t1 = std::max(ta, tb);
+            if (t1 - t0 < 0.15 * L) continue;
+            double before = poly_cov({V[a], V[b]}, t0, t1);
+            if (before >= 0.95 * (t1 - t0)) continue;
+            std::vector<Vector3d> pts;
+            for (int i = 1; i < pieces; ++i) pts.push_back(at(ta + (tb - ta) * i / pieces));
+            std::vector<Vector3d> Q = {V[a]};
+            Q.insert(Q.end(), pts.begin(), pts.end());
+            Q.push_back(V[b]);
+            double gain = poly_cov(Q, t0, t1) - before;
+            if (gain > 0.05 * L) cands.push_back({gain, a, b, pts});
+        }
+    }
+    std::sort(cands.begin(), cands.end(), [](const Cand& x, const Cand& y) { return x.gain > y.gain; });
+    std::set<int> touched;
+    int done = 0;
+    for (auto& c : cands) {
+        if (done >= max_edges) break;
+        int a = c.a, b = c.b;
+        auto it = edge_faces.find({std::min(a, b), std::max(a, b)});
+        if (it == edge_faces.end()) continue;
+        bool busy = false;
+        for (int f : it->second) busy |= touched.count(f) > 0;
+        if (busy) continue;  // one subdivision per face per pass keeps the re-split simple
+        std::vector<int> ids;
+        for (auto& x : c.pts) { ids.push_back((int)V.size()); V.push_back(x); }
+        int side = 0;
+        for (int f : it->second) {
+            Poly& p = polys[f];
+            for (size_t j = 0; j < p.size(); ++j) {
+                int x = p[j], y = p[(j + 1) % p.size()];
+                if (x == a && y == b) { p.insert(p.begin() + j + 1, ids.begin(), ids.end()); break; }
+                if (x == b && y == a) { p.insert(p.begin() + j + 1, ids.rbegin(), ids.rend()); break; }
+            }
+            // a quad that became a hexagon (a n1 n2 b c d) is split right here, with the diagonal
+            // from n1 on one side and from n2 on the other, so no new vertex is left with valence 2
+            if (p.size() == 6 && pieces == 3) {
+                int k = (int)(std::find(p.begin(), p.end(), ids[side]) - p.begin());
+                Poly q1 = {p[k], p[(k + 1) % 6], p[(k + 2) % 6], p[(k + 3) % 6]};
+                Poly q2 = {p[(k + 3) % 6], p[(k + 4) % 6], p[(k + 5) % 6], p[k]};
+                p = q1;
+                polys.push_back(q2);
+            }
+            side = 1 - side;
+            touched.insert(f);
+        }
+        if (added) added->insert(added->end(), c.pts.begin(), c.pts.end());
+        done++;
+    }
+    if (!done) return 0;
+    std::vector<Poly> out;
+    for (int f = 0; f < (int)polys.size(); ++f) {
+        if (polys[f].size() <= 4) { out.push_back(polys[f]); continue; }
+        tessellate(polys[f], V, out);
+    }
+    m.V.resize(V.size(), 3);
+    for (size_t i = 0; i < V.size(); ++i) m.V.row(i) = V[i].transpose();
+    m.Q.resize(out.size(), 4);
+    for (size_t f = 0; f < out.size(); ++f)
+        for (int j = 0; j < 4; ++j) m.Q(f, j) = j < (int)out[f].size() ? out[f][j] : -1;
+    m.UV.resize(0, 2);
+    return done;
+}
+
 }  // namespace qrm

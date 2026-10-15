@@ -1,0 +1,98 @@
+{
+ "method": "it17_default_guarded",
+ "faces": {
+  "total": 4558,
+  "quads": 4558,
+  "triangles": 0,
+  "vertices": 4888,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.9116
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.835358,
+   "min": -1,
+   "p05": 0.219395,
+   "median": 0.953235,
+   "p95": 0.999405,
+   "max": 0.999995,
+   "std": 0.257579
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.835358,
+   "min": -1,
+   "p05": 0.219395,
+   "median": 0.953235,
+   "p95": 0.999405,
+   "max": 0.999995,
+   "std": 0.257579
+  },
+  "frac_sj_below_0.5": 0.0993857,
+  "inverted_or_degenerate": 94,
+  "planarity": {
+   "mean": 0.0156407,
+   "min": 0,
+   "p05": 5.05335e-09,
+   "median": 0.00509826,
+   "p95": 0.066229,
+   "max": 0.405053,
+   "std": 0.0297486
+  },
+  "aspect_ratio": {
+   "mean": 443046,
+   "min": 1.00442,
+   "p05": 1.08633,
+   "median": 1.5835,
+   "p95": 5.07913,
+   "max": 1000000000.0,
+   "std": 20943700.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.392819,
+   "median": 0.918897,
+   "p95": 1.68862,
+   "max": 6.61515,
+   "std": 0.464666
+  },
+  "edge_length_mean_pct_diag": 1.10109
+ },
+ "topology": {
+  "singularities": 243,
+  "boundary_irregular": 57,
+  "singularities_per_1k_faces": 53.3129,
+  "interior_vertices": 4202,
+  "boundary_vertices": 686,
+  "boundary_edges": 686,
+  "nonmanifold_edges": 0,
+  "components": 2,
+  "valence_histogram": {
+   "3": 121,
+   "4": 3959,
+   "5": 122
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0506283,
+  "out_to_in_mean_pct": 0.0588874,
+  "in_to_out_mean_pct": 0.0423691,
+  "rms_pct": 0.180744,
+  "hausdorff_pct": 4.13729,
+  "area_ratio": 0.999077
+ },
+ "features": {
+  "feature_coverage": 0.737376,
+  "boundary_coverage": 0.703038,
+  "combined_coverage": 0.723191,
+  "feature_length_pct_diag": 1250.35,
+  "boundary_length_pct_diag": 880.036,
+  "feature_segments": 1830,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 38.07,
+ "input_faces": 32848,
+ "cmd": "build/quadremesh data/models/beetle.obj -o benchmark/study/it17_default_guarded/meshes/beetle.obj -f 5000 -a 35 --no-uv"
+}

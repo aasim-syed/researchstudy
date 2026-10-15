@@ -34,4 +34,14 @@ int embed_crease_run(QuadMesh& m, const std::vector<Vector3d>& run, double L, do
 int snap_near_creases(QuadMesh& m, const std::vector<std::vector<Vector3d>>& chains, double L, double max_dist,
                       std::vector<Vector3d>* moved = nullptr, double max_angle = 75.0);
 
+// Path-edge subdivision: every edge of a recovered crease path whose chord does not cover its
+// piece of the crease (sag > 0.09 L or turn > 23 deg) is split into `pieces` (odd: 3 or 5) at
+// crease points; the faces on both sides gain an even number of vertices and are re-split into
+// quads (a quad becomes two or three quads, a triangle a quad + triangle). paths/chains as in
+// PostStats. Returns the number of path edges subdivided (at most max_edges); new vertex
+// positions go to `added`.
+int subdivide_path_edges(QuadMesh& m, const std::vector<std::vector<int>>& paths,
+                         const std::vector<std::vector<Vector3d>>& chains, double L, int pieces, int max_edges,
+                         std::vector<Vector3d>* added = nullptr);
+
 }  // namespace qrm
