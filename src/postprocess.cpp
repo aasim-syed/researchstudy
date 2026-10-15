@@ -6,6 +6,9 @@
 #include <array>
 #include <cmath>
 #include <map>
+#include <cstdio>
+#include <cstdlib>
+#include <queue>
 #include <set>
 
 #include "quadremesh/geometry.h"
@@ -86,6 +89,63 @@ MatrixXd SurfaceRef::corner_points() const {
     for (int i = 0; i < impl->CE.rows(); ++i) P.row(i) = impl->V.row(impl->CE(i, 0));
     return P;
 }
+std::vector<std::vector<Vector3d>> SurfaceRef::feature_chains(double min_len) const {
+    std::vector<std::vector<Vector3d>> out;
+    const auto& FE = impl->FE;
+    if (!FE.rows()) return out;
+    std::map<int, std::vector<std::pair<int, int>>> adj;  // vertex -> (nbr, edge)
+    for (int e = 0; e < FE.rows(); ++e) {
+        adj[FE(e, 0)].push_back({FE(e, 1), e});
+        adj[FE(e, 1)].push_back({FE(e, 0), e});
+    }
+    std::set<int> stop;  // split only at junctions / endpoints (kinks are followed by the path)
+    for (auto& kv : adj)
+        if (kv.second.size() != 2) stop.insert(kv.first);
+    std::vector<char> used(FE.rows(), 0);
+    auto walk = [&](int start, int e0) {
+        std::vector<int> vs = {start};
+        int v = start, e = e0;
+        while (true) {
+            used[e] = 1;
+            int u = FE(e, 0) == v ? FE(e, 1) : FE(e, 0);
+            vs.push_back(u);
+            if (stop.count(u) || u == start) break;
+            auto& a = adj[u];
+            int en = a[0].second == e ? a[1].second : a[0].second;
+            if (used[en]) break;
+            v = u, e = en;
+        }
+        return vs;
+    };
+    auto emit = [&](const std::vector<int>& vs) {
+        std::vector<Vector3d> P;
+        double len = 0;
+        for (size_t k = 0; k < vs.size(); ++k) {
+            P.push_back(impl->V.row(vs[k]).transpose());
+            if (k) len += (P[k] - P[k - 1]).norm();
+        }
+        if (len < min_len || P.size() < 2) return;
+        if (vs.front() == vs.back() && P.size() > 3) {  // closed loop: split in two halves
+            size_t h = P.size() / 2;
+            out.emplace_back(P.begin(), P.begin() + h + 1);
+            out.emplace_back(P.begin() + h, P.end());
+        } else {
+            out.push_back(P);
+        }
+    };
+    for (auto& kv : adj)
+        if (stop.count(kv.first))
+            for (auto& pr : kv.second)
+                if (!used[pr.second]) emit(walk(kv.first, pr.second));
+    for (int e = 0; e < FE.rows(); ++e)
+        if (!used[e]) emit(walk(FE(e, 0), e));
+    std::sort(out.begin(), out.end(), [](const std::vector<Vector3d>& a, const std::vector<Vector3d>& b) {
+        if (a.size() != b.size()) return a.size() > b.size();
+        return a[0].x() < b[0].x();
+    });
+    return out;
+}
+
 bool SurfaceRef::has_features() const { return impl->FE.rows() > 0; }
 bool SurfaceRef::has_boundary() const { return impl->BE.rows() > 0; }
 int SurfaceRef::sym_axis() const { return impl->axis; }
@@ -409,6 +469,224 @@ int refine_to_size(QuadMesh& m, const std::function<VectorXd(const MatrixXd&)>& 
     return total;
 }
 
+
+namespace {
+// Directed-edge Dijkstra between the output vertices nearest to the two ends of a feature chain.
+// Cost favours edges close to and parallel with the curve and penalises turning inside a single
+// face (staircases). The path is then snapped onto the curve with a monotone arclength map.
+int trace_feature_paths(QuadMesh& m, const std::vector<Face>& f, const std::vector<std::vector<int>>& nbr,
+                        std::vector<char>& type, std::vector<std::vector<int>>& fnbr, const SurfaceRef& ref,
+                        double L, PostStats& st) {
+    const int nv = (int)m.V.rows();
+    auto chains = ref.feature_chains(0.5 * L);
+    st.untraced.clear();
+    st.feature_chains = (int)chains.size();
+    if (chains.empty()) return 0;
+    // consecutive (x, u, y) corners -> turning inside a face
+    std::vector<std::set<std::pair<int, int>>> corner(nv);
+    for (auto& q : f) {
+        int n = fsize(q);
+        for (int k = 0; k < n; ++k) {
+            int x = q[(k + n - 1) % n], u = q[k], y = q[(k + 1) % n];
+            corner[u].insert({std::min(x, y), std::max(x, y)});
+        }
+    }
+    std::vector<std::vector<int>> vfaces(nv);
+    for (size_t fi = 0; fi < f.size(); ++fi)
+        for (int k = 0; k < fsize(f[fi]); ++k) vfaces[f[fi][k]].push_back((int)fi);
+    std::vector<char> locked(nv, 0);
+    const bool dbg = std::getenv("QRM_DEBUG_PATHS") != nullptr;
+    int r_end = 0, r_nopath = 0, r_reject = 0;
+    double len_all = 0, len_ok = 0;
+    std::vector<std::vector<int>> pnbr(nv);
+    std::vector<char> on_path(nv, 0);
+    int traced = 0;
+    for (const auto& C : chains) {
+        // chain geometry
+        std::vector<double> cum(C.size(), 0.0);
+        for (size_t k = 1; k < C.size(); ++k) cum[k] = cum[k - 1] + (C[k] - C[k - 1]).norm();
+        const double clen = cum.back();
+        len_all += clen;
+        Vector3d bmin = C[0], bmax = C[0];
+        for (auto& p : C) bmin = bmin.cwiseMin(p), bmax = bmax.cwiseMax(p);
+        bmin.array() -= L, bmax.array() += L;
+        auto closest = [&](const Vector3d& p, double& t, Vector3d& c, Vector3d& tan) {
+            double best = 1e300;
+            for (size_t k = 0; k + 1 < C.size(); ++k) {
+                Vector3d ab = C[k + 1] - C[k];
+                double l2 = ab.squaredNorm();
+                double s = l2 > 0 ? std::max(0.0, std::min(1.0, (p - C[k]).dot(ab) / l2)) : 0.0;
+                Vector3d q = C[k] + s * ab;
+                double d = (p - q).squaredNorm();
+                if (d < best) {
+                    best = d, c = q, t = cum[k] + s * std::sqrt(l2);
+                    tan = l2 > 0 ? Vector3d(ab / std::sqrt(l2)) : Vector3d(1, 0, 0);
+                }
+            }
+            return std::sqrt(best);
+        };
+        // candidate vertices near the chain
+        std::map<int, double> dist;
+        std::map<int, Vector3d> tangent;
+        for (int v = 0; v < nv; ++v) {
+            Vector3d p = m.V.row(v).transpose();
+            if ((p.array() < bmin.array()).any() || (p.array() > bmax.array()).any()) continue;
+            if (type[v] == 2 || type[v] == 3) continue;
+            double t;
+            Vector3d c, tan;
+            double d = closest(p, t, c, tan);
+            if (d < 1.4 * L) dist[v] = d, tangent[v] = tan;
+        }
+        auto nearest_to = [&](const Vector3d& p) {
+            int best = -1;
+            double bd = 1.0 * L;
+            for (auto& kv : dist) {
+                double d = (m.V.row(kv.first).transpose() - p).norm();
+                if (d < bd) bd = d, best = kv.first;
+            }
+            return best;
+        };
+        int s0 = nearest_to(C.front()), s1 = nearest_to(C.back());
+        if (s0 < 0 || s1 < 0 || s0 == s1) { r_end++; st.untraced.push_back(C); continue; }
+        // Dijkstra over (vertex, previous vertex)
+        typedef std::pair<int, int> State;
+        std::map<State, double> best;
+        std::map<State, State> prev;
+        std::priority_queue<std::pair<double, State>, std::vector<std::pair<double, State>>, std::greater<>> pq;
+        best[{s0, -1}] = 0;
+        pq.push({0.0, {s0, -1}});
+        State goal = {-1, -1};
+        int pops = 0;
+        while (!pq.empty() && pops < 2000000) {
+            auto [d, stt] = pq.top();
+            pq.pop();
+            ++pops;
+            if (d > best[stt]) continue;
+            int u = stt.first, pu = stt.second;
+            if (u == s1) { goal = stt; break; }
+            for (int v : nbr[u]) {
+                if (v == pu) continue;
+                auto it = dist.find(v);
+                if (it == dist.end()) continue;
+                if (locked[v] && v != s1) continue;
+                Vector3d e = m.V.row(v) - m.V.row(u);
+                double len = e.norm();
+                if (len <= 0) continue;
+                double dm = 0.5 * (dist[u] + it->second);
+                double align = std::abs(e.dot(tangent[v])) / len;
+                double c = len * (1.0 + 6.0 * dm / L) + len * 1.5 * (1.0 - align);
+                if (pu >= 0 && corner[u].count({std::min(pu, v), std::max(pu, v)})) c += 3.0 * L;
+                double nd = d + c;
+                State ns = {v, u};
+                auto bi = best.find(ns);
+                if (bi == best.end() || nd < bi->second) {
+                    best[ns] = nd;
+                    prev[ns] = stt;
+                    pq.push({nd, ns});
+                }
+            }
+        }
+        if (goal.first < 0) { r_nopath++; st.untraced.push_back(C); continue; }
+        std::vector<int> path;
+        for (State s = goal; s.first >= 0;) {
+            path.push_back(s.first);
+            auto it = prev.find(s);
+            if (it == prev.end()) break;
+            s = it->second;
+        }
+        std::reverse(path.begin(), path.end());
+        if (path.size() < 2) continue;
+        // acceptance
+        double plen = 0, md = 0;
+        for (size_t k = 0; k < path.size(); ++k) {
+            md += dist[path[k]];
+            if (k) plen += (m.V.row(path[k]) - m.V.row(path[k - 1])).norm();
+        }
+        md /= path.size();
+        if (md > 0.45 * L || plen > 1.8 * clen + L) { r_reject++; st.untraced.push_back(C); continue; }
+        len_ok += clen;
+        // snap with a monotone arclength map
+        std::vector<double> ts(path.size());
+        for (size_t k = 0; k < path.size(); ++k) {
+            double t;
+            Vector3d c, tan;
+            closest(m.V.row(path[k]).transpose(), t, c, tan);
+            ts[k] = t;
+        }
+        ts.front() = 0, ts.back() = clen;
+        for (size_t k = 1; k + 1 < ts.size(); ++k) ts[k] = std::max(ts[k], ts[k - 1]);
+        for (size_t k = ts.size() - 1; k-- > 1;) ts[k] = std::min(ts[k], ts[k + 1]);
+        // spread duplicated parameters evenly
+        for (size_t a = 0; a < ts.size();) {
+            size_t b = a;
+            while (b + 1 < ts.size() && ts[b + 1] - ts[a] < 1e-9 * (clen + 1)) ++b;
+            if (b > a) {
+                double lo = a > 0 ? ts[a - 1] : 0.0, hi = b + 1 < ts.size() ? ts[b + 1] : clen;
+                for (size_t k = a; k <= b; ++k) ts[k] = lo + (hi - lo) * (k - a + 1) / (b - a + 2);
+            }
+            a = b + 1;
+        }
+        auto at = [&](double t) {
+            size_t k = std::upper_bound(cum.begin(), cum.end(), t) - cum.begin();
+            if (k == 0) return C.front();
+            if (k >= C.size()) return C.back();
+            double s = (t - cum[k - 1]) / std::max(cum[k] - cum[k - 1], 1e-30);
+            return Vector3d(C[k - 1] + s * (C[k] - C[k - 1]));
+        };
+        // quality-checked snap: keep the path only if it does not create degenerate faces
+        std::set<int> touched;
+        for (int v : path)
+            for (int fi : vfaces[v]) touched.insert(fi);
+        auto count_bad = [&]() {
+            int b = 0;
+            for (int fi : touched)
+                if (scaled_jacobian(m.V, f[fi][0], f[fi][1], f[fi][2], f[fi][3]) < 0.1) b++;
+            return b;
+        };
+        int bad_before = count_bad();
+        std::vector<Vector3d> saved(path.size());
+        for (size_t k = 0; k < path.size(); ++k) saved[k] = m.V.row(path[k]).transpose();
+        for (size_t k = 0; k < path.size(); ++k) {
+            int v = path[k];
+            if (type[v] == 4 && locked[v]) continue;  // shared junction already placed
+            m.V.row(v) = at(ts[k]).transpose();
+        }
+        if (std::getenv("QRM_PATH_QCHECK") && count_bad() > bad_before + std::max<int>(1, (int)(0.05 * path.size()))) {
+            for (size_t k = 0; k < path.size(); ++k) m.V.row(path[k]) = saved[k].transpose();
+            r_reject++;
+            st.untraced.push_back(C);
+            len_ok -= clen;
+            continue;
+        }
+        for (size_t k = 0; k < path.size(); ++k) {
+            int v = path[k];
+            locked[v] = 1;
+            on_path[v] = 1;
+            if (k == 0 || k + 1 == path.size()) {
+                type[v] = 4;
+            } else {
+                type[v] = 1;
+                pnbr[v] = {path[k - 1], path[k + 1]};
+            }
+        }
+        traced++;
+    }
+    st.feature_len_traced = len_ok;
+    st.feature_len_total = len_all;
+    if (dbg)
+        std::fprintf(stderr, "[paths] chains=%zu traced=%d no-endpoints=%d no-path=%d rejected=%d length ok/all=%.3f/%.3f (L=%.4f)\n",
+                     chains.size(), traced, r_end, r_nopath, r_reject, len_ok, len_all, L);
+    // vertices snapped to a feature by proximity but not on any recovered path go back to the
+    // surface (they would otherwise pinch the faces next to the locked loop)
+    for (int v = 0; v < nv; ++v) {
+        if (type[v] == 1 && !on_path[v]) type[v] = 0;
+        if (on_path[v] && type[v] == 1) fnbr[v] = pnbr[v];
+        if (!on_path[v]) fnbr[v].clear();
+    }
+    return traced;
+}
+}  // namespace
+
 void relax_and_project(QuadMesh& m, const SurfaceRef& ref, double L, int iterations, PostStats& st) {
     const int nv = (int)m.V.rows();
     std::vector<Face> f = to_faces(m);
@@ -516,6 +794,12 @@ void relax_and_project(QuadMesh& m, const SurfaceRef& ref, double L, int iterati
         if (type[v] == 1)
             for (int u : nbr[v])
                 if ((type[u] == 1 || type[u] == 4) && (m.V.row(u) - m.V.row(v)).norm() < 2.5 * L) fnbr[v].push_back(u);
+
+    // ---- feature edge-path recovery: lock an edge path of the quad mesh onto every feature curve
+    if (ref.has_features() && !std::getenv("QRM_NO_FEATURE_PATHS")) {
+        int traced = trace_feature_paths(m, f, nbr, type, fnbr, ref, L, st);
+        st.feature_paths = traced;
+    }
 
     // untangling: move vertices of inverted / degenerate faces to the projected neighbour
     // average until their worst incident face improves

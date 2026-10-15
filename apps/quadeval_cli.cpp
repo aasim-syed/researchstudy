@@ -27,6 +27,8 @@ int main(int argc, char** argv) {
         else if (a == "--method") method = next();
         else if (a == "--runtime") runtime = std::stod(next());
         else if (a == "--samples") ep.samples = std::stoi(next());
+        else if (a == "--coverage-tol") ep.coverage_tol = std::stod(next());
+        else if (a == "--coverage-angle") ep.coverage_angle = std::stod(next());
     }
     try {
         TriMesh m = load_mesh(in);

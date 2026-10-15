@@ -1,0 +1,2 @@
+/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/sheen_chair.obj -o /tmp/claude-0/s/res_ref/meshes/sheen_chair__ours_featref.obj -f 5000 -a 35.0 --no-uv --feature-refine 2
+quadremesh: 39936 faces -> 13484 quads/tris (23.32s) -> /tmp/claude-0/s/res_ref/meshes/sheen_chair__ours_featref.obj

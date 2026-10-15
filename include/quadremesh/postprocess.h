@@ -20,6 +20,9 @@ struct SurfaceRef {
     double dist2_boundary(const Vector3d& p, Vector3d* c, bool* on_plane = nullptr) const;
     double dist2_corner(const Vector3d& p, Vector3d* c) const;
     MatrixXd corner_points() const;
+    // Feature curves as ordered polylines, split at corners / junctions; closed loops are split
+    // in two. Chains shorter than min_len are skipped.
+    std::vector<std::vector<Vector3d>> feature_chains(double min_len) const;
     bool has_features() const;
     bool has_boundary() const;
     int sym_axis() const;
@@ -28,7 +31,10 @@ struct SurfaceRef {
 
 struct PostStats {
     int degenerate_removed = 0, duplicates_removed = 0, nonmanifold_removed = 0, tris_merged = 0;
-    int tris_remaining = 0, smoothing_rejected = 0, feature_vertices = 0, corner_vertices = 0;
+    int tris_remaining = 0, smoothing_rejected = 0, feature_vertices = 0, corner_vertices = 0, feature_paths = 0;
+    int feature_chains = 0;
+    double feature_len_traced = 0, feature_len_total = 0;
+    std::vector<std::vector<Vector3d>> untraced;  // feature chains without a recovered edge path
 };
 
 void cleanup(QuadMesh& m, PostStats& st);

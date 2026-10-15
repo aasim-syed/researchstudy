@@ -1,0 +1,2 @@
+/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/rocker_arm.obj -o /tmp/claude-0/s/res_ref/meshes/rocker_arm__ours_featref.obj -f 5000 -a 35.0 --no-uv --feature-refine 2
+quadremesh: 20088 faces -> 4935 quads/tris (5.64s) -> /tmp/claude-0/s/res_ref/meshes/rocker_arm__ours_featref.obj

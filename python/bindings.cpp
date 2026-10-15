@@ -21,6 +21,7 @@ Params params_from_kwargs(const py::kwargs& kw) {
         else if (k == "feature_angle") p.feature_angle = v.cast<double>();
         else if (k == "min_feature_length") p.min_feature_length = v.cast<double>();
         else if (k == "preserve_boundary") p.preserve_boundary = v.cast<bool>();
+        else if (k == "feature_refine_rounds") p.feature_refine_rounds = v.cast<int>();
         else if (k == "curvature_weight") p.curvature_weight = v.cast<double>();
         else if (k == "curvature_min_anisotropy") p.curvature_min_anisotropy = v.cast<double>();
         else if (k == "strokes") {

@@ -70,6 +70,8 @@ def run(cmd, timeout, log):
 def method_cmd(method, src, dst, target):
     if method == "ours":
         return [QUADREMESH, src, "-o", dst, "-f", str(target), "-a", str(FEATURE_ANGLE), "--no-uv"]
+    if method == "ours_featref":
+        return [QUADREMESH, src, "-o", dst, "-f", str(target), "-a", str(FEATURE_ANGLE), "--no-uv", "--feature-refine", "2"]
     if method == "ours_learned":
         return [sys.executable, "-c", OURS_LEARNED_SNIPPET, src, dst, str(target), str(FEATURE_ANGLE)]
     if method == "instant_meshes":
@@ -84,7 +86,7 @@ def method_cmd(method, src, dst, target):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--models", default="")
-    ap.add_argument("--methods", default="ours,instant_meshes,quadriflow,blender_quadriflow")
+    ap.add_argument("--methods", default="ours,ours_learned,ours_featref,instant_meshes,quadriflow,blender_quadriflow")
     ap.add_argument("--out", default=os.path.join(ROOT, "benchmark/results"))
     ap.add_argument("--timeout", type=int, default=1500)
     ap.add_argument("--skip-existing", action="store_true")

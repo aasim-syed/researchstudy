@@ -1,0 +1,2 @@
+/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/nefertiti.obj -o /tmp/claude-0/s/res_ref/meshes/nefertiti__ours_featref.obj -f 5000 -a 35.0 --no-uv --feature-refine 2
+quadremesh: 99938 faces -> 6590 quads/tris (8.33s) -> /tmp/claude-0/s/res_ref/meshes/nefertiti__ours_featref.obj

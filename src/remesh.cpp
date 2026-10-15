@@ -677,13 +677,50 @@ Result quadremesh(const TriMesh& input, const Params& p) {
     }
     SurfaceRef ref(refV, refF, refFE, refBE, ref_corners, plane_verts, sym ? p.symmetry_axis : -1, sym_off);
     if (!std::getenv("QRM_NOPOST")) relax_and_project(qm, ref, L, p.smooth_iterations, pst);
+    log("feature paths: ", pst.feature_paths, "/", pst.feature_chains, " chains, length ", pst.feature_len_traced, "/",
+        pst.feature_len_total);
+    // Feature-driven refinement: where no edge path could follow a feature (features closer than
+    // one element, or crossing the field diagonally), refine the quads around it once with the
+    // conforming templates and trace again at the finer resolution.
+    for (int round = 0; round < p.feature_refine_rounds && !pst.untraced.empty() && !p.pure_quad &&
+                        !std::getenv("QRM_NOPOST");
+         ++round) {
+        std::vector<Vector3d> a, b;
+        for (auto& ch : pst.untraced)
+            for (size_t k = 0; k + 1 < ch.size(); ++k) a.push_back(ch[k]), b.push_back(ch[k + 1]);
+        MatrixXd SV(2 * a.size(), 3);
+        MatrixXi SE(a.size(), 2);
+        for (size_t k = 0; k < a.size(); ++k) {
+            SV.row(2 * k) = a[k].transpose();
+            SV.row(2 * k + 1) = b[k].transpose();
+            SE.row(k) << (int)(2 * k), (int)(2 * k + 1);
+        }
+        igl::AABB<MatrixXd, 3> st;
+        st.init(SV, SE);
+        const double Lr = L / (1 << round);
+        auto target = [&](const MatrixXd& P) -> VectorXd {
+            VectorXd D, t(P.rows());
+            VectorXi I;
+            MatrixXd C;
+            st.squared_distance(SV, SE, P, D, I, C);
+            for (int i = 0; i < P.rows(); ++i) t[i] = D[i] < (1.2 * Lr) * (1.2 * Lr) ? 0.5 * Lr : 1e30;
+            return t;
+        };
+        int nref = refine_to_size(qm, target, 1);
+        if (!nref) break;
+        merge_triangle_pairs(qm, pst);
+        cleanup(qm, pst);
+        relax_and_project(qm, ref, L, p.smooth_iterations, pst);
+        log("feature refinement ", round + 1, ": ", nref, " faces split -> ", qm.Q.rows(), " faces; paths ",
+            pst.feature_paths, "/", pst.feature_chains, ", length ", pst.feature_len_traced, "/", pst.feature_len_total);
+    }
     if (sym) {
         mirror_and_weld(qm, p.symmetry_axis, sym_off, 1e-9);
         cleanup(qm, pst);
     }
     log("post: degenerate=", pst.degenerate_removed, " duplicates=", pst.duplicates_removed, " nonmanifold=",
         pst.nonmanifold_removed, " tris_merged=", pst.tris_merged, " tris_left=", pst.tris_remaining,
-        " feature_v=", pst.feature_vertices, " corner_v=", pst.corner_vertices, " rejected_moves=",
+        " feature_v=", pst.feature_vertices, " corner_v=", pst.corner_vertices, " feature_paths=", pst.feature_paths, " rejected_moves=",
         pst.smoothing_rejected);
 
     // ---------------------------------------------------------------- back to input space + UVs

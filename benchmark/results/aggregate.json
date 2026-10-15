@@ -4,23 +4,34 @@
    "models": 15,
    "succeeded": 15,
    "quad_ratio": 0.9999689333333333,
-   "sj_mean": 0.9323774666666667,
-   "dist_mean_pct": 0.05945248,
-   "feature_coverage": 0.44311898666666666,
+   "sj_mean": 0.9307848,
+   "dist_mean_pct": 0.06055821000000001,
+   "feature_coverage": 0.4865217666666667,
    "singularities": 204.8,
    "sing_per_1k": 31.387370666666666,
-   "runtime_s": 20.463466666666665
+   "runtime_s": 20.033
   },
   "ours_learned": {
    "models": 15,
    "succeeded": 15,
    "quad_ratio": 0.9999690000000001,
-   "sj_mean": 0.9347082,
-   "dist_mean_pct": 0.06216907333333333,
-   "feature_coverage": 0.44204682666666667,
+   "sj_mean": 0.9331986666666666,
+   "dist_mean_pct": 0.06362836,
+   "feature_coverage": 0.47104682,
    "singularities": 208.06666666666666,
    "sing_per_1k": 29.707553333333333,
-   "runtime_s": 30.782933333333336
+   "runtime_s": 32.1588
+  },
+  "ours_featref": {
+   "models": 15,
+   "succeeded": 15,
+   "quad_ratio": 0.9479384666666667,
+   "sj_mean": 0.8798232666666668,
+   "dist_mean_pct": 0.057341493333333333,
+   "feature_coverage": 0.64573066,
+   "singularities": 1015.2666666666667,
+   "sing_per_1k": 86.28564,
+   "runtime_s": 20.74233333333333
   },
   "instant_meshes": {
    "models": 15,

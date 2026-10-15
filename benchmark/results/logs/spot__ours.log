@@ -1,2 +1,2 @@
-/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/spot.obj -o benchmark/results/meshes/spot__ours.obj -f 5000 -a 35.0 --no-uv
-quadremesh: 23424 faces -> 4505 quads/tris (5.02s) -> benchmark/results/meshes/spot__ours.obj
+/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/spot.obj -o /tmp/claude-0/s/res_paths/meshes/spot__ours.obj -f 5000 -a 35.0 --no-uv
+quadremesh: 23424 faces -> 4505 quads/tris (4.79s) -> /tmp/claude-0/s/res_paths/meshes/spot__ours.obj

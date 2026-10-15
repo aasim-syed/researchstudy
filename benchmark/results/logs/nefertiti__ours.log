@@ -1,2 +1,2 @@
-/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/nefertiti.obj -o benchmark/results/meshes/nefertiti__ours.obj -f 5000 -a 35.0 --no-uv
-quadremesh: 99938 faces -> 4703 quads/tris (8.35s) -> benchmark/results/meshes/nefertiti__ours.obj
+/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/nefertiti.obj -o /tmp/claude-0/s/res_paths/meshes/nefertiti__ours.obj -f 5000 -a 35.0 --no-uv
+quadremesh: 99938 faces -> 4703 quads/tris (8.03s) -> /tmp/claude-0/s/res_paths/meshes/nefertiti__ours.obj

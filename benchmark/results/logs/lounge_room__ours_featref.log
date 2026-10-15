@@ -1,0 +1,2 @@
+/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/lounge_room.obj -o /tmp/claude-0/s/res_ref/meshes/lounge_room__ours_featref.obj -f 15000 -a 35.0 --no-uv --feature-refine 2
+quadremesh: 999999 faces -> 17720 quads/tris (94.11s) -> /tmp/claude-0/s/res_ref/meshes/lounge_room__ours_featref.obj

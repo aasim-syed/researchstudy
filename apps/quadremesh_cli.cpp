@@ -22,6 +22,7 @@ static void usage() {
         "  -a, --feature-angle DEG  sharp-feature dihedral threshold (default 35, 0 = off)\n"
         "  --min-feature-length K   drop feature chains shorter than K x edge length (3.0)\n"
         "  --no-boundary            do not constrain open boundaries\n"
+        "  --feature-refine N       refine N times around features without an edge loop (0)\n"
         "  --curvature-weight W     principal-curvature alignment strength 0..1 (0.35)\n"
         "  --strokes FILE           guidance polylines: 'x y z' per line, blank line between strokes\n"
         "  --strokes-as-edges       also force edge loops onto the strokes\n"
@@ -89,6 +90,7 @@ int main(int argc, char** argv) {
         else if (a == "-a" || a == "--feature-angle") p.feature_angle = std::stod(next());
         else if (a == "--min-feature-length") p.min_feature_length = std::stod(next());
         else if (a == "--no-boundary") p.preserve_boundary = false;
+        else if (a == "--feature-refine") p.feature_refine_rounds = std::stoi(next());
         else if (a == "--curvature-weight") p.curvature_weight = std::stod(next());
         else if (a == "--strokes") p.strokes = read_strokes(next());
         else if (a == "--strokes-as-edges") p.strokes_as_edges = true;

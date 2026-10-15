@@ -26,7 +26,7 @@ print(res.quad_ratio, res.report["quality"]["scaled_jacobian"]["mean"])
 | 4. sizing | target count or edge length; adaptive density map (per-vertex, sphere regions, curvature-driven) → scale field | `src/field.cpp` |
 | 5. integer grid + extraction | multiresolution orientation / position fields, min-cost-flow singularity optimisation, quad extraction (vendored, patched QuadriFlow); per connected component with coverage-checked retries for thin parts | `third_party/qflow_patched` |
 | 5b. fallbacks | Instant Meshes extractor (second choice; best-of-two on dense scans), best approximate result for parts thinner than an element, QEM-decimated exact fallback | `src/im_driver.cpp`, `src/decimate.cpp` |
-| 6. post-process | cleanup, triangle-pair merging, optional pure-quad split, feature/boundary/corner snapping, guarded tangential relaxation + reprojection, untangling | `src/postprocess.cpp` |
+| 6. post-process | cleanup, triangle-pair merging, optional pure-quad split, feature/boundary/corner snapping, **feature edge-path recovery** (Dijkstra edge paths snapped onto every crease chain), optional feature refinement, guarded tangential relaxation + reprojection, untangling | `src/postprocess.cpp` |
 | 7. symmetry | remesh one half (clipped at the plane, plane boundary preserved), mirror and weld | `src/preprocess.cpp`, `src/postprocess.cpp` |
 | 8. attributes | per-corner UV transfer with UV-chart consistency; generic per-vertex attribute transfer | `src/transfer.cpp` |
 | 9. report | quad ratio, scaled Jacobian, planarity, aspect, distance (mean / RMS / Hausdorff, two-sided), feature & boundary coverage, singularities / valence histogram, topology | `src/metrics.cpp` |
@@ -40,14 +40,15 @@ bit-identical output for repeated runs.
 |---|---|---|---|---|
 | models processed | **15/15** | 15/15 | 12/15 | 8/15 |
 | quad ratio | **100 %** | 100 % | 100 % | 100 % |
-| mean scaled Jacobian (≥ 0.8) | **0.932** | 0.935 | 0.952* | 0.963* |
-| mean distance error (< 0.5 %) | **0.060 %** | 0.316 % | 0.054 %* | 0.051 %* |
-| feature coverage (≥ 90 %) | 44 % | 22 % | 36 %* | 29 %* |
+| mean scaled Jacobian (≥ 0.8) | **0.931** | 0.935 | 0.952* | 0.963* |
+| mean distance error (< 0.5 %) | **0.061 %** | 0.316 % | 0.054 %* | 0.051 %* |
+| feature coverage (≥ 90 %) | 49 % | 22 % | 36 %* | 29 %* |
 | singularities / 1k faces | **31.4** | 99.8 | 17.8* | 17.3* |
 
 \* over the models that method could process. Fewer singularities than Instant Meshes on 14/15
-models (3 072 vs 4 782 in total). Feature coverage reaches 94 % on CAD but not on organic
-scans / dense carvings - see `docs/technical_writeup.pdf` for the full analysis.
+models (3 072 vs 4 782 in total). Feature coverage reaches 98 % on CAD but not on organic
+scans / dense carvings / TSDF rooms; opt-in `--feature-refine 2` raises the mean to 65 % at the
+cost of quad ratio and singularities - see `docs/technical_writeup.pdf` for the full analysis.
 
 ## Build
 
@@ -67,7 +68,7 @@ PYTHONPATH=python python -m pytest tests          # Python tests
 
 ```
 quadremesh INPUT(.obj|.ply|.glb|.gltf|.off) -o OUT.obj [options]
-  -f/--faces N  -e/--edge-length X  -a/--feature-angle DEG  --min-feature-length K
+  -f/--faces N  -e/--edge-length X  -a/--feature-angle DEG  --min-feature-length K  --feature-refine N
   --no-boundary  --curvature-weight W  --strokes FILE [--strokes-as-edges]
   --guide FILE [--guide-strength W]  --density FILE  --density-region X Y Z R F
   --curvature-density K  --symmetry x|y|z [--symmetry-offset C]

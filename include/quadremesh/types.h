@@ -50,6 +50,8 @@ struct Params {
     double feature_angle = 35.0;        // dihedral threshold in degrees (<= 0 disables)
     double min_feature_length = 3.0;    // drop feature chains shorter than this x edge length
     bool preserve_boundary = true;
+    int feature_refine_rounds = 0;      // opt-in: local refinement around features without an edge path
+                                        // (raises coverage, costs faces/singularities/quad ratio)
 
     // ---- field design -------------------------------------------------------------
     double curvature_weight = 0.35;     // strength of principal-curvature alignment [0,1]
