@@ -478,7 +478,39 @@ int trace_feature_paths(QuadMesh& m, const std::vector<Face>& f, const std::vect
                         std::vector<char>& type, std::vector<std::vector<int>>& fnbr, const SurfaceRef& ref,
                         double L, PostStats& st) {
     const int nv = (int)m.V.rows();
-    auto chains = ref.feature_chains(0.5 * L);
+    auto parents = ref.feature_chains(0.5 * L);
+    // trace long chains in pieces (<= piece_len), so a path can neither short-cut a U-shaped
+    // chain nor be rejected as a whole because the layout drifts in one place
+    const double piece_len = std::getenv("QRM_PIECE") ? std::atof(std::getenv("QRM_PIECE")) * L : 1e30;
+    std::vector<std::vector<Vector3d>> chains;
+    std::vector<int> parent_of, first_piece;
+    for (size_t pc = 0; pc < parents.size(); ++pc) {
+        const auto& P = parents[pc];
+        double tot = 0;
+        for (size_t k = 1; k < P.size(); ++k) tot += (P[k] - P[k - 1]).norm();
+        int npieces = std::max(1, (int)std::ceil(tot / piece_len));
+        double step = tot / npieces, acc = 0, next = step;
+        std::vector<Vector3d> cur = {P[0]};
+        for (size_t k = 1; k < P.size(); ++k) {
+            double seg = (P[k] - P[k - 1]).norm();
+            while (acc + seg >= next - 1e-12 && (int)chains.size() - (first_piece.size() ? 0 : 0) >= 0 && next < tot - 1e-9) {
+                double t = seg > 0 ? (next - acc) / seg : 0;
+                Vector3d q = P[k - 1] + t * (P[k] - P[k - 1]);
+                cur.push_back(q);
+                chains.push_back(cur);
+                parent_of.push_back((int)pc);
+                first_piece.push_back(cur.size() && chains.size() > 0 && (chains.size() == 1 || parent_of[parent_of.size() - 2] != (int)pc));
+                cur = {q};
+                next += step;
+            }
+            acc += seg;
+            cur.push_back(P[k]);
+        }
+        chains.push_back(cur);
+        parent_of.push_back((int)pc);
+        first_piece.push_back(chains.size() == 1 || parent_of[parent_of.size() - 2] != (int)pc);
+    }
+    std::vector<int> piece_end(chains.size(), -1);  // output vertex where each traced piece ended
     st.untraced.clear();
     st.feature_chains = (int)chains.size();
     if (chains.empty()) return 0;
@@ -501,7 +533,8 @@ int trace_feature_paths(QuadMesh& m, const std::vector<Face>& f, const std::vect
     std::vector<std::vector<int>> pnbr(nv);
     std::vector<char> on_path(nv, 0);
     int traced = 0;
-    for (const auto& C : chains) {
+    for (size_t ci = 0; ci < chains.size(); ++ci) {
+        const auto& C = chains[ci];
         // chain geometry
         std::vector<double> cum(C.size(), 0.0);
         for (size_t k = 1; k < C.size(); ++k) cum[k] = cum[k - 1] + (C[k] - C[k - 1]).norm();
@@ -547,7 +580,34 @@ int trace_feature_paths(QuadMesh& m, const std::vector<Face>& f, const std::vect
             return best;
         };
         int s0 = nearest_to(C.front()), s1 = nearest_to(C.back());
-        if (s0 < 0 || s1 < 0 || s0 == s1) { r_end++; st.untraced.push_back(C); continue; }
+        if (ci > 0 && !first_piece[ci] && piece_end[ci - 1] >= 0) s0 = piece_end[ci - 1];
+        if (s1 >= 0 && locked[s1] && s1 != s0) {
+            // the far end is taken by another path: allow it only as a junction (shared vertex)
+        }
+        if (s0 >= 0 && s0 == s1) {
+            // short chain: both ends map to one vertex -> choose the best distinct second end
+            // among candidates, scored by distance to the far end and alignment with the chain
+            Vector3d dir = (C.back() - C.front());
+            double dl = dir.norm();
+            int best = -1;
+            double bs = 1e300;
+            for (auto& kv : dist) {
+                int v = kv.first;
+                if (v == s0) continue;
+                Vector3d e = m.V.row(v) - m.V.row(s0);
+                double el = e.norm();
+                if (el <= 0 || el > 2.0 * std::max(dl, 0.5 * L)) continue;
+                double sc = (m.V.row(v).transpose() - C.back()).norm() + kv.second +
+                            (dl > 0 ? 0.5 * el * (1.0 - std::abs(e.dot(dir)) / (el * dl)) : 0.0);
+                if (sc < bs) bs = sc, best = v;
+            }
+            s1 = best;
+        }
+        auto dbg_chain = [&](const char* why, double a = 0, double b = 0) {
+            if (dbg && clen > 5 * L)
+                std::fprintf(stderr, "  chain len=%.1fL pts=%zu cand=%zu: %s %.2f %.2f\n", clen / L, C.size(), dist.size(), why, a, b);
+        };
+        if (s0 < 0 || s1 < 0 || s0 == s1) { dbg_chain("no-endpoints", s0, s1); r_end++; st.untraced.push_back(C); continue; }
         // Dijkstra over (vertex, previous vertex)
         typedef std::pair<int, int> State;
         std::map<State, double> best;
@@ -586,7 +646,7 @@ int trace_feature_paths(QuadMesh& m, const std::vector<Face>& f, const std::vect
                 }
             }
         }
-        if (goal.first < 0) { r_nopath++; st.untraced.push_back(C); continue; }
+        if (goal.first < 0) { dbg_chain("no-path", pops); r_nopath++; st.untraced.push_back(C); continue; }
         std::vector<int> path;
         for (State s = goal; s.first >= 0;) {
             path.push_back(s.first);
@@ -603,7 +663,8 @@ int trace_feature_paths(QuadMesh& m, const std::vector<Face>& f, const std::vect
             if (k) plen += (m.V.row(path[k]) - m.V.row(path[k - 1])).norm();
         }
         md /= path.size();
-        if (md > 0.45 * L || plen > 1.8 * clen + L) { r_reject++; st.untraced.push_back(C); continue; }
+        if (md > 0.45 * L || plen > 1.8 * clen + L) { dbg_chain("rejected md/L, plen/clen", md / L, plen / clen); r_reject++; st.untraced.push_back(C); continue; }
+        dbg_chain("ok md/L, plen/clen", md / L, plen / clen);
         len_ok += clen;
         // snap with a monotone arclength map
         std::vector<double> ts(path.size());
@@ -669,6 +730,7 @@ int trace_feature_paths(QuadMesh& m, const std::vector<Face>& f, const std::vect
                 pnbr[v] = {path[k - 1], path[k + 1]};
             }
         }
+        piece_end[ci] = path.back();
         traced++;
     }
     st.feature_len_traced = len_ok;
@@ -686,6 +748,236 @@ int trace_feature_paths(QuadMesh& m, const std::vector<Face>& f, const std::vect
     return traced;
 }
 }  // namespace
+
+int insert_feature_loops(QuadMesh& m, const std::vector<std::vector<Vector3d>>& chains_in, double L, int max_added) {
+    int added = 0;
+    std::vector<std::vector<Vector3d>> chains = chains_in;
+    std::sort(chains.begin(), chains.end(), [](const std::vector<Vector3d>& a, const std::vector<Vector3d>& b) {
+        double la = 0, lb = 0;
+        for (size_t k = 1; k < a.size(); ++k) la += (a[k] - a[k - 1]).norm();
+        for (size_t k = 1; k < b.size(); ++k) lb += (b[k] - b[k - 1]).norm();
+        return la > lb;
+    });
+    for (const auto& C : chains) {
+        for (int rep = 0; rep < 6 && added < max_added; ++rep) {
+            std::vector<Face> f = to_faces(m);
+            const int nf = (int)f.size();
+            // edge -> (face, local index)
+            std::map<std::pair<int, int>, std::vector<std::pair<int, int>>> ef;
+            for (int i = 0; i < nf; ++i)
+                for (int k = 0; k < fsize(f[i]); ++k) {
+                    int a = f[i][k], b = f[i][(k + 1) % fsize(f[i])];
+                    ef[{std::min(a, b), std::max(a, b)}].push_back({i, k});
+                }
+            auto neighbour = [&](int fi, int k, int& nk) {
+                int a = f[fi][k], b = f[fi][(k + 1) % fsize(f[fi])];
+                for (auto& pr : ef[{std::min(a, b), std::max(a, b)}])
+                    if (pr.first != fi) { nk = pr.second; return pr.first; }
+                return -1;
+            };
+            // triangulation for point location
+            std::vector<int> tri_face;
+            std::vector<std::array<int, 3>> tris;
+            for (int i = 0; i < nf; ++i) {
+                tris.push_back({f[i][0], f[i][1], f[i][2]});
+                tri_face.push_back(i);
+                if (fsize(f[i]) == 4) { tris.push_back({f[i][0], f[i][2], f[i][3]}); tri_face.push_back(i); }
+            }
+            MatrixXi T(tris.size(), 3);
+            for (size_t k = 0; k < tris.size(); ++k) T.row(k) << tris[k][0], tris[k][1], tris[k][2];
+            igl::AABB<MatrixXd, 3> tree;
+            tree.init(m.V, T);
+            // dense samples along the chain
+            std::vector<Vector3d> S;
+            for (size_t k = 0; k + 1 < C.size(); ++k) {
+                double l = (C[k + 1] - C[k]).norm();
+                int n = std::max(1, (int)std::ceil(l / (0.2 * L)));
+                for (int j = 0; j < n; ++j) S.push_back(C[k] + (C[k + 1] - C[k]) * (double(j) / n));
+            }
+            S.push_back(C.back());
+            MatrixXd P(S.size(), 3);
+            for (size_t k = 0; k < S.size(); ++k) P.row(k) = S[k].transpose();
+            VectorXd D;
+            VectorXi I;
+            MatrixXd CP;
+            tree.squared_distance(m.V, T, P, D, I, CP);
+            // face sequence + crossing edges
+            struct Cross { int face, kin, kout; double tin, tout; };
+            std::vector<int> fseq;
+            std::vector<Vector3d> pseq;
+            for (int k = 0; k < (int)S.size(); ++k) {
+                int fi = tri_face[I[k]];
+                if (fseq.empty() || fseq.back() != fi) { fseq.push_back(fi); pseq.push_back(CP.row(k).transpose()); }
+            }
+            if (fseq.size() < 3) { if (std::getenv("QRM_DEBUG_LOOPS")) std::fprintf(stderr, "  loop chain: <3 faces\n"); break; }
+            // for each consecutive pair, the shared edge and the crossing parameter along it
+            std::vector<int> ek(fseq.size() - 1, -1);   // local edge index in fseq[i] towards fseq[i+1]
+            std::vector<double> et(fseq.size() - 1, 0);  // param along that edge (from its first vertex)
+            for (size_t i = 0; i + 1 < fseq.size(); ++i) {
+                int fi = fseq[i];
+                for (int k = 0; k < fsize(f[fi]); ++k) {
+                    int nk;
+                    if (neighbour(fi, k, nk) == fseq[i + 1]) {
+                        Vector3d a = m.V.row(f[fi][k]), b = m.V.row(f[fi][(k + 1) % fsize(f[fi])]);
+                        Vector3d mid = 0.5 * (pseq[i] + pseq[i + 1]);
+                        double l2 = (b - a).squaredNorm();
+                        et[i] = l2 > 0 ? std::max(0.08, std::min(0.92, (mid - a).dot(b - a) / l2)) : 0.5;
+                        ek[i] = k;
+                        break;
+                    }
+                }
+            }
+            // runs of rung-to-rung crossings
+            int best_s = -1, best_len = 0;
+            for (size_t i = 1; i + 1 < fseq.size();) {
+                size_t j = i;
+                while (j + 1 < fseq.size()) {
+                    int fi = fseq[j];
+                    if (fsize(f[fi]) != 4 || ek[j - 1] < 0 || ek[j] < 0) break;
+                    // entry local index in fi
+                    int nk = -1;
+                    neighbour(fseq[j - 1], ek[j - 1], nk);
+                    if (nk < 0 || (ek[j] - nk + 4) % 4 != 2) break;
+                    ++j;
+                }
+                if ((int)(j - i) > best_len) { best_len = (int)(j - i); best_s = (int)i; }
+                i = j + 1;
+            }
+            if (std::getenv("QRM_DEBUG_LOOPS")) {
+                int adj = 0, quads = 0;
+                for (size_t i = 0; i + 1 < fseq.size(); ++i) adj += ek[i] >= 0;
+                for (int fi : fseq) quads += fsize(f[fi]) == 4;
+                std::fprintf(stderr, "  loop chain: faces=%zu adjacent-pairs=%d quads=%d best_run=%d\n", fseq.size(), adj, quads, best_len);
+            }
+            if (best_len < 2) break;
+            // the strip through fseq[best_s]: entry rung index
+            int f0 = fseq[best_s];
+            int k_in0 = -1;
+            neighbour(fseq[best_s - 1], ek[best_s - 1], k_in0);
+            // rung parameters measured from the strip's left side, keyed by undirected edge
+            std::map<std::pair<int, int>, double> rung_t;  // key (left, right) directed
+            // crossing params inside the run
+            for (int j = best_s - 1; j < best_s + best_len; ++j) {
+                int fi = fseq[j];
+                int k = ek[j];
+                int a = f[fi][k], b = f[fi][(k + 1) % 4];
+                rung_t[{a, b}] = et[j];
+                rung_t[{b, a}] = 1.0 - et[j];
+            }
+            // walk the strip in both directions collecting (face, in_k). A strip may cross itself
+            // (same face, perpendicular rung pair): that face is split into 4.
+            std::vector<std::pair<int, int>> strip;
+            std::set<std::pair<int, int>> seen;  // (face, rung parity)
+            bool closed = false, ok = true;
+            {
+                int fi = f0, kin = k_in0;
+                while (fi >= 0) {
+                    if (fsize(f[fi]) != 4) break;
+                    if (seen.count({fi, kin % 2})) { closed = (fi == f0); if (!closed) ok = false; break; }
+                    seen.insert({fi, kin % 2});
+                    strip.push_back({fi, kin});
+                    int nk;
+                    int nf2 = neighbour(fi, (kin + 2) % 4, nk);
+                    fi = nf2, kin = nk;
+                }
+                if (ok && !closed) {
+                    std::vector<std::pair<int, int>> back;
+                    int nk;
+                    int fb = neighbour(f0, k_in0, nk);
+                    int kb = nk;
+                    while (fb >= 0) {
+                        if (fsize(f[fb]) != 4) break;
+                        if (seen.count({fb, kb % 2})) { ok = false; break; }
+                        seen.insert({fb, kb % 2});
+                        back.push_back({fb, (kb + 2) % 4});
+                        int nk2;
+                        int nb = neighbour(fb, (kb + 2) % 4, nk2);
+                        fb = nb, kb = nk2;
+                    }
+                    std::reverse(back.begin(), back.end());
+                    back.insert(back.end(), strip.begin(), strip.end());
+                    strip.swap(back);
+                }
+            }
+            if (!ok || strip.empty()) { if (std::getenv("QRM_DEBUG_LOOPS")) std::fprintf(stderr, "  strip rejected ok=%d size=%zu\n", ok, strip.size()); break; }
+            if (added + (int)strip.size() > max_added) return added;
+            // new vertex per rung
+            std::map<std::pair<int, int>, int> rung_vertex;
+            std::vector<Vector3d> newV;
+            const int n0 = (int)m.V.rows();
+            auto rung_point = [&](int left, int right) {
+                auto key = std::make_pair(std::min(left, right), std::max(left, right));
+                auto it = rung_vertex.find(key);
+                if (it != rung_vertex.end()) return it->second;
+                double t = 0.5;
+                auto rt = rung_t.find({left, right});
+                if (rt != rung_t.end()) t = rt->second;
+                Vector3d p = (1 - t) * m.V.row(left).transpose() + t * m.V.row(right).transpose();
+                int id = n0 + (int)newV.size();
+                newV.push_back(p);
+                rung_vertex[key] = id;
+                return id;
+            };
+            std::map<int, std::vector<int>> face_ins;  // face -> list of in-rung indices
+            for (auto& sk : strip) face_ins[sk.first].push_back(sk.second);
+            std::vector<char> replaced(nf, 0);
+            std::vector<Face> addf;
+            for (auto& kv : face_ins) {
+                int fi = kv.first;
+                const Face& q = f[fi];
+                if (kv.second.size() == 1) {
+                    int k = kv.second[0];
+                    int v0 = q[k], v1 = q[(k + 1) % 4], v2 = q[(k + 2) % 4], v3 = q[(k + 3) % 4];
+                    int pin = rung_point(v0, v1), pout = rung_point(v3, v2);
+                    addf.push_back({v0, pin, pout, v3});
+                    addf.push_back({pin, v1, v2, pout});
+                } else {  // crossed in both directions: 4 quads around a centre point
+                    int pe[4];
+                    Vector3d c = Vector3d::Zero();
+                    for (int k = 0; k < 4; ++k) {
+                        pe[k] = rung_point(q[k], q[(k + 1) % 4]);
+                        c += (pe[k] < n0 ? Vector3d(m.V.row(pe[k])) : newV[pe[k] - n0]);
+                    }
+                    int ci = n0 + (int)newV.size();
+                    newV.push_back(c / 4.0);
+                    for (int k = 0; k < 4; ++k) addf.push_back({q[k], pe[k], ci, pe[(k + 3) % 4]});
+                }
+                replaced[fi] = 1;
+            }
+            // neighbours across the strip's open end rungs that are triangles: become quads
+            std::vector<Face> out;
+            for (int i = 0; i < nf; ++i) {
+                if (replaced[i]) continue;
+                Face q = f[i];
+                if (fsize(q) == 3) {
+                    for (int k = 0; k < 3; ++k) {
+                        int a = q[k], b = q[(k + 1) % 3];
+                        auto it = rung_vertex.find({std::min(a, b), std::max(a, b)});
+                        if (it != rung_vertex.end()) {
+                            Face nq = {-1, -1, -1, -1};
+                            int c = 0;
+                            for (int j = 0; j < 3; ++j) {
+                                nq[c++] = q[j];
+                                if (j == k) nq[c++] = it->second;
+                            }
+                            q = nq;
+                            break;
+                        }
+                    }
+                }
+                out.push_back(q);
+            }
+            for (auto& q : addf) out.push_back(q);
+            MatrixXd V2(n0 + newV.size(), 3);
+            V2.topRows(n0) = m.V;
+            for (size_t k = 0; k < newV.size(); ++k) V2.row(n0 + k) = newV[k].transpose();
+            m.V = V2;
+            from_faces(m, out);
+            added += (int)strip.size();
+        }
+    }
+    return added;
+}
 
 void relax_and_project(QuadMesh& m, const SurfaceRef& ref, double L, int iterations, PostStats& st) {
     const int nv = (int)m.V.rows();

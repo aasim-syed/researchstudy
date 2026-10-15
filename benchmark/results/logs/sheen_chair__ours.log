@@ -1,2 +1,2 @@
-/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/sheen_chair.obj -o /tmp/claude-0/s/res_paths/meshes/sheen_chair__ours.obj -f 5000 -a 35.0 --no-uv
-quadremesh: 39936 faces -> 5431 quads/tris (19.21s) -> /tmp/claude-0/s/res_paths/meshes/sheen_chair__ours.obj
+/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/sheen_chair.obj -o benchmark/results/meshes/sheen_chair__ours.obj -f 5000 -a 35.0 --no-uv
+quadremesh: 39936 faces -> 4609 quads/tris (16.37s) -> benchmark/results/meshes/sheen_chair__ours.obj

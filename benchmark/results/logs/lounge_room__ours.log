@@ -1,2 +1,2 @@
-/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/lounge_room.obj -o /tmp/claude-0/s/res_paths/meshes/lounge_room__ours.obj -f 15000 -a 35.0 --no-uv
-quadremesh: 999999 faces -> 12810 quads/tris (91.57s) -> /tmp/claude-0/s/res_paths/meshes/lounge_room__ours.obj
+/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/lounge_room.obj -o benchmark/results/meshes/lounge_room__ours.obj -f 15000 -a 35.0 --no-uv
+quadremesh: 999999 faces -> 12810 quads/tris (87.42s) -> benchmark/results/meshes/lounge_room__ours.obj

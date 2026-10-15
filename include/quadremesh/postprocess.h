@@ -46,6 +46,11 @@ void split_to_pure_quads(QuadMesh& m);
 // target(P) returns the target edge length at each query point (rows of P).
 int refine_to_size(QuadMesh& m, const std::function<VectorXd(const MatrixXd&)>& target, int max_levels);
 void relax_and_project(QuadMesh& m, const SurfaceRef& ref, double L, int iterations, PostStats& st);
+// Feature loop insertion: for each chain without an edge path, find runs of quads it crosses
+// rung-to-rung (lengthwise along a quad strip) and split that whole strip lengthwise, with the cut
+// through the chain inside the run and on the strip midline elsewhere. Pure quads in, pure quads
+// out; no new irregular vertices. Returns faces added (stops at max_added).
+int insert_feature_loops(QuadMesh& m, const std::vector<std::vector<Vector3d>>& chains, double L, int max_added);
 // Mirror across the plane and weld seam vertices (those within tol of the plane).
 void mirror_and_weld(QuadMesh& m, int axis, double offset, double tol);
 

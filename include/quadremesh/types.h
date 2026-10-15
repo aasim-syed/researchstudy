@@ -50,6 +50,9 @@ struct Params {
     double feature_angle = 35.0;        // dihedral threshold in degrees (<= 0 disables)
     double min_feature_length = 3.0;    // drop feature chains shorter than this x edge length
     bool preserve_boundary = true;
+    bool match_face_count = true;       // re-solve once if post-solve insertions overshoot the target
+    bool feature_loops = false;         // opt-in: insert edge loops along creases without an edge path
+    double feature_loop_budget = 0.5;   // max faces added by loop insertion (x target faces)
     int feature_refine_rounds = 0;      // opt-in: local refinement around features without an edge path
                                         // (raises coverage, costs faces/singularities/quad ratio)
 

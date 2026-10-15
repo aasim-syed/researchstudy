@@ -41,14 +41,14 @@ bit-identical output for repeated runs.
 | models processed | **15/15** | 15/15 | 12/15 | 8/15 |
 | quad ratio | **100 %** | 100 % | 100 % | 100 % |
 | mean scaled Jacobian (≥ 0.8) | **0.931** | 0.935 | 0.952* | 0.963* |
-| mean distance error (< 0.5 %) | **0.061 %** | 0.316 % | 0.054 %* | 0.051 %* |
-| feature coverage (≥ 90 %) | 49 % | 22 % | 36 %* | 29 %* |
-| singularities / 1k faces | **31.4** | 99.8 | 17.8* | 17.3* |
+| mean distance error (< 0.5 %) | **0.074 %** | 0.316 % | 0.054 %* | 0.051 %* |
+| feature coverage (≥ 90 %) | 50 % | 22 % | 36 %* | 29 %* |
+| singularities / 1k faces | **33.9** | 99.8 | 17.8* | 17.3* |
 
 \* over the models that method could process. Fewer singularities than Instant Meshes on 14/15
-models (3 072 vs 4 782 in total). Feature coverage reaches 98 % on CAD but not on organic
-scans / dense carvings / TSDF rooms; opt-in `--feature-refine 2` raises the mean to 65 % at the
-cost of quad ratio and singularities - see `docs/technical_writeup.pdf` for the full analysis.
+models (3 122 vs 4 782 in total). Feature coverage reaches 98 % on CAD but not on organic
+scans / dense carvings / TSDF rooms; the opt-ins `--feature-refine 2` / `--feature-loops` raise it
+only by adding faces or costing quad ratio / singularities - see `docs/technical_writeup.pdf` for the full analysis.
 
 ## Build
 
@@ -68,7 +68,8 @@ PYTHONPATH=python python -m pytest tests          # Python tests
 
 ```
 quadremesh INPUT(.obj|.ply|.glb|.gltf|.off) -o OUT.obj [options]
-  -f/--faces N  -e/--edge-length X  -a/--feature-angle DEG  --min-feature-length K  --feature-refine N
+  -f/--faces N  -e/--edge-length X  -a/--feature-angle DEG  --min-feature-length K
+  --feature-refine N  --feature-loops  --no-face-match
   --no-boundary  --curvature-weight W  --strokes FILE [--strokes-as-edges]
   --guide FILE [--guide-strength W]  --density FILE  --density-region X Y Z R F
   --curvature-density K  --symmetry x|y|z [--symmetry-offset C]

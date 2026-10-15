@@ -116,7 +116,7 @@ int count_singularities(int nv, const std::vector<std::array<int, 4>>& Q) {
 }
 }  // namespace
 
-Result quadremesh(const TriMesh& input, const Params& p) {
+static Result quadremesh_once(const TriMesh& input, const Params& p) {
     Result R;
     Logger log{R.log, p.verbose};
     auto t0 = Clock::now();
@@ -679,6 +679,18 @@ Result quadremesh(const TriMesh& input, const Params& p) {
     if (!std::getenv("QRM_NOPOST")) relax_and_project(qm, ref, L, p.smooth_iterations, pst);
     log("feature paths: ", pst.feature_paths, "/", pst.feature_chains, " chains, length ", pst.feature_len_traced, "/",
         pst.feature_len_total);
+    // Feature loop insertion: give every crease without an edge path its own edge loop by splitting
+    // the quad strip it runs along (pure quads, no new irregular vertices), then trace again.
+    if (p.feature_loops && !pst.untraced.empty() && !std::getenv("QRM_NOPOST")) {
+        int budget_add = (int)(p.feature_loop_budget * std::max(1, p.target_faces));
+        int nadd = insert_feature_loops(qm, pst.untraced, L, budget_add);
+        if (nadd > 0) {
+            cleanup(qm, pst);
+            relax_and_project(qm, ref, L, p.smooth_iterations, pst);
+            log("feature loops: +", nadd, " faces -> ", qm.Q.rows(), "; paths ", pst.feature_paths, "/", pst.feature_chains,
+                ", length ", pst.feature_len_traced, "/", pst.feature_len_total);
+        }
+    }
     // Feature-driven refinement: where no edge path could follow a feature (features closer than
     // one element, or crossing the field diagonally), refine the quads around it once with the
     // conforming templates and trace again at the finer resolution.
@@ -737,6 +749,31 @@ Result quadremesh(const TriMesh& input, const Params& p) {
     R.timing.total = secs(t0, t4);
     log("done: ", qm.V.rows(), " vertices, ", qm.Q.rows(), " faces in ", R.timing.total, " s");
     return R;
+}
+
+}  // namespace qrm
+
+namespace qrm {
+
+// Face-count control: loop insertion / feature refinement add faces after the solve, so the
+// solve budget is re-scaled once (twice at most) to land on the requested face count.
+Result quadremesh(const TriMesh& input, const Params& p) {
+    Result r = quadremesh_once(input, p);
+    if (p.target_edge_length > 0 || p.target_faces <= 0 || !p.match_face_count) return r;
+    Params q = p;
+    double solve_target = p.target_faces;
+    for (int it = 0; it < 2; ++it) {
+        double ratio = (double)r.mesh.Q.rows() / p.target_faces;
+        if (ratio < 1.08) break;
+        solve_target = std::max(0.25 * p.target_faces, solve_target / ratio);
+        q.target_faces = (int)std::lround(solve_target);
+        q.feature_loop_budget = p.feature_loop_budget * p.target_faces / std::max(1.0, solve_target);
+        Result r2 = quadremesh_once(input, q);
+        r2.log.insert(r2.log.begin(), "face-count control: solve budget " + std::to_string(q.target_faces) + " (output was " +
+                                          std::to_string(r.mesh.Q.rows()) + " faces)");
+        r = std::move(r2);
+    }
+    return r;
 }
 
 }  // namespace qrm

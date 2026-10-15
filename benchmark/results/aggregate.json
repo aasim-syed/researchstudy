@@ -4,12 +4,12 @@
    "models": 15,
    "succeeded": 15,
    "quad_ratio": 0.9999689333333333,
-   "sj_mean": 0.9307848,
-   "dist_mean_pct": 0.06055821000000001,
-   "feature_coverage": 0.4865217666666667,
-   "singularities": 204.8,
-   "sing_per_1k": 31.387370666666666,
-   "runtime_s": 20.033
+   "sj_mean": 0.9314226666666666,
+   "dist_mean_pct": 0.07393318333333335,
+   "feature_coverage": 0.49837889999999996,
+   "singularities": 208.13333333333333,
+   "sing_per_1k": 33.85537733333333,
+   "runtime_s": 22.467266666666667
   },
   "ours_learned": {
    "models": 15,
@@ -74,7 +74,7 @@
   "feature_coverage>=0.9": false,
   "fewer_singularities_than_instant_meshes": false,
   "fewer_singularities_models": "14/15",
-  "singularities_ours_total": 3072,
+  "singularities_ours_total": 3122,
   "singularities_im_total": 4782
  }
 }
