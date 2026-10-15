@@ -126,18 +126,61 @@ def per_model_table():
     return "\n".join(L)
 
 
+def highlights():
+    O, IM, QF, BL, C = bench("ours"), bench("instant_meshes"), bench("quadriflow"), bench("blender_quadriflow"), bench("ours_coverage")
+    cov = lambda r, m: f"{100 * r[m]['features']['feature_coverage']:.0f} %" if m in r else "failed"
+    s1k = lambda r, m: f"{r[m]['topology']['singularities_per_1k_faces']:.1f}" if m in r else "failed"
+    out = []
+    m = "fandisk"
+    out.append(f"* **CAD (fandisk):** feature coverage {cov(O, m)} (max coverage {cov(C, m)}) vs {cov(IM, m)} / {cov(QF, m)} / "
+               f"{cov(BL, m)} for IM / QF / Blender; singularities per 1k faces {s1k(O, m)} vs {s1k(QF, m)} (QF) and {s1k(IM, m)} (IM).")
+    m = "fandisk_noisy"
+    out.append(f"* **Robustness:** fandisk_noisy (holes + non-manifold fin): Blender {'refuses it' if m not in BL else 'processes it'}; "
+               f"feature coverage {cov(O, m)} vs QuadriFlow's {cov(QF, m)}.")
+    m = "leather_sofa"
+    if m in IM and m in O:
+        out.append(f"  Leather sofa: QuadriFlow {'fails' if m not in QF else 'succeeds'}, Blender {'fails' if m not in BL else 'succeeds'}; "
+                   f"Instant Meshes produces {IM[m]['faces']['total']} faces at {IM[m]['distance']['mean_pct']:.1f} % error; "
+                   f"ours {O[m]['faces']['total']} quads, SJ {O[m]['quality']['scaled_jacobian']['mean']:.2f}, "
+                   f"{O[m]['distance']['mean_pct']:.3f} % error.")
+    for m, lab in [("fountain_scan", "Fountain"), ("lounge_room", "Lounge")]:
+        if m in O:
+            out.append(f"* **Scans - {lab}:** {s1k(O, m)} singularities per 1k faces vs {s1k(IM, m)} (IM), SJ "
+                       f"{O[m]['quality']['scaled_jacobian']['mean']:.2f}, {O[m]['distance']['mean_pct']:.3f} % error; "
+                       f"QuadriFlow {'fails' if m not in QF else 'succeeds'}, Blender {'fails' if m not in BL else 'succeeds'}.")
+    d_o = st.mean(v["distance"]["mean_pct"] for v in O.values())
+    d_i = st.mean(v["distance"]["mean_pct"] for v in IM.values())
+    out.append(f"* **Distance error:** {d_o:.3f} % vs {d_i:.3f} % for Instant Meshes (mean), from projection with feature/boundary snapping.")
+    both = [k for k in O if k in QF]
+    out.append(f"* **vs QuadriFlow on the {len(both)} models it can process:** it has fewer singularities "
+               f"({st.mean(QF[k]['topology']['singularities_per_1k_faces'] for k in both):.1f} vs "
+               f"{st.mean(O[k]['topology']['singularities_per_1k_faces'] for k in both):.1f} per 1k) and slightly higher SJ; we trade "
+               f"those for feature coverage: {100 * st.mean(O[k]['features']['feature_coverage'] for k in both):.0f} % vs "
+               f"{100 * st.mean(QF[k]['features']['feature_coverage'] for k in both):.0f} %.")
+    rt = lambda r, ks: (min(r[k]["runtime_s"] for k in ks if k in r), max(r[k]["runtime_s"] for k in ks if k in r))
+    objs = [k for k in O if k not in SCANS]
+    scans = [k for k in O if k in SCANS]
+    a, b = rt(O, objs)
+    c, d = rt(O, scans)
+    e1, e2 = rt(IM, list(IM))
+    q1, q2 = rt(QF, list(QF))
+    out.append(f"* **Runtime (2 CPU cores):** default {a:.0f}–{b:.0f} s per object, {c:.0f}–{d:.0f} s per 1M-face scan "
+               f"(Instant Meshes {e1:.0f}–{e2:.0f} s, QuadriFlow {q1:.0f}–{q2:.0f} s); max coverage runs four solves.")
+    return "\n".join(out)
+
+
 def replace(path, name, text):
     s = open(path).read()
-    pat = re.compile(r"(<!-- %s:BEGIN -->\n).*?(\n<!-- %s:END -->)" % (name, name), re.S)
+    pat = re.compile(r"(<!-- %s:BEGIN -->\n).*?(<!-- %s:END -->)" % (name, name), re.S)
     if not pat.search(s):
         return False
-    s = pat.sub(lambda m: m.group(1) + text + m.group(2), s)
+    s = pat.sub(lambda m: m.group(1) + text + "\n" + m.group(2), s)
     open(path, "w").write(s)
     return True
 
 
 if __name__ == "__main__":
-    tabs = {"SUMMARY": summary_table(), "STUDY": study_table(), "PERMODEL": per_model_table()}
+    tabs = {"SUMMARY": summary_table(), "STUDY": study_table(), "PERMODEL": per_model_table(), "HIGHLIGHTS": highlights()}
     for doc in ["README.md", "docs/technical_writeup.md"]:
         for k, v in tabs.items():
             if replace(os.path.join(ROOT, doc), k, v):

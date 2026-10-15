@@ -1,0 +1,23 @@
+{
+ "name": "it22_max_coverage",
+ "flags": "--coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search",
+ "date": "2026-10-15T17:31:58",
+ "git": "5d8dbf7",
+ "models": [
+  "bunny",
+  "fandisk",
+  "fandisk_noisy",
+  "rocker_arm",
+  "armadillo",
+  "spot",
+  "beetle",
+  "nefertiti",
+  "igea",
+  "sheen_chair",
+  "damask_chair",
+  "velvet_sofa",
+  "leather_sofa",
+  "fountain_scan",
+  "lounge_room"
+ ]
+}

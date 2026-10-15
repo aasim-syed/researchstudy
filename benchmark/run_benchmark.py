@@ -106,8 +106,8 @@ def main():
         manifest = [m for m in manifest if m["name"] in keep]
     methods = args.methods.split(",")
     if args.import_study:
-        run, method = args.import_study.split(":")
-        sd = os.path.join(ROOT, "benchmark", "study", run)
+        srun, method = args.import_study.split(":")
+        sd = os.path.join(ROOT, "benchmark", "study", srun)
         meta = json.load(open(os.path.join(sd, "meta.json")))
         for entry in manifest:
             rep = os.path.join(sd, "reports", entry["name"] + ".json")
@@ -115,13 +115,13 @@ def main():
                 continue
             d = json.load(open(rep))
             d["method"] = method
-            d["imported_from"] = f"benchmark/study/{run} (flags: {meta['flags']}, code {meta['git']})"
+            d["imported_from"] = f"benchmark/study/{srun} (flags: {meta['flags']}, code {meta['git']})"
             json.dump(d, open(os.path.join(args.out, "reports", f"{entry['name']}__{method}.json"), "w"), indent=1)
             src_mesh = os.path.join(sd, "meshes", entry["name"] + ".obj")
             if os.path.exists(src_mesh):
                 import shutil
                 shutil.copy(src_mesh, os.path.join(args.out, "meshes", f"{entry['name']}__{method}.obj"))
-            print(f"{entry['name']:15s} {method:20s} imported from {run}")
+            print(f"{entry['name']:15s} {method:20s} imported from {srun}")
         summarize(args.out, json.load(open(os.path.join(ROOT, "data/manifest.json"))), ALL_METHODS.split(","))
         return
     os.makedirs(os.path.join(args.out, "meshes"), exist_ok=True)

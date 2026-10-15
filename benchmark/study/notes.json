@@ -120,7 +120,8 @@
   "Observed: 0.708 over 15, 0.803 on the 13 non-scan models, quad 0.989, SJ 0.884; 6/15 below Instant Meshes."
  ],
  "it21_im_budget": [
-  "Singularity budget referenced to the criterion itself: before the coverage stage, Instant Meshes (the same library the benchmark runs, here on the preprocessed surface) remeshes the input at the requested face count; the stage may add irregular vertices up to 85 % of its singularity rate (85 % because the internal reference landed up to ~14 % above the benchmark's Instant Meshes run on rocker arm / fandisk_noisy in a test). Coverage mode + path-edge subdivision (--coverage-mode --path-subdiv 3 --sing-budget-im)."
+  "Singularity budget referenced to the criterion itself: before the coverage stage, Instant Meshes (the same library the benchmark runs, here on the preprocessed surface) remeshes the input at the requested face count; the stage may add irregular vertices up to 85 % of its singularity rate (85 % because the internal reference landed up to ~14 % above the benchmark's Instant Meshes run on rocker arm / fandisk_noisy in a test). Coverage mode + path-edge subdivision (--coverage-mode --path-subdiv 3 --sing-budget-im).",
+  "Observed: 0.694 over 15, 0.790 on the 13 non-scan models, quad 0.995, SJ 0.897, distance 0.073 %; singularities 41.4 per 1k and 14/15 below Instant Meshes (as the default: only the room scan, which the default also loses). Compared with it20 (fixed budget): -1.4 points of coverage, +8 models below Instant Meshes."
  ],
  "it22_max_coverage": [
   "it21 + coverage search (4 candidates; with the Instant Meshes-referenced budget a candidate may not exceed the first candidate's singularity rate by more than 5 %). 4x runtime. Recommended setting when feature coverage matters most."
