@@ -1,0 +1,99 @@
+{
+ "method": "it9_trace_all",
+ "faces": {
+  "total": 15447,
+  "quads": 15447,
+  "triangles": 0,
+  "vertices": 15986,
+  "quad_ratio": 1,
+  "target": 15000,
+  "count_ratio": 1.0298
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.921006,
+   "min": -1,
+   "p05": 0.510052,
+   "median": 0.991667,
+   "p95": 0.999576,
+   "max": 0.999994,
+   "std": 0.226971
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.921006,
+   "min": -1,
+   "p05": 0.510052,
+   "median": 0.991667,
+   "p95": 0.999576,
+   "max": 0.999994,
+   "std": 0.226971
+  },
+  "frac_sj_below_0.5": 0.049071,
+  "inverted_or_degenerate": 252,
+  "planarity": {
+   "mean": 0.016027,
+   "min": 0,
+   "p05": 0.000484965,
+   "median": 0.00745295,
+   "p95": 0.0604646,
+   "max": 0.484327,
+   "std": 0.027404
+  },
+  "aspect_ratio": {
+   "mean": 1683190.0,
+   "min": 1.002,
+   "p05": 1.01869,
+   "median": 1.1356,
+   "p95": 2.73871,
+   "max": 1000000000.0,
+   "std": 40992000.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.675551,
+   "median": 1.00699,
+   "p95": 1.28318,
+   "max": 3.83904,
+   "std": 0.210893
+  },
+  "edge_length_mean_pct_diag": 0.619334
+ },
+ "topology": {
+  "singularities": 241,
+  "boundary_irregular": 206,
+  "singularities_per_1k_faces": 15.6017,
+  "interior_vertices": 14886,
+  "boundary_vertices": 1100,
+  "boundary_edges": 1100,
+  "nonmanifold_edges": 0,
+  "components": 8,
+  "valence_histogram": {
+   "2": 2,
+   "3": 105,
+   "4": 14645,
+   "5": 134
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0362929,
+  "out_to_in_mean_pct": 0.0168471,
+  "in_to_out_mean_pct": 0.0557388,
+  "rms_pct": 0.172243,
+  "hausdorff_pct": 16.0403,
+  "area_ratio": 0.948064
+ },
+ "features": {
+  "feature_coverage": 0.0657904,
+  "boundary_coverage": 0.0988639,
+  "combined_coverage": 0.0880171,
+  "feature_length_pct_diag": 1687.31,
+  "boundary_length_pct_diag": 3457.55,
+  "feature_segments": 15097,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 80.72,
+ "input_faces": 1033745,
+ "cmd": "build/quadremesh data/models/fountain_scan.obj -o benchmark/study/it9_trace_all/meshes/fountain_scan.obj -f 15000 -a 35 --no-uv --trace-all"
+}

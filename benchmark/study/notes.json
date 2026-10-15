@@ -51,10 +51,12 @@
   "Same as it7 with a singularity budget of +25 per 1k target faces: measures the coverage / singularity trade-off."
  ],
  "it9_trace_all": [
-  "Hypothesis: on inputs whose crease network is denser than the resolution, the field gets a reduced crease set (to keep the integer solve stable), so path recovery never sees the remaining creases. Change: path recovery uses the full crease set while the field keeps the reduced one. Vertex moves only - no topology change."
+  "Hypothesis: on inputs whose crease network is denser than the resolution, the field gets a reduced crease set (to keep the integer solve stable), so path recovery never sees the remaining creases. Change: path recovery uses the full crease set while the field keeps the reduced one. Vertex moves only - no topology change.",
+  "Observed: mean coverage 0.498 -> 0.506 vs it1 with singularities unchanged (14/15 models still below Instant Meshes); the gain is only on the dense-crease inputs (damask_chair 0.43 -> 0.55, fountain_scan 0.03 -> 0.07, lounge_room 0.02 -> 0.04); sheen_chair drops 0.81 -> 0.75. Kept as an option."
  ],
  "it10_coverage_mode": [
-  "it8 (hybrid, singularity budget 25) + full-set path recovery (it9)."
+  "it8 (hybrid, singularity budget 25) + full-set path recovery (it9).",
+  "Observed: best mean coverage so far, 0.598 (it8: 0.584), quad 0.989, SJ 0.908, distance 0.064 %; cost: 48.8 singularities/1k and only 9/15 models below Instant Meshes. Still far from the 0.90 target: the misses concentrate on organic scans (armadillo, igea, nefertiti) and room scans, whose 35-degree 'creases' are mostly sculpting/scan noise shorter than one element."
  ],
  "code_note": "it0-it8 ran on the working tree between commits f0a388b and the commit that adds this note; it5/it6 used an earlier triangle budget (1.2 %, loops limited to 0.6 of it) and face-count threshold (1.08x). From it9 on, each run's meta.json records the exact commit."
 }

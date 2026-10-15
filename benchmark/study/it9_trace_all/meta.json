@@ -1,0 +1,23 @@
+{
+ "name": "it9_trace_all",
+ "flags": "--trace-all",
+ "date": "2026-10-15T09:33:16",
+ "git": "f2fdc85",
+ "models": [
+  "bunny",
+  "fandisk",
+  "fandisk_noisy",
+  "rocker_arm",
+  "armadillo",
+  "spot",
+  "beetle",
+  "nefertiti",
+  "igea",
+  "sheen_chair",
+  "damask_chair",
+  "velvet_sofa",
+  "leather_sofa",
+  "fountain_scan",
+  "lounge_room"
+ ]
+}
