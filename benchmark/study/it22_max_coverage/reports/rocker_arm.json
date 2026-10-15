@@ -1,0 +1,102 @@
+{
+ "method": "it22_max_coverage",
+ "faces": {
+  "total": 5081,
+  "quads": 5029,
+  "triangles": 52,
+  "vertices": 5062,
+  "quad_ratio": 0.989766,
+  "target": 5000,
+  "count_ratio": 1.0162
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.947591,
+   "min": -1,
+   "p05": 0.803292,
+   "median": 0.987093,
+   "p95": 0.999408,
+   "max": 0.999969,
+   "std": 0.148689
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.952232,
+   "min": -1,
+   "p05": 0.827713,
+   "median": 0.987358,
+   "p95": 0.999414,
+   "max": 0.999969,
+   "std": 0.139206
+  },
+  "frac_sj_below_0.5": 0.019878,
+  "inverted_or_degenerate": 35,
+  "planarity": {
+   "mean": 0.0157927,
+   "min": 0,
+   "p05": 0.000299605,
+   "median": 0.0069028,
+   "p95": 0.0609386,
+   "max": 0.440896,
+   "std": 0.0239914
+  },
+  "aspect_ratio": {
+   "mean": 397695,
+   "min": 1.00717,
+   "p05": 1.04916,
+   "median": 1.21252,
+   "p95": 1.92152,
+   "max": 1000000000.0,
+   "std": 19938300.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.585657,
+   "median": 0.979663,
+   "p95": 1.43162,
+   "max": 10.6559,
+   "std": 0.386655
+  },
+  "edge_length_mean_pct_diag": 1.36614
+ },
+ "topology": {
+  "singularities": 164,
+  "boundary_irregular": 17,
+  "singularities_per_1k_faces": 32.2771,
+  "interior_vertices": 5039,
+  "boundary_vertices": 23,
+  "boundary_edges": 24,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "2": 12,
+   "3": 59,
+   "4": 4875,
+   "5": 75,
+   "6": 15,
+   "7": 2,
+   "8": 1
+  }
+ },
+ "distance": {
+  "mean_pct": 0.055742,
+  "out_to_in_mean_pct": 0.0541393,
+  "in_to_out_mean_pct": 0.0573448,
+  "rms_pct": 0.121711,
+  "hausdorff_pct": 1.90687,
+  "area_ratio": 0.984148
+ },
+ "features": {
+  "feature_coverage": 0.829384,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.829384,
+  "feature_length_pct_diag": 56.1287,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 88,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 47.63,
+ "input_faces": 20088,
+ "cmd": "build/quadremesh data/models/rocker_arm.obj -o benchmark/study/it22_max_coverage/meshes/rocker_arm.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search"
+}

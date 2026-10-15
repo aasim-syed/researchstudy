@@ -1,101 +1,102 @@
 {
-"method": "ours_coverage",
-"faces": {
-  "total": 4557,
-  "quads": 4529,
-  "triangles": 28,
-  "vertices": 4635,
-  "quad_ratio": 0.993856,
+ "method": "ours_coverage",
+ "faces": {
+  "total": 4581,
+  "quads": 4581,
+  "triangles": 0,
+  "vertices": 4706,
+  "quad_ratio": 1,
   "target": 5000,
-  "count_ratio": 0.9114
-},
-"quality": {
+  "count_ratio": 0.9162
+ },
+ "quality": {
   "scaled_jacobian": {
-    "mean": 0.797488,
-    "min": -1,
-    "p05": 0.0452603,
-    "median": 0.957515,
-    "p95": 0.999347,
-    "max": 1,
-    "std": 0.327746
+   "mean": 0.816151,
+   "min": -1,
+   "p05": 0.0403429,
+   "median": 0.968368,
+   "p95": 0.999826,
+   "max": 0.999999,
+   "std": 0.335747
   },
   "scaled_jacobian_quads": {
-    "mean": 0.79959,
-    "min": -1,
-    "p05": 0.045273,
-    "median": 0.95829,
-    "p95": 0.999354,
-    "max": 1,
-    "std": 0.326843
+   "mean": 0.816151,
+   "min": -1,
+   "p05": 0.0403429,
+   "median": 0.968368,
+   "p95": 0.999826,
+   "max": 0.999999,
+   "std": 0.335747
   },
-  "frac_sj_below_0.5": 0.15361,
-  "inverted_or_degenerate": 88,
+  "frac_sj_below_0.5": 0.128138,
+  "inverted_or_degenerate": 125,
   "planarity": {
-    "mean": 0.0163484,
-    "min": 0,
-    "p05": 8.91715e-07,
-    "median": 0.00492912,
-    "p95": 0.0718256,
-    "max": 0.33041,
-    "std": 0.0288823
+   "mean": 0.0218448,
+   "min": 0,
+   "p05": 3.37261e-06,
+   "median": 0.0064596,
+   "p95": 0.106339,
+   "max": 0.450972,
+   "std": 0.0380824
   },
   "aspect_ratio": {
-    "mean": 5.0785e+06,
-    "min": 1.00547,
-    "p05": 1.0587,
-    "median": 1.52111,
-    "p95": 326.48,
-    "max": 1e+09,
-    "std": 7.10816e+07
+   "mean": 8734090.0,
+   "min": 1.00274,
+   "p05": 1.0359,
+   "median": 1.47338,
+   "p95": 9.63447,
+   "max": 1000000000.0,
+   "std": 93034600.0
   },
   "edge_length_rel": {
-    "mean": 1,
-    "min": 0,
-    "p05": 0.0306037,
-    "median": 1.03961,
-    "p95": 1.76498,
-    "max": 10.5478,
-    "std": 0.725063
+   "mean": 1,
+   "min": 0,
+   "p05": 0.156492,
+   "median": 1.05925,
+   "p95": 1.76379,
+   "max": 34.6065,
+   "std": 1.08185
   },
-  "edge_length_mean_pct_diag": 1.82528
-},
-"topology": {
-  "singularities": 361,
-  "boundary_irregular": 22,
-  "singularities_per_1k_faces": 79.2188,
-  "interior_vertices": 4473,
-  "boundary_vertices": 162,
-  "boundary_edges": 162,
+  "edge_length_mean_pct_diag": 1.63764
+ },
+ "topology": {
+  "singularities": 261,
+  "boundary_irregular": 51,
+  "singularities_per_1k_faces": 56.9745,
+  "interior_vertices": 4488,
+  "boundary_vertices": 218,
+  "boundary_edges": 218,
   "nonmanifold_edges": 0,
-  "components": 13,
+  "components": 28,
   "valence_histogram": {
-    "3": 231,
-    "4": 4112,
-    "5": 88,
-    "6": 29,
-    "7": 10,
-    "8": 2,
-    "9": 1
+   "3": 180,
+   "4": 4227,
+   "5": 62,
+   "6": 13,
+   "7": 5,
+   "8": 1
   }
-},
-"distance": {
-  "mean_pct": 0.114457,
-  "out_to_in_mean_pct": 0.0988687,
-  "in_to_out_mean_pct": 0.130045,
-  "rms_pct": 0.233318,
-  "hausdorff_pct": 2.8756,
-  "area_ratio": 0.958912
-},
-"features": {
-  "feature_coverage": 0.584912,
-  "boundary_coverage": 0.582064,
-  "combined_coverage": 0.584706,
+ },
+ "distance": {
+  "mean_pct": 0.33816,
+  "out_to_in_mean_pct": 0.527093,
+  "in_to_out_mean_pct": 0.149227,
+  "rms_pct": 2.64344,
+  "hausdorff_pct": 54.4823,
+  "area_ratio": 0.951123
+ },
+ "features": {
+  "feature_coverage": 0.618692,
+  "boundary_coverage": 0.59243,
+  "combined_coverage": 0.616795,
   "feature_length_pct_diag": 5985.21,
   "boundary_length_pct_diag": 466.079,
   "feature_segments": 4513,
   "tolerance_L": 0.1,
   "feature_angle": 35
-},
-"runtime_s": 57.32,
-"input_faces": 39936
+ },
+ "runtime_s": 1068.8,
+ "input_faces": 39936,
+ "cmd": "build/quadremesh data/models/damask_chair.obj -o benchmark/study/it22_max_coverage/meshes/damask_chair.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search",
+ "imported_from": "benchmark/study/it22_max_coverage (flags: --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search, code 5d8dbf7)"
 }

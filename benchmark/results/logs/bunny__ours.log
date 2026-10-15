@@ -1,2 +1,2 @@
 /home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/bunny.obj -o /home/claude/quadremesh/benchmark/results/meshes/bunny__ours.obj -f 5000 -a 35.0 --no-uv
-quadremesh: 69451 faces -> 4158 quads/tris (6.27s) -> /home/claude/quadremesh/benchmark/results/meshes/bunny__ours.obj
+quadremesh: 69451 faces -> 4354 quads/tris (12.59s) -> /home/claude/quadremesh/benchmark/results/meshes/bunny__ours.obj

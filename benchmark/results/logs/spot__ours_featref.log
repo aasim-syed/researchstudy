@@ -1,2 +1,2 @@
 /home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/spot.obj -o /home/claude/quadremesh/benchmark/results/meshes/spot__ours_featref.obj -f 5000 -a 35.0 --no-uv --feature-refine 2
-quadremesh: 23424 faces -> 4505 quads/tris (4.17s) -> /home/claude/quadremesh/benchmark/results/meshes/spot__ours_featref.obj
+quadremesh: 23424 faces -> 4050 quads/tris (7.28s) -> /home/claude/quadremesh/benchmark/results/meshes/spot__ours_featref.obj

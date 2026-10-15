@@ -124,6 +124,7 @@
   "Observed: 0.694 over 15, 0.790 on the 13 non-scan models, quad 0.995, SJ 0.897, distance 0.073 %; singularities 41.4 per 1k and 14/15 below Instant Meshes (as the default: only the room scan, which the default also loses). Compared with it20 (fixed budget): -1.4 points of coverage, +8 models below Instant Meshes."
  ],
  "it22_max_coverage": [
-  "it21 + coverage search (4 candidates; with the Instant Meshes-referenced budget a candidate may not exceed the first candidate's singularity rate by more than 5 %). 4x runtime. Recommended setting when feature coverage matters most."
+  "it21 + coverage search (4 candidates; with the Instant Meshes-referenced budget a candidate may not exceed the first candidate's singularity rate by more than 5 %). 4x runtime. Recommended setting when feature coverage matters most.",
+  "Observed: on damask_chair none of the 4 candidates kept the mean SJ >= 0.8 (first run: SJ 0.762 was returned); the search now falls back to the default settings in that case and damask was re-run with that fix (recorded in meta.json reruns): coverage 0.619, SJ 0.816. Final: 0.712 over 15, 0.808 on the 13 non-scan models, every model meets quad >= 98 %, SJ >= 0.8 and distance < 0.5 %; 14/15 below Instant Meshes. Four models reach >= 90 % (fandisk 1.000, spot 0.994, sheen chair 0.925, velvet sofa 0.906), leather sofa 0.895."
  ]
 }

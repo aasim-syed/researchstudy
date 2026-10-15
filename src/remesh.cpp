@@ -1115,6 +1115,22 @@ Result quadremesh(const TriMesh& input, const Params& p) {
             best_params = cands[k];
         }
     }
+    // no candidate met every criterion (e.g. dense carvings where the coverage operations push the
+    // mean SJ below 0.8): fall back to the default settings, without the coverage operations
+    if (best_cov < 0) {
+        Params q = base;
+        q.feature_loops = q.feature_loop_partial = q.curved_feature_splits = q.crease_cuts = false;
+        q.feature_refine_rounds = 0;
+        q.path_subdivision = 0;
+        Result r = quadremesh_matched(input, q);
+        std::string js = evaluate(input, r.mesh, ep);
+        char buf[256];
+        std::snprintf(buf, sizeof buf, "coverage search: no candidate met all criteria -> default settings: coverage %.3f SJ %.3f",
+                      json_num(js, "feature_coverage"), json_num(js, "scaled_jacobian", "mean"));
+        notes.push_back(buf);
+        if (p.verbose) std::fprintf(stderr, "[quadremesh] %s\n", buf);
+        best = std::move(r);
+    }
     best.log.insert(best.log.begin(), notes.begin(), notes.end());
     return best;
 }

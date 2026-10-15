@@ -3,46 +3,46 @@
   "ours": {
    "models": 15,
    "succeeded": 15,
-   "quad_ratio": 0.9999689333333333,
-   "sj_mean": 0.929388,
-   "dist_mean_pct": 0.07641850333333333,
-   "feature_coverage": 0.4943783666666667,
-   "singularities": 208.8,
-   "sing_per_1k": 33.376084,
-   "runtime_s": 18.7888
+   "quad_ratio": 0.9999948,
+   "sj_mean": 0.9043224666666667,
+   "dist_mean_pct": 0.08629745999999999,
+   "feature_coverage": 0.6482974533333333,
+   "singularities": 218.4,
+   "sing_per_1k": 35.587334000000006,
+   "runtime_s": 45.35653333333333
   },
   "ours_learned": {
    "models": 15,
    "succeeded": 15,
-   "quad_ratio": 0.9999367333333333,
-   "sj_mean": 0.934118,
-   "dist_mean_pct": 0.06943738,
-   "feature_coverage": 0.4697711866666667,
-   "singularities": 223.2,
-   "sing_per_1k": 36.546773333333334,
-   "runtime_s": 29.62633333333333
+   "quad_ratio": 0.9999008,
+   "sj_mean": 0.9147229333333333,
+   "dist_mean_pct": 0.06126105333333333,
+   "feature_coverage": 0.6478143333333333,
+   "singularities": 234.6,
+   "sing_per_1k": 39.160023333333335,
+   "runtime_s": 57.480599999999995
   },
   "ours_featref": {
    "models": 15,
    "succeeded": 15,
-   "quad_ratio": 0.9919968666666666,
-   "sj_mean": 0.9230436,
-   "dist_mean_pct": 0.0638387,
-   "feature_coverage": 0.5411352533333333,
-   "singularities": 260.06666666666666,
-   "sing_per_1k": 41.81052666666667,
-   "runtime_s": 25.7074
+   "quad_ratio": 0.9918248666666667,
+   "sj_mean": 0.8981277333333334,
+   "dist_mean_pct": 0.07324796,
+   "feature_coverage": 0.6707634133333333,
+   "singularities": 264.8,
+   "sing_per_1k": 41.49032,
+   "runtime_s": 64.23526666666666
   },
   "ours_coverage": {
    "models": 15,
    "succeeded": 15,
-   "quad_ratio": 0.9891777333333334,
-   "sj_mean": 0.9076562,
-   "dist_mean_pct": 0.06432831133333333,
-   "feature_coverage": 0.5975943,
-   "singularities": 301.26666666666665,
-   "sing_per_1k": 48.826746666666665,
-   "runtime_s": 32.61986666666667
+   "quad_ratio": 0.9946088666666667,
+   "sj_mean": 0.9060834666666666,
+   "dist_mean_pct": 0.08143505466666667,
+   "feature_coverage": 0.7118303466666667,
+   "singularities": 253.0,
+   "sing_per_1k": 41.13832,
+   "runtime_s": 265.6306666666667
   },
   "instant_meshes": {
    "models": 15,
@@ -85,7 +85,7 @@
   "feature_coverage>=0.9": false,
   "fewer_singularities_than_instant_meshes": false,
   "fewer_singularities_models": "14/15",
-  "singularities_ours_total": 3132,
+  "singularities_ours_total": 3276,
   "singularities_im_total": 4782
  }
 }

@@ -1,2 +1,2 @@
 /home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/beetle.obj -o /home/claude/quadremesh/benchmark/results/meshes/beetle__ours_featref.obj -f 5000 -a 35.0 --no-uv --feature-refine 2
-quadremesh: 32848 faces -> 4567 quads/tris (16.36s) -> /home/claude/quadremesh/benchmark/results/meshes/beetle__ours_featref.obj
+quadremesh: 32848 faces -> 4765 quads/tris (23.17s) -> /home/claude/quadremesh/benchmark/results/meshes/beetle__ours_featref.obj

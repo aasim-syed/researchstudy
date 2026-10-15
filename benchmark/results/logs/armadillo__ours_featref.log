@@ -1,2 +1,2 @@
 /home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/armadillo.obj -o /home/claude/quadremesh/benchmark/results/meshes/armadillo__ours_featref.obj -f 5000 -a 35.0 --no-uv --feature-refine 2
-quadremesh: 99976 faces -> 4506 quads/tris (6.90s) -> /home/claude/quadremesh/benchmark/results/meshes/armadillo__ours_featref.obj
+quadremesh: 99976 faces -> 4308 quads/tris (11.78s) -> /home/claude/quadremesh/benchmark/results/meshes/armadillo__ours_featref.obj

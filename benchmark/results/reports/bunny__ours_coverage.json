@@ -1,100 +1,102 @@
 {
-"method": "ours_coverage",
-"faces": {
-  "total": 4311,
-  "quads": 4249,
-  "triangles": 62,
-  "vertices": 4303,
-  "quad_ratio": 0.985618,
+ "method": "ours_coverage",
+ "faces": {
+  "total": 4442,
+  "quads": 4411,
+  "triangles": 31,
+  "vertices": 4451,
+  "quad_ratio": 0.993021,
   "target": 5000,
-  "count_ratio": 0.8622
-},
-"quality": {
+  "count_ratio": 0.8884
+ },
+ "quality": {
   "scaled_jacobian": {
-    "mean": 0.915858,
-    "min": -1,
-    "p05": 0.672552,
-    "median": 0.962179,
-    "p95": 0.997342,
-    "max": 0.999886,
-    "std": 0.144446
+   "mean": 0.930444,
+   "min": -1,
+   "p05": 0.664258,
+   "median": 0.980972,
+   "p95": 0.998125,
+   "max": 0.999973,
+   "std": 0.168408
   },
   "scaled_jacobian_quads": {
-    "mean": 0.920649,
-    "min": -1,
-    "p05": 0.712774,
-    "median": 0.962859,
-    "p95": 0.997387,
-    "max": 0.999886,
-    "std": 0.137771
+   "mean": 0.933388,
+   "min": -1,
+   "p05": 0.681097,
+   "median": 0.981137,
+   "p95": 0.998131,
+   "max": 0.999973,
+   "std": 0.163891
   },
-  "frac_sj_below_0.5": 0.0222686,
-  "inverted_or_degenerate": 13,
+  "frac_sj_below_0.5": 0.0288158,
+  "inverted_or_degenerate": 25,
   "planarity": {
-    "mean": 0.0248692,
-    "min": 0,
-    "p05": 0.00114763,
-    "median": 0.0158069,
-    "p95": 0.0816806,
-    "max": 0.304791,
-    "std": 0.0275037
+   "mean": 0.023876,
+   "min": 0,
+   "p05": 0.00104476,
+   "median": 0.0155101,
+   "p95": 0.0764437,
+   "max": 0.30757,
+   "std": 0.0267648
   },
   "aspect_ratio": {
-    "mean": 1.17675e+06,
-    "min": 1.00102,
-    "p05": 1.03956,
-    "median": 1.19566,
-    "p95": 2.24307,
-    "max": 1e+09,
-    "std": 3.42836e+07
+   "mean": 1360240.0,
+   "min": 1.00228,
+   "p05": 1.03633,
+   "median": 1.19724,
+   "p95": 2.39736,
+   "max": 1000000000.0,
+   "std": 36856300.0
   },
   "edge_length_rel": {
-    "mean": 1,
-    "min": 0,
-    "p05": 0.594537,
-    "median": 1.00482,
-    "p95": 1.33055,
-    "max": 4.89673,
-    "std": 0.250716
+   "mean": 1,
+   "min": 0,
+   "p05": 0.567264,
+   "median": 1.01624,
+   "p95": 1.32732,
+   "max": 39.0023,
+   "std": 0.480506
   },
-  "edge_length_mean_pct_diag": 1.46826
-},
-"topology": {
-  "singularities": 219,
-  "boundary_irregular": 19,
-  "singularities_per_1k_faces": 50.8003,
-  "interior_vertices": 4253,
-  "boundary_vertices": 50,
-  "boundary_edges": 50,
+  "edge_length_mean_pct_diag": 1.4339
+ },
+ "topology": {
+  "singularities": 160,
+  "boundary_irregular": 28,
+  "singularities_per_1k_faces": 36.0198,
+  "interior_vertices": 4396,
+  "boundary_vertices": 55,
+  "boundary_edges": 55,
   "nonmanifold_edges": 0,
   "components": 1,
   "valence_histogram": {
-    "2": 5,
-    "3": 83,
-    "4": 4034,
-    "5": 118,
-    "6": 11,
-    "7": 2
+   "2": 1,
+   "3": 71,
+   "4": 4236,
+   "5": 83,
+   "6": 4,
+   "7": 1
   }
-},
-"distance": {
-  "mean_pct": 0.0764401,
-  "out_to_in_mean_pct": 0.0729583,
-  "in_to_out_mean_pct": 0.0799218,
-  "rms_pct": 0.195376,
-  "hausdorff_pct": 3.43795,
-  "area_ratio": 0.985631
-},
-"features": {
-  "feature_coverage": 0.647704,
-  "boundary_coverage": 0.396207,
-  "combined_coverage": 0.496299,
+ },
+ "distance": {
+  "mean_pct": 0.0924096,
+  "out_to_in_mean_pct": 0.0803341,
+  "in_to_out_mean_pct": 0.104485,
+  "rms_pct": 0.322077,
+  "hausdorff_pct": 9.41047,
+  "area_ratio": 0.982957
+ },
+ "features": {
+  "feature_coverage": 0.729634,
+  "boundary_coverage": 0.486364,
+  "combined_coverage": 0.583182,
   "feature_length_pct_diag": 89.7017,
   "boundary_length_pct_diag": 135.687,
   "feature_segments": 142,
   "tolerance_L": 0.1,
   "feature_angle": 35
-},
-"runtime_s": 6.362,
-"input_faces": 69451
+ },
+ "runtime_s": 61.06,
+ "input_faces": 69451,
+ "cmd": "build/quadremesh data/models/bunny.obj -o benchmark/study/it22_max_coverage/meshes/bunny.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search",
+ "imported_from": "benchmark/study/it22_max_coverage (flags: --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search, code 5d8dbf7)"
 }

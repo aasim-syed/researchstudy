@@ -1,0 +1,100 @@
+{
+ "method": "it22_max_coverage",
+ "faces": {
+  "total": 4858,
+  "quads": 4830,
+  "triangles": 28,
+  "vertices": 5148,
+  "quad_ratio": 0.994236,
+  "target": 5000,
+  "count_ratio": 0.9716
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.888887,
+   "min": -1,
+   "p05": 0.389345,
+   "median": 0.98275,
+   "p95": 0.999864,
+   "max": 1,
+   "std": 0.227236
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.891216,
+   "min": -1,
+   "p05": 0.400726,
+   "median": 0.983069,
+   "p95": 0.999865,
+   "max": 1,
+   "std": 0.224959
+  },
+  "frac_sj_below_0.5": 0.0636064,
+  "inverted_or_degenerate": 76,
+  "planarity": {
+   "mean": 0.0140433,
+   "min": 0,
+   "p05": 4.57715e-09,
+   "median": 0.00407445,
+   "p95": 0.0613266,
+   "max": 0.485406,
+   "std": 0.0287885
+  },
+  "aspect_ratio": {
+   "mean": 621124,
+   "min": 1.00177,
+   "p05": 1.04923,
+   "median": 1.24165,
+   "p95": 4.85822,
+   "max": 1000000000.0,
+   "std": 24914500.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.440629,
+   "median": 1.00013,
+   "p95": 1.55763,
+   "max": 6.58771,
+   "std": 0.344928
+  },
+  "edge_length_mean_pct_diag": 1.05449
+ },
+ "topology": {
+  "singularities": 229,
+  "boundary_irregular": 49,
+  "singularities_per_1k_faces": 47.1387,
+  "interior_vertices": 4520,
+  "boundary_vertices": 628,
+  "boundary_edges": 628,
+  "nonmanifold_edges": 0,
+  "components": 2,
+  "valence_histogram": {
+   "3": 106,
+   "4": 4291,
+   "5": 116,
+   "6": 6,
+   "9": 1
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0340215,
+  "out_to_in_mean_pct": 0.0353526,
+  "in_to_out_mean_pct": 0.0326905,
+  "rms_pct": 0.0925961,
+  "hausdorff_pct": 2.15465,
+  "area_ratio": 0.987355
+ },
+ "features": {
+  "feature_coverage": 0.775063,
+  "boundary_coverage": 0.729669,
+  "combined_coverage": 0.756311,
+  "feature_length_pct_diag": 1250.35,
+  "boundary_length_pct_diag": 880.036,
+  "feature_segments": 1830,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 90.1,
+ "input_faces": 32848,
+ "cmd": "build/quadremesh data/models/beetle.obj -o benchmark/study/it22_max_coverage/meshes/beetle.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search"
+}

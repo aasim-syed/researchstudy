@@ -1,2 +1,2 @@
 /home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/igea.obj -o /home/claude/quadremesh/benchmark/results/meshes/igea__ours.obj -f 5000 -a 35.0 --no-uv
-quadremesh: 268686 faces -> 5069 quads/tris (13.02s) -> /home/claude/quadremesh/benchmark/results/meshes/igea__ours.obj
+quadremesh: 268686 faces -> 4843 quads/tris (26.38s) -> /home/claude/quadremesh/benchmark/results/meshes/igea__ours.obj

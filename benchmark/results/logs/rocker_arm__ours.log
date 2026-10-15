@@ -1,2 +1,2 @@
 /home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/rocker_arm.obj -o /home/claude/quadremesh/benchmark/results/meshes/rocker_arm__ours.obj -f 5000 -a 35.0 --no-uv
-quadremesh: 20088 faces -> 4635 quads/tris (5.18s) -> /home/claude/quadremesh/benchmark/results/meshes/rocker_arm__ours.obj
+quadremesh: 20088 faces -> 4815 quads/tris (9.47s) -> /home/claude/quadremesh/benchmark/results/meshes/rocker_arm__ours.obj
