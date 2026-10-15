@@ -251,7 +251,8 @@ singularity overlay, the scaled-Jacobian heatmap, the cross field, and all metho
    layout crosses a crease diagonally, or where a recovered feature path cuts across the grid
    (visible as a sawtooth on fandisk): at most 0.8 % of faces, mean 0.34 % (QuadriFlow: up to
    1.8 %, mean 0.47 %; Instant Meshes up to 1.1 %), hence
-   the minimum SJ < 0 on some models. Snapping and relaxation never make them worse, but cannot always fix them.
+   the minimum SJ < 0 on some models. Untangling repairs most of them but not all; path
+   recovery trades a few folds for exact feature loops.
 4. **Thin parts.** Parts thinner than one element are represented approximately (single sheet)
    or by the decimated exact fallback, with locally irregular structure.
 5. **Symmetry hint** assumes a near-symmetric input: the negative side is discarded.
