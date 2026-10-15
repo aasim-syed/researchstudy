@@ -115,7 +115,7 @@ including the failed ones) is in the generated study [`docs/coverage_study.md`](
 (`python benchmark/coverage_study.py run NAME "FLAGS"` + `report`), and the geometric limits of the
 metric - why the room scan cannot reach 90 % at 15k faces and why the organic scans need edges
 shorter than the element size - are measured in [`docs/crease_bounds.md`](docs/crease_bounds.md)
-(`python benchmark/crease_bounds.py`). `docs/technical_writeup.pdf` §6.1 has the analysis.
+(`python benchmark/crease_bounds.py`). `docs/technical_writeup.pdf` §6.1 has the analysis. Every pipeline function (file, signature, input, output, library, code excerpt, figure) is listed in [`docs/code_reference.md`](docs/code_reference.md), generated from the source by `docs/gen_codemap.py`.
 
 ## Build
 
