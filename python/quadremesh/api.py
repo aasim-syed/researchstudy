@@ -72,7 +72,9 @@ def quadremesh(input: MeshLike, target_faces: int = 5000, feature_angle: float =
     learned_field : True or a checkpoint path -> predict the guide field with the PyTorch
         model (`quadremesh.learned`), runs on CUDA when available
     pure_quad : guarantee 100% quads
-    options : any other core parameter (curvature_weight, smooth_iterations, ...)
+    options : any other core parameter (curvature_weight, smooth_iterations, ...), e.g.
+        coverage_mode=True -> feature-coverage preset (CLI --coverage-mode): more creases get
+        edge loops at the cost of more singularities and ~1 % triangles; see docs/coverage_study.md
     """
     mesh = load_mesh(input)
     V, F = np.ascontiguousarray(mesh["V"], np.float64), np.ascontiguousarray(mesh["F"], np.int32)

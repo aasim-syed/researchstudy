@@ -68,3 +68,14 @@ def test_evaluate_roundtrip(tmp_path):
     r = quadremesh((V, F), target_faces=300, report=False, output=str(tmp_path / "q.obj"))
     rep = evaluate((V, F), str(tmp_path / "q.obj"), target_faces=300)
     assert rep["faces"]["total"] == len(r.faces)
+
+
+def test_coverage_mode_kwarg():
+    import json, os
+    import quadremesh as q
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    f = [e["file"] for e in json.load(open(os.path.join(root, "data", "manifest.json"))) if e["name"] == "fandisk"][0]
+    base = q.quadremesh(os.path.join(root, "data", f), 3000)
+    cov = q.quadremesh(os.path.join(root, "data", f), 3000, coverage_mode=True)
+    assert cov.report["features"]["feature_coverage"] >= base.report["features"]["feature_coverage"]
+    assert cov.report["faces"]["quad_ratio"] >= 0.97

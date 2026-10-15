@@ -24,6 +24,14 @@ static void usage() {
         "  --no-boundary            do not constrain open boundaries\n"
         "  --feature-refine N       refine N times around features without an edge loop (0)\n"
         "  --feature-loops          insert edge loops (strip splits) along creases without an edge path\n"
+        "  --partial-loops          like --feature-loops but split only the crease's own run (quad+tri ends)\n"
+        "  --curved-splits          split recovered path edges that sag off tightly curved creases\n"
+        "  --trace-all              recover edge paths for all creases, not only the field's subset\n"
+        "  --tri-budget F           triangles the coverage stage may add, fraction of target (0.015)\n"
+        "  --sing-budget S          irregular vertices it may add per 1k target faces (10)\n"
+        "  --refine-max-len K       --feature-refine only around creases <= K x edge length (0 = all)\n"
+        "  --coverage-mode          preset: --trace-all --partial-loops --curved-splits --feature-refine 1\n"
+        "                           --refine-max-len 8 --sing-budget 25 (more coverage, more singularities)\n"
         "  --no-face-match          do not re-solve to hit the target face count after insertions\n"
         "  --curvature-weight W     principal-curvature alignment strength 0..1 (0.35)\n"
         "  --strokes FILE           guidance polylines: 'x y z' per line, blank line between strokes\n"
@@ -101,6 +109,10 @@ int main(int argc, char** argv) {
         else if (a == "--refine-max-len") p.feature_refine_max_len = std::stod(next());
         else if (a == "--sing-budget") p.singularity_budget = std::stod(next());
         else if (a == "--trace-all") p.trace_all_features = true;
+        else if (a == "--coverage-mode") {
+            p.trace_all_features = p.feature_loops = p.feature_loop_partial = p.curved_feature_splits = true;
+            p.feature_refine_rounds = 1; p.feature_refine_max_len = 8; p.singularity_budget = 25;
+        }
         else if (a == "--field-feature-budget") p.feature_field_budget = std::stod(next());
         else if (a == "--no-face-match") p.match_face_count = false;
         else if (a == "--curvature-weight") p.curvature_weight = std::stod(next());

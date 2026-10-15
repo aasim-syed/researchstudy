@@ -25,6 +25,19 @@ Params params_from_kwargs(const py::kwargs& kw) {
         else if (k == "feature_loops") p.feature_loops = v.cast<bool>();
         else if (k == "feature_loop_budget") p.feature_loop_budget = v.cast<double>();
         else if (k == "match_face_count") p.match_face_count = v.cast<bool>();
+        else if (k == "feature_loop_partial") p.feature_loop_partial = v.cast<bool>();
+        else if (k == "curved_feature_splits") p.curved_feature_splits = v.cast<bool>();
+        else if (k == "trace_all_features") p.trace_all_features = v.cast<bool>();
+        else if (k == "triangle_budget") p.triangle_budget = v.cast<double>();
+        else if (k == "singularity_budget") p.singularity_budget = v.cast<double>();
+        else if (k == "feature_refine_max_len") p.feature_refine_max_len = v.cast<double>();
+        else if (k == "feature_field_budget") p.feature_field_budget = v.cast<double>();
+        else if (k == "coverage_mode") {
+            if (v.cast<bool>()) {
+                p.trace_all_features = p.feature_loops = p.feature_loop_partial = p.curved_feature_splits = true;
+                p.feature_refine_rounds = 1; p.feature_refine_max_len = 8; p.singularity_budget = 25;
+            }
+        }
         else if (k == "curvature_weight") p.curvature_weight = v.cast<double>();
         else if (k == "curvature_min_anisotropy") p.curvature_min_anisotropy = v.cast<double>();
         else if (k == "strokes") {
