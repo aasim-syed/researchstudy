@@ -15,6 +15,8 @@
 #include "quadremesh/field.h"
 #include "quadremesh/geometry.h"
 #include "quadremesh/postprocess.h"
+#include "quadremesh/crease_cut.h"
+#include "quadremesh/metrics.h"
 #include "quadremesh/preprocess.h"
 #include "quadremesh/quadremesh.h"
 #include "quadremesh/transfer.h"
@@ -230,6 +232,15 @@ static Result quadremesh_once(const TriMesh& input, const Params& p) {
         }
         refFE.resize(fe.size(), 2);
         for (size_t i = 0; i < fe.size(); ++i) refFE.row(i) << fe[i].first, fe[i].second;
+        if (const char* dp = std::getenv("QRM_DUMP_FE")) {  // diagnostics: crease edges in input units
+            if (std::FILE* fp = std::fopen(dp, "w")) {
+                for (auto& e : fe) {
+                    Vector3d a = wm.V.row(e.first).transpose() / s + center, b = wm.V.row(e.second).transpose() / s + center;
+                    std::fprintf(fp, "%.9g %.9g %.9g %.9g %.9g %.9g\n", a.x(), a.y(), a.z(), b.x(), b.y(), b.z());
+                }
+                std::fclose(fp);
+            }
+        }
         refBE.resize(be.size(), 2);
         for (size_t i = 0; i < be.size(); ++i) refBE.row(i) << be[i].first, be[i].second;
         // boundary corners (sharp turns of open boundaries) are fixed too
@@ -412,6 +423,34 @@ static Result quadremesh_once(const TriMesh& input, const Params& p) {
         budget = std::max(budget, p.min_component_faces);
         job.preserve_boundary = boundary_hard;
         job.seed = p.seed;
+        // feature-adaptive size inside the field solve: smaller elements near creases, larger
+        // elsewhere, same expected face count (density -> conformal scale target of the solve)
+        if (p.feature_density > 0 || std::getenv("QRM_FEAT_SCALE")) {
+            const double k = std::getenv("QRM_FEAT_SCALE") ? std::atof(std::getenv("QRM_FEAT_SCALE")) : p.feature_density;
+            const double wdt = std::getenv("QRM_FEAT_WIDTH") ? std::atof(std::getenv("QRM_FEAT_WIDTH")) : p.feature_density_width;
+            std::vector<std::pair<int, int>> se;
+            for (int e = 0; e < refFE.rows(); ++e) se.push_back({refFE(e, 0), refFE(e, 1)});
+            if (!se.empty() && k > 0) {
+                MatrixXd SV(2 * se.size(), 3);
+                MatrixXi SE(se.size(), 2);
+                for (size_t i = 0; i < se.size(); ++i) {
+                    SV.row(2 * i) = refV.row(se[i].first);
+                    SV.row(2 * i + 1) = refV.row(se[i].second);
+                    SE.row(i) << (int)(2 * i), (int)(2 * i + 1);
+                }
+                igl::AABB<MatrixXd, 3> st;
+                st.init(SV, SE);
+                VectorXd D;
+                VectorXi I;
+                MatrixXd C;
+                st.squared_distance(SV, SE, job.V, D, I, C);
+                VectorXd d(job.V.rows());
+                for (int i = 0; i < job.V.rows(); ++i) d[i] = 1.0 + k * std::exp(-D[i] / (wdt * wdt * Lqf * Lqf));
+                job.scale = density_to_scale(job.V, job.F, d, p.max_density_ratio);
+                log("feature scale: ", se.size(), " crease edges, min dist ", std::sqrt(D.minCoeff()) / Lqf, " L, density ",
+                    d.minCoeff(), "..", d.maxCoeff(), ", scale ", job.scale.minCoeff(), "..", job.scale.maxCoeff());
+            }
+        }
         if (const char* dump = std::getenv("QRM_DUMP_COMPONENTS")) {
             TriMesh dm;
             dm.V = job.V;
@@ -686,7 +725,7 @@ static Result quadremesh_once(const TriMesh& input, const Params& p) {
     // Every coverage operation (edge-loop insertion, local refinement, curved-crease splits) is
     // applied tentatively and kept only if the mesh stays inside two budgets: triangles (quad
     // ratio) and irregular vertices (singularities). Both are topological, so checks are cheap.
-    if (!std::getenv("QRM_NOPOST") && (p.feature_loops || p.feature_refine_rounds > 0 || p.curved_feature_splits)) {
+    if (!std::getenv("QRM_NOPOST") && (p.feature_loops || p.feature_refine_rounds > 0 || p.curved_feature_splits || p.crease_cuts)) {
         const int T = std::max(1, p.target_faces);
         auto ntris = [&]() { int t = 0; for (int i = 0; i < qm.Q.rows(); ++i) t += qm.Q(i, 3) < 0; return t; };
         auto nsing = [&]() {
@@ -781,6 +820,49 @@ static Result quadremesh_once(const TriMesh& input, const Params& p) {
                 rejected++;
             }
         }
+        // 4. crease cuts: embed the remaining uncovered crease pieces as mesh edges (longest first)
+        if (p.crease_cuts) {
+            const auto all_chains = ref.feature_chains(0.0);
+            for (int round = 0; round < p.crease_cut_rounds; ++round) {
+                double cov = 0, tot = 0;
+                auto runs = uncovered_crease_runs(qm, all_chains, L, 0.15, 0.1, 0.1, 25.0, &cov, &tot);
+                std::sort(runs.begin(), runs.end(), [&](const std::vector<Vector3d>& x, const std::vector<Vector3d>& y) {
+                    return chain_len(x) > chain_len(y);
+                });
+                int ok = 0, bad = 0, rej = 0;
+                std::map<int, int> why;
+                for (auto& r : runs) {
+                    QuadMesh backup = qm;
+                    std::vector<Vector3d> cv;
+                    int rc = embed_crease_run(qm, r, L, 0.05, &cv, 0.2);
+                    if (rc == -8) { cv.clear(); rc = embed_crease_run(qm, r, L, 0.05, &cv, 0.34); }
+                    if (rc < 0) { bad++; why[rc]++; continue; }
+                    if (std::getenv("QRM_DEBUG_CUT") && std::string(std::getenv("QRM_DEBUG_CUT")) == "2") {
+                        double c0 = 0, t0 = 0, c1 = 0, t1 = 0;
+                        uncovered_crease_runs(backup, {r}, L, 1e9, 0, 0.1, 25.0, &c0, &t0);
+                        uncovered_crease_runs(qm, {r}, L, 1e9, 0, 0.1, 25.0, &c1, &t1);
+                        log("  cut: run ", chain_len(r) / L, " L, faces ", backup.Q.rows(), " -> ", qm.Q.rows(), ", run coverage ",
+                            c0 / std::max(t0, 1e-30), " -> ", c1 / std::max(t1, 1e-30));
+                    }
+                    cleanup(qm, pst);
+                    if (within()) { ok++; accepted++; pst.pinned.insert(pst.pinned.end(), cv.begin(), cv.end()); }
+                    else { qm = backup; rej++; rejected++; }
+                }
+                if (std::getenv("QRM_DEBUG_CUT"))
+                    for (auto& w : why) log("  cut failure code ", w.first, ": ", w.second);
+                if (std::getenv("QRM_DEBUG_CUT")) {
+                    double c1 = 0, t1 = 0;
+                    uncovered_crease_runs(qm, all_chains, L, 1e9, 0, 0.1, 25.0, &c1, &t1);
+                    log("  coverage right after cuts (before relaxation): ", c1 / std::max(t1, 1e-30));
+                }
+                if (ok) relax_and_project(qm, ref, L, p.smooth_iterations, pst);
+                double cov2 = 0, tot2 = 0;
+                uncovered_crease_runs(qm, all_chains, L, 1e9, 0, 0.1, 25.0, &cov2, &tot2);
+                log("crease cuts ", round + 1, ": ", runs.size(), " uncovered runs, ", ok, " cut, ", bad, " not embeddable, ", rej,
+                    " over budget; coverage ", cov / std::max(tot, 1e-30), " -> ", cov2 / std::max(tot2, 1e-30), ", ", qm.Q.rows(), " faces");
+                if (!ok) break;
+            }
+        }
         log("coverage stage: ", accepted, " operations kept, ", rejected, " rejected by budget (triangles ", ntris(), "/",
             tri_cap, ", singularities ", nsing(), "/", sing_cap, ")");
     }
@@ -815,7 +897,7 @@ namespace qrm {
 
 // Face-count control: loop insertion / feature refinement add faces after the solve, so the
 // solve budget is re-scaled once (twice at most) to land on the requested face count.
-Result quadremesh(const TriMesh& input, const Params& p) {
+static Result quadremesh_matched(const TriMesh& input, const Params& p) {
     Result r = quadremesh_once(input, p);
     if (p.target_edge_length > 0 || p.target_faces <= 0 || !p.match_face_count) return r;
     Params q = p;
@@ -832,6 +914,84 @@ Result quadremesh(const TriMesh& input, const Params& p) {
         r = std::move(r2);
     }
     return r;
+}
+
+
+// value of "key" (optionally the first "sub" key after it) in the evaluator's JSON report
+static double json_num(const std::string& js, const std::string& key, const std::string& sub = "") {
+    size_t i = js.find("\"" + key + "\"");
+    if (i == std::string::npos) return std::nan("");
+    if (!sub.empty()) {
+        i = js.find("\"" + sub + "\"", i);
+        if (i == std::string::npos) return std::nan("");
+        i += sub.size() + 2;
+    } else {
+        i += key.size() + 2;
+    }
+    i = js.find(':', i);
+    return std::strtod(js.c_str() + i + 1, nullptr);
+}
+
+// Coverage search: the field solve is sensitive to where the element size is reduced near
+// creases, so several settings are solved and each result is scored with the evaluator itself
+// (the same code as quadeval: feature coverage, quad ratio, scaled Jacobian, distance,
+// singularities). The result with the highest feature coverage that keeps quad ratio >= 98 %,
+// mean SJ >= 0.8, mean distance < 0.5 % and at most `singularity_budget` more singularities per
+// 1k faces than the first candidate is returned. Runtime grows with the number of candidates.
+Result quadremesh(const TriMesh& input, const Params& p) {
+    if (!p.coverage_search) return quadremesh_matched(input, p);
+    Params base = p;
+    base.coverage_search = false;
+    std::vector<Params> cands;
+    cands.push_back(base);
+    for (double w : {1.5, 2.5}) {
+        Params q = base;
+        q.feature_density = 8.0;
+        q.feature_density_width = w;
+        cands.push_back(q);
+    }
+    {
+        Params q = base;
+        q.feature_density = 8.0;
+        q.feature_density_width = 2.0;
+        q.seed = base.seed + 1;
+        cands.push_back(q);
+    }
+    EvalParams ep;
+    ep.feature_angle = p.feature_angle > 0 ? p.feature_angle : 35.0;
+    ep.min_feature_length = 3.0;
+    ep.target_faces = p.target_faces;
+    ep.samples = 50000;
+    Result best;
+    double best_cov = -1, s_cap = 1e30;
+    std::vector<std::string> notes;
+    for (size_t k = 0; k < cands.size(); ++k) {
+        Result r;
+        try {
+            r = quadremesh_matched(input, cands[k]);
+        } catch (const std::exception& e) {
+            notes.push_back("coverage search: candidate " + std::to_string(k) + " failed: " + e.what());
+            continue;
+        }
+        std::string js = evaluate(input, r.mesh, ep);
+        double cov = json_num(js, "feature_coverage"), quad = json_num(js, "quad_ratio"),
+               sj = json_num(js, "scaled_jacobian", "mean"), dist = json_num(js, "distance", "mean_pct"),
+               s1k = json_num(js, "singularities_per_1k_faces");
+        if (k == 0) s_cap = s1k + p.singularity_budget;
+        bool ok = quad >= 0.98 && sj >= 0.8 && dist < 0.5 && s1k <= s_cap;
+        char buf[256];
+        std::snprintf(buf, sizeof buf, "coverage search: candidate %zu (feature density %.0f, width %.1f, seed %u): coverage %.3f quad %.3f SJ %.3f dist %.3f%% sing/1k %.1f%s",
+                      k, cands[k].feature_density, cands[k].feature_density_width, cands[k].seed, cov, quad, sj, dist, s1k, ok ? "" : " (fails a criterion)");
+        notes.push_back(buf);
+        if (p.verbose) std::fprintf(stderr, "[quadremesh] %s\n", buf);
+        if ((ok && cov > best_cov) || best_cov < 0) {
+            if (!ok && best_cov >= 0) continue;
+            best = std::move(r);
+            best_cov = ok ? cov : -0.5;
+        }
+    }
+    best.log.insert(best.log.begin(), notes.begin(), notes.end());
+    return best;
 }
 
 }  // namespace qrm

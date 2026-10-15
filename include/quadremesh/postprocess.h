@@ -38,6 +38,7 @@ struct PostStats {
     std::vector<std::vector<int>> paths;          // recovered edge paths (output vertex ids)
     std::vector<std::vector<Vector3d>> path_chains;  // the feature chain each path follows
     int curved_splits = 0;
+    std::vector<Vector3d> pinned;  // positions of vertices placed on creases by crease cuts (kept fixed)
 };
 
 void cleanup(QuadMesh& m, PostStats& st);

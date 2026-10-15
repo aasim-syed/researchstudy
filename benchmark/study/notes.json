@@ -11,7 +11,11 @@
   "it8_hybrid_sb25",
   "it9_trace_all",
   "it10_coverage_mode",
-  "it11_scans_field_budget"
+  "it11_scans_field_budget",
+  "it12_crease_cuts",
+  "it13_feature_density",
+  "it14_coverage_mode_density",
+  "it15_coverage_search"
  ],
  "it0_no_feature_paths": [
   "Baseline before any coverage-specific post-processing: hard feature constraints in the field + proximity snapping of vertices to creases (the default before edge-path recovery). Reproduced with the current code by disabling path recovery (QRM_NO_FEATURE_PATHS=1)."
@@ -65,5 +69,20 @@
  "it11_scans_field_budget": [
   "Scans and the dense-crease chair only (4 models - not comparable to the 15-model means above). Hypothesis: on these inputs the field is given only a fraction of the creases (feature budget 0.06 for scans, 0.3 otherwise), so loops are not aligned with the rest. Change: coverage mode + give the field all creases (--field-feature-budget 1.0).",
   "Observed (vs it10 on the same 4 models): damask_chair 0.585 -> 0.624 coverage but 361 -> 403 singularities; leather_sofa, fountain_scan and lounge_room are bit-identical, because the dense-scan path keeps its fixed 0.06 field budget regardless of the flag (the integer solve is unstable on 1M-face scans with more constraints). So the hypothesis is untested on the scans and gives a coverage-for-singularities trade on the chair. Not adopted."
+ ],
+ "it12_crease_cuts": [
+  "Diagnosis (evaluator sample dump, QRM_EVAL_DUMP): on the organic models most uncovered crease length lies 0.1-0.35 L from an output edge or within 0.1 L but misaligned; the crease sets of pipeline and evaluator are identical (checked edge by edge).",
+  "Change: crease cuts - every crease piece still uncovered after the coverage stage is traced across the faces (closest-point walk); new vertices are inserted where it crosses edges (or nearby vertices are moved onto it), the crossed faces are split along it (with extra vertices where it bends inside a face; run ends anchored to the best vertex of their face), the polygons are re-split into quads + at most one triangle, non-crease vertices are locally untangled, and the cut is kept only if no face gets worse than SJ 0.05 (or than it was) and the triangle/singularity budgets hold. Cut vertices are pinned during later relaxation."
+ ],
+ "it13_feature_density": [
+  "Hypothesis: the creases that are missed are finer than the elements; smaller elements along creases and larger ones elsewhere (same face count) let the integer grid follow them without any post-hoc topology change.",
+  "Change: per-vertex density 1 + 8 exp(-(d/1.5L)^2), d = distance to the nearest crease, converted to a conformal scale target for the field solve (QuadriFlow's adaptive-scale path, density ratio clamped at 8, normalised to the same expected face count). Path recovery over all creases (it9) on."
+ ],
+ "it14_coverage_mode_density": [
+  "it10 (coverage mode) + feature-adaptive element size (it13)."
+ ],
+ "it15_coverage_search": [
+  "Observation from a parameter sweep: per model the coverage varies strongly with where the size is reduced (e.g. fandisk 0.80-0.99 across widths), so no single setting is best for all inputs.",
+  "Change: --coverage-search solves 4 candidates (coverage mode without / with feature density 8 at widths 1.5 and 2.5, and width 2.0 with another seed), scores each with the evaluator code itself (same as quadeval) and keeps the one with the highest feature coverage among those with quad >= 0.98, SJ >= 0.8, distance < 0.5 % and at most +10 singularities/1k over the first candidate. 4x runtime."
  ]
 }

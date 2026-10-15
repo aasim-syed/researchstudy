@@ -59,6 +59,11 @@ struct Params {
     double triangle_budget = 0.015;     // max triangles added by the coverage stage (x target faces)
     double singularity_budget = 10.0;   // max irregular vertices added by the coverage stage (per 1k target faces)
     bool curved_feature_splits = false; // split path edges that leave a curved crease (quad + triangle)  // split only the crease run (+ short extension), not whole strips   // max faces added by loop insertion (x target faces)
+    double feature_density = 0.0;        // >0: smaller elements near creases inside the field solve
+    double feature_density_width = 1.5;  // (density 1 + K exp(-(d / (W L))^2), same expected face count)
+    bool crease_cuts = false;
+    bool coverage_search = false;        // try several feature-size settings, keep the best (see remesh.cpp)            // embed still-uncovered creases by cutting the mesh along them
+    int crease_cut_rounds = 2;
     int feature_refine_rounds = 0;
     double feature_refine_max_len = 0;  // > 0: refine only around untraced chains up to this length (x L)      // opt-in: local refinement around features without an edge path
                                         // (raises coverage, costs faces/singularities/quad ratio)

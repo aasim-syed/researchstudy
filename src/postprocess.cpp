@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <queue>
 #include <set>
+#include <tuple>
 
 #include "quadremesh/geometry.h"
 #include "quadremesh/metrics.h"
@@ -1074,8 +1075,14 @@ void relax_and_project(QuadMesh& m, const SurfaceRef& ref, double L, int iterati
     const double tol_corner = 0.3 * L, tol_feat = 0.35 * L;
     const int axis = ref.sym_axis();
     const double off = ref.sym_offset();
+    std::set<std::array<double, 3>> pinned;
+    for (auto& x : st.pinned) pinned.insert({x.x(), x.y(), x.z()});
     for (int v = 0; v < nv; ++v) {
         Vector3d p = m.V.row(v), c, cc;
+        if (!pinned.empty() && pinned.count({p.x(), p.y(), p.z()})) {  // placed on a crease by a crease cut
+            type[v] = 4;
+            continue;
+        }
         double before = local_min_sj(v);
         if (bnd[v]) {
             bool plane = false;

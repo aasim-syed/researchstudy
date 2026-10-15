@@ -32,6 +32,10 @@ Params params_from_kwargs(const py::kwargs& kw) {
         else if (k == "singularity_budget") p.singularity_budget = v.cast<double>();
         else if (k == "feature_refine_max_len") p.feature_refine_max_len = v.cast<double>();
         else if (k == "feature_field_budget") p.feature_field_budget = v.cast<double>();
+        else if (k == "feature_density") p.feature_density = v.cast<double>();
+        else if (k == "feature_density_width") p.feature_density_width = v.cast<double>();
+        else if (k == "crease_cuts") p.crease_cuts = v.cast<bool>();
+        else if (k == "coverage_search") p.coverage_search = v.cast<bool>();
         else if (k == "coverage_mode") {
             if (v.cast<bool>()) {
                 p.trace_all_features = p.feature_loops = p.feature_loop_partial = p.curved_feature_splits = true;

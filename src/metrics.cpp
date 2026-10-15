@@ -294,6 +294,8 @@ std::string evaluate(const TriMesh& input, const QuadMesh& out, const EvalParams
         }
         igl::AABB<MatrixXd, 3> te;
         te.init(out.V, E);
+        std::FILE* dump = nullptr;
+        if (const char* dp = std::getenv("QRM_EVAL_DUMP")) dump = std::fopen(dp, "w");
         const double tol = ep.coverage_tol * L;
         const double cos_a = std::cos(ep.coverage_angle * M_PI / 180.0);
         auto coverage = [&](const MatrixXd& S, double& covered_len, double& total_len) {
@@ -320,7 +322,12 @@ std::string evaluate(const TriMesh& input, const QuadMesh& out, const EvalParams
             te.squared_distance(out.V, E, P, D, I, C);
             for (size_t i = 0; i < pts.size(); ++i) {
                 total_len += wts[i];
-                if (D[i] > tol * tol) continue;
+                if (D[i] > tol * tol) {
+                    if (dump && &S == &fs.segments)
+                        std::fprintf(dump, "%.9g %.9g %.9g %.9g %.9g %.9g %.9g %.9g %d %.9g\n", pts[i].x(), pts[i].y(), pts[i].z(),
+                                     dirs[i].x(), dirs[i].y(), dirs[i].z(), std::sqrt(D[i]) / L, -1.0, 0, wts[i] / L);
+                    continue;
+                }
                 bool ok = false;
                 auto aligned = [&](int e) {
                     Vector3d d = out.V.row(E(e, 1)) - out.V.row(E(e, 0));
@@ -335,11 +342,18 @@ std::string evaluate(const TriMesh& input, const QuadMesh& out, const EvalParams
                     for (int e : vinc[v])
                         if (!ok && aligned(e)) ok = true;
                 if (ok) covered_len += wts[i];
+                if (dump && &S == &fs.segments) {
+                    Vector3d d0 = out.V.row(E(e0, 1)) - out.V.row(E(e0, 0));
+                    double ca = d0.norm() > 0 ? std::abs(d0.dot(dirs[i]) / d0.norm()) : 0;
+                    std::fprintf(dump, "%.9g %.9g %.9g %.9g %.9g %.9g %.9g %.9g %d %.9g\n", pts[i].x(), pts[i].y(), pts[i].z(),
+                                 dirs[i].x(), dirs[i].y(), dirs[i].z(), std::sqrt(D[i]) / L, ca, ok ? 1 : 0, wts[i] / L);
+                }
             }
         };
         double fc, ft, bc, bt;
         coverage(fs.segments, fc, ft);
         coverage(fs.boundary_segments, bc, bt);
+        if (dump) std::fclose(dump);
         J.open("features");
         J.num("feature_coverage", ft > 0 ? fc / ft : 1.0);
         J.num("boundary_coverage", bt > 0 ? bc / bt : 1.0);
