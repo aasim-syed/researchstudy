@@ -1,0 +1,101 @@
+{
+ "method": "it15_coverage_search",
+ "faces": {
+  "total": 3742,
+  "quads": 3680,
+  "triangles": 62,
+  "vertices": 3715,
+  "quad_ratio": 0.983431,
+  "target": 5000,
+  "count_ratio": 0.7484
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.932426,
+   "min": -0.528922,
+   "p05": 0.693312,
+   "median": 0.976749,
+   "p95": 0.997941,
+   "max": 0.999874,
+   "std": 0.128148
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.937151,
+   "min": -0.528922,
+   "p05": 0.738151,
+   "median": 0.97728,
+   "p95": 0.99797,
+   "max": 0.999874,
+   "std": 0.121824
+  },
+  "frac_sj_below_0.5": 0.0211117,
+  "inverted_or_degenerate": 8,
+  "planarity": {
+   "mean": 0.0155308,
+   "min": 3.41979e-10,
+   "p05": 0.000730752,
+   "median": 0.00959248,
+   "p95": 0.0494115,
+   "max": 0.266505,
+   "std": 0.019285
+  },
+  "aspect_ratio": {
+   "mean": 1.41205,
+   "min": 1.00712,
+   "p05": 1.05363,
+   "median": 1.24608,
+   "p95": 2.1682,
+   "max": 19.5826,
+   "std": 0.708055
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0.0689235,
+   "p05": 0.51743,
+   "median": 1.00868,
+   "p95": 1.46976,
+   "max": 2.60605,
+   "std": 0.294982
+  },
+  "edge_length_mean_pct_diag": 1.50238
+ },
+ "topology": {
+  "singularities": 164,
+  "boundary_irregular": 4,
+  "singularities_per_1k_faces": 43.8268,
+  "interior_vertices": 3709,
+  "boundary_vertices": 6,
+  "boundary_edges": 6,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "2": 3,
+   "3": 57,
+   "4": 3545,
+   "5": 94,
+   "6": 8,
+   "7": 2
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0426328,
+  "out_to_in_mean_pct": 0.0417885,
+  "in_to_out_mean_pct": 0.0434771,
+  "rms_pct": 0.067451,
+  "hausdorff_pct": 1.31953,
+  "area_ratio": 0.989663
+ },
+ "features": {
+  "feature_coverage": 0.967284,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.967284,
+  "feature_length_pct_diag": 131.743,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 150,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 60.35,
+ "input_faces": 23424,
+ "cmd": "build/quadremesh data/models/spot.obj -o benchmark/study/it15_coverage_search/meshes/spot.obj -f 5000 -a 35 --no-uv --coverage-mode --coverage-search"
+}

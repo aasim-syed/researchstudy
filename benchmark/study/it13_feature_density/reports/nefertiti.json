@@ -1,0 +1,98 @@
+{
+ "method": "it13_feature_density",
+ "faces": {
+  "total": 4598,
+  "quads": 4598,
+  "triangles": 0,
+  "vertices": 4603,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.9196
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.927369,
+   "min": -1,
+   "p05": 0.740078,
+   "median": 0.973744,
+   "p95": 0.99836,
+   "max": 0.999986,
+   "std": 0.164575
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.927369,
+   "min": -1,
+   "p05": 0.740078,
+   "median": 0.973744,
+   "p95": 0.99836,
+   "max": 0.999986,
+   "std": 0.164575
+  },
+  "frac_sj_below_0.5": 0.0197912,
+  "inverted_or_degenerate": 37,
+  "planarity": {
+   "mean": 0.0169413,
+   "min": 1.5694e-15,
+   "p05": 0.000274593,
+   "median": 0.00788388,
+   "p95": 0.0712735,
+   "max": 0.275208,
+   "std": 0.0267251
+  },
+  "aspect_ratio": {
+   "mean": 869945,
+   "min": 1.00405,
+   "p05": 1.04322,
+   "median": 1.21711,
+   "p95": 2.12957,
+   "max": 1000000000.0,
+   "std": 29482000.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.570656,
+   "median": 1.01427,
+   "p95": 1.36809,
+   "max": 15.9853,
+   "std": 0.34793
+  },
+  "edge_length_mean_pct_diag": 1.342
+ },
+ "topology": {
+  "singularities": 123,
+  "boundary_irregular": 14,
+  "singularities_per_1k_faces": 26.7508,
+  "interior_vertices": 4585,
+  "boundary_vertices": 18,
+  "boundary_edges": 18,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "3": 63,
+   "4": 4462,
+   "5": 60
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0467083,
+  "out_to_in_mean_pct": 0.0483971,
+  "in_to_out_mean_pct": 0.0450194,
+  "rms_pct": 0.150473,
+  "hausdorff_pct": 2.37327,
+  "area_ratio": 0.981671
+ },
+ "features": {
+  "feature_coverage": 0.521795,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.521795,
+  "feature_length_pct_diag": 194.693,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 682,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 15.64,
+ "input_faces": 99938,
+ "cmd": "build/quadremesh data/models/nefertiti.obj -o benchmark/study/it13_feature_density/meshes/nefertiti.obj -f 5000 -a 35 --no-uv --trace-all --feature-density 8 --feature-density-width 1.5"
+}

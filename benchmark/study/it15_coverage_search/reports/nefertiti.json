@@ -1,0 +1,99 @@
+{
+ "method": "it15_coverage_search",
+ "faces": {
+  "total": 4810,
+  "quads": 4738,
+  "triangles": 72,
+  "vertices": 4780,
+  "quad_ratio": 0.985031,
+  "target": 5000,
+  "count_ratio": 0.962
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.918065,
+   "min": -1,
+   "p05": 0.648322,
+   "median": 0.97374,
+   "p95": 0.998517,
+   "max": 0.999968,
+   "std": 0.176056
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.922087,
+   "min": -1,
+   "p05": 0.677417,
+   "median": 0.974322,
+   "p95": 0.998538,
+   "max": 0.999968,
+   "std": 0.172682
+  },
+  "frac_sj_below_0.5": 0.0282744,
+  "inverted_or_degenerate": 39,
+  "planarity": {
+   "mean": 0.0171684,
+   "min": 0,
+   "p05": 0.000274792,
+   "median": 0.00792392,
+   "p95": 0.0723447,
+   "max": 0.270592,
+   "std": 0.0266689
+  },
+  "aspect_ratio": {
+   "mean": 1055300.0,
+   "min": 1.00266,
+   "p05": 1.03622,
+   "median": 1.20875,
+   "p95": 2.31768,
+   "max": 1000000000.0,
+   "std": 32468200.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.504082,
+   "median": 1.02158,
+   "p95": 1.39827,
+   "max": 16.4355,
+   "std": 0.367399
+  },
+  "edge_length_mean_pct_diag": 1.30523
+ },
+ "topology": {
+  "singularities": 211,
+  "boundary_irregular": 18,
+  "singularities_per_1k_faces": 43.8669,
+  "interior_vertices": 4757,
+  "boundary_vertices": 23,
+  "boundary_edges": 24,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "3": 73,
+   "4": 4546,
+   "5": 135,
+   "6": 3
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0511871,
+  "out_to_in_mean_pct": 0.0511823,
+  "in_to_out_mean_pct": 0.0511919,
+  "rms_pct": 0.163104,
+  "hausdorff_pct": 2.37327,
+  "area_ratio": 0.979407
+ },
+ "features": {
+  "feature_coverage": 0.574239,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.574239,
+  "feature_length_pct_diag": 194.693,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 682,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 118.17,
+ "input_faces": 99938,
+ "cmd": "build/quadremesh data/models/nefertiti.obj -o benchmark/study/it15_coverage_search/meshes/nefertiti.obj -f 5000 -a 35 --no-uv --coverage-mode --coverage-search"
+}

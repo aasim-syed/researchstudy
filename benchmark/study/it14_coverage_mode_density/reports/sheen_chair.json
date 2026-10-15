@@ -1,0 +1,102 @@
+{
+ "method": "it14_coverage_mode_density",
+ "faces": {
+  "total": 4795,
+  "quads": 4742,
+  "triangles": 53,
+  "vertices": 4901,
+  "quad_ratio": 0.988947,
+  "target": 5000,
+  "count_ratio": 0.959
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.858723,
+   "min": -1,
+   "p05": 0.13826,
+   "median": 0.975362,
+   "p95": 0.999693,
+   "max": 1,
+   "std": 0.265195
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.862512,
+   "min": -1,
+   "p05": 0.139908,
+   "median": 0.976027,
+   "p95": 0.999706,
+   "max": 1,
+   "std": 0.262886
+  },
+  "frac_sj_below_0.5": 0.102398,
+  "inverted_or_degenerate": 33,
+  "planarity": {
+   "mean": 0.0166747,
+   "min": 0,
+   "p05": 0.000110102,
+   "median": 0.00570113,
+   "p95": 0.0702764,
+   "max": 0.405671,
+   "std": 0.0286528
+  },
+  "aspect_ratio": {
+   "mean": 1054590.0,
+   "min": 1.00721,
+   "p05": 1.06916,
+   "median": 1.37872,
+   "p95": 9.39257,
+   "max": 1000000000.0,
+   "std": 32454500.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.284871,
+   "median": 0.922069,
+   "p95": 1.6423,
+   "max": 14.8711,
+   "std": 0.827969
+  },
+  "edge_length_mean_pct_diag": 1.70756
+ },
+ "topology": {
+  "singularities": 365,
+  "boundary_irregular": 18,
+  "singularities_per_1k_faces": 76.121,
+  "interior_vertices": 4668,
+  "boundary_vertices": 233,
+  "boundary_edges": 233,
+  "nonmanifold_edges": 0,
+  "components": 14,
+  "valence_histogram": {
+   "2": 6,
+   "3": 210,
+   "4": 4303,
+   "5": 116,
+   "6": 24,
+   "7": 7,
+   "8": 2
+  }
+ },
+ "distance": {
+  "mean_pct": 0.119439,
+  "out_to_in_mean_pct": 0.101332,
+  "in_to_out_mean_pct": 0.137547,
+  "rms_pct": 0.305885,
+  "hausdorff_pct": 3.88248,
+  "area_ratio": 1.00638
+ },
+ "features": {
+  "feature_coverage": 0.834658,
+  "boundary_coverage": 0.697125,
+  "combined_coverage": 0.772041,
+  "feature_length_pct_diag": 735.744,
+  "boundary_length_pct_diag": 614.945,
+  "feature_segments": 772,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 89.33,
+ "input_faces": 39936,
+ "cmd": "build/quadremesh data/models/sheen_chair.obj -o benchmark/study/it14_coverage_mode_density/meshes/sheen_chair.obj -f 5000 -a 35 --no-uv --coverage-mode --feature-density 8 --feature-density-width 1.5"
+}

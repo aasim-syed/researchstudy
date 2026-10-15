@@ -1,0 +1,98 @@
+{
+ "method": "it13_feature_density",
+ "faces": {
+  "total": 4558,
+  "quads": 4558,
+  "triangles": 0,
+  "vertices": 4888,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.9116
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.842826,
+   "min": -1,
+   "p05": 0.232174,
+   "median": 0.958332,
+   "p95": 0.999283,
+   "max": 0.999986,
+   "std": 0.251294
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.842826,
+   "min": -1,
+   "p05": 0.232174,
+   "median": 0.958332,
+   "p95": 0.999283,
+   "max": 0.999986,
+   "std": 0.251294
+  },
+  "frac_sj_below_0.5": 0.0949978,
+  "inverted_or_degenerate": 82,
+  "planarity": {
+   "mean": 0.0162533,
+   "min": 0,
+   "p05": 6.0352e-09,
+   "median": 0.00542849,
+   "p95": 0.0702049,
+   "max": 0.357398,
+   "std": 0.030237
+  },
+  "aspect_ratio": {
+   "mean": 438791,
+   "min": 1.00031,
+   "p05": 1.08132,
+   "median": 1.5743,
+   "p95": 5.04136,
+   "max": 1000000000.0,
+   "std": 20942700.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.39772,
+   "median": 0.904718,
+   "p95": 1.70229,
+   "max": 5.91025,
+   "std": 0.465003
+  },
+  "edge_length_mean_pct_diag": 1.09863
+ },
+ "topology": {
+  "singularities": 243,
+  "boundary_irregular": 57,
+  "singularities_per_1k_faces": 53.3129,
+  "interior_vertices": 4202,
+  "boundary_vertices": 686,
+  "boundary_edges": 686,
+  "nonmanifold_edges": 0,
+  "components": 2,
+  "valence_histogram": {
+   "3": 121,
+   "4": 3959,
+   "5": 122
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0517859,
+  "out_to_in_mean_pct": 0.0594915,
+  "in_to_out_mean_pct": 0.0440802,
+  "rms_pct": 0.179711,
+  "hausdorff_pct": 4.13729,
+  "area_ratio": 0.999737
+ },
+ "features": {
+  "feature_coverage": 0.614754,
+  "boundary_coverage": 0.73537,
+  "combined_coverage": 0.664579,
+  "feature_length_pct_diag": 1250.35,
+  "boundary_length_pct_diag": 880.036,
+  "feature_segments": 1830,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 25.13,
+ "input_faces": 32848,
+ "cmd": "build/quadremesh data/models/beetle.obj -o benchmark/study/it13_feature_density/meshes/beetle.obj -f 5000 -a 35 --no-uv --trace-all --feature-density 8 --feature-density-width 1.5"
+}

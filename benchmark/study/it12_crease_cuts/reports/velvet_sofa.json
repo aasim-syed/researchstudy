@@ -1,0 +1,100 @@
+{
+ "method": "it12_crease_cuts",
+ "faces": {
+  "total": 5469,
+  "quads": 5409,
+  "triangles": 60,
+  "vertices": 5459,
+  "quad_ratio": 0.989029,
+  "target": 5000,
+  "count_ratio": 1.0938
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.92739,
+   "min": -0.489388,
+   "p05": 0.600813,
+   "median": 0.988216,
+   "p95": 0.999769,
+   "max": 0.99999,
+   "std": 0.171048
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.931911,
+   "min": -0.489388,
+   "p05": 0.60697,
+   "median": 0.988466,
+   "p95": 0.999771,
+   "max": 0.99999,
+   "std": 0.164127
+  },
+  "frac_sj_below_0.5": 0.0394953,
+  "inverted_or_degenerate": 23,
+  "planarity": {
+   "mean": 0.0110154,
+   "min": 0,
+   "p05": 1.38688e-08,
+   "median": 0.00179559,
+   "p95": 0.0554904,
+   "max": 0.343307,
+   "std": 0.0226164
+  },
+  "aspect_ratio": {
+   "mean": 7.00868,
+   "min": 1.00773,
+   "p05": 1.05941,
+   "median": 1.30026,
+   "p95": 6.56921,
+   "max": 1594.11,
+   "std": 62.8812
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0.000801411,
+   "p05": 0.213577,
+   "median": 1.11644,
+   "p95": 1.51623,
+   "max": 3.13114,
+   "std": 0.424761
+  },
+  "edge_length_mean_pct_diag": 1.19958
+ },
+ "topology": {
+  "singularities": 211,
+  "boundary_irregular": 0,
+  "singularities_per_1k_faces": 38.5811,
+  "interior_vertices": 5459,
+  "boundary_vertices": 0,
+  "boundary_edges": 0,
+  "nonmanifold_edges": 0,
+  "components": 10,
+  "valence_histogram": {
+   "2": 1,
+   "3": 119,
+   "4": 5248,
+   "5": 81,
+   "6": 10
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0275594,
+  "out_to_in_mean_pct": 0.0241761,
+  "in_to_out_mean_pct": 0.0309427,
+  "rms_pct": 0.081576,
+  "hausdorff_pct": 2.17065,
+  "area_ratio": 0.979578
+ },
+ "features": {
+  "feature_coverage": 0.808495,
+  "boundary_coverage": 0.0840815,
+  "combined_coverage": 0.787519,
+  "feature_length_pct_diag": 1072.41,
+  "boundary_length_pct_diag": 31.9776,
+  "feature_segments": 731,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 27.08,
+ "input_faces": 16784,
+ "cmd": "build/quadremesh data/models/velvet_sofa.obj -o benchmark/study/it12_crease_cuts/meshes/velvet_sofa.obj -f 5000 -a 35 --no-uv --coverage-mode --crease-cuts"
+}

@@ -67,19 +67,19 @@ include lemon/CMakeFiles/dist.dir/compiler_depend.make
 include lemon/CMakeFiles/dist.dir/progress.make
 
 lemon/CMakeFiles/dist: lemon/html
-	cd /home/claude/quadremesh/build2/lemon && cmake -E remove_directory quadremesh-1.3.1
-	cd /home/claude/quadremesh/build2/lemon && hg archive quadremesh-1.3.1
-	cd /home/claude/quadremesh/build2/lemon && cmake -E copy cmake/version.cmake quadremesh-1.3.1/cmake/version.cmake
-	cd /home/claude/quadremesh/build2/lemon && tar -czf quadremesh-nodoc-1.3.1.tar.gz quadremesh-1.3.1
-	cd /home/claude/quadremesh/build2/lemon && zip -r quadremesh-nodoc-1.3.1.zip quadremesh-1.3.1
-	cd /home/claude/quadremesh/build2/lemon && cmake -E copy_directory doc/html quadremesh-1.3.1/doc/html
-	cd /home/claude/quadremesh/build2/lemon && tar -czf quadremesh-1.3.1.tar.gz quadremesh-1.3.1
-	cd /home/claude/quadremesh/build2/lemon && zip -r quadremesh-1.3.1.zip quadremesh-1.3.1
-	cd /home/claude/quadremesh/build2/lemon && cmake -E copy_directory doc/html quadremesh-doc-1.3.1
-	cd /home/claude/quadremesh/build2/lemon && tar -czf quadremesh-doc-1.3.1.tar.gz quadremesh-doc-1.3.1
-	cd /home/claude/quadremesh/build2/lemon && zip -r quadremesh-doc-1.3.1.zip quadremesh-doc-1.3.1
-	cd /home/claude/quadremesh/build2/lemon && cmake -E remove_directory quadremesh-1.3.1
-	cd /home/claude/quadremesh/build2/lemon && cmake -E remove_directory quadremesh-doc-1.3.1
+	cd /home/claude/quadremesh/build2/lemon && cmake -E remove_directory quadremesh-
+	cd /home/claude/quadremesh/build2/lemon && hg archive quadremesh-
+	cd /home/claude/quadremesh/build2/lemon && cmake -E copy cmake/version.cmake quadremesh-/cmake/version.cmake
+	cd /home/claude/quadremesh/build2/lemon && tar -czf quadremesh-nodoc-.tar.gz quadremesh-
+	cd /home/claude/quadremesh/build2/lemon && zip -r quadremesh-nodoc-.zip quadremesh-
+	cd /home/claude/quadremesh/build2/lemon && cmake -E copy_directory doc/html quadremesh-/doc/html
+	cd /home/claude/quadremesh/build2/lemon && tar -czf quadremesh-.tar.gz quadremesh-
+	cd /home/claude/quadremesh/build2/lemon && zip -r quadremesh-.zip quadremesh-
+	cd /home/claude/quadremesh/build2/lemon && cmake -E copy_directory doc/html quadremesh-doc-
+	cd /home/claude/quadremesh/build2/lemon && tar -czf quadremesh-doc-.tar.gz quadremesh-doc-
+	cd /home/claude/quadremesh/build2/lemon && zip -r quadremesh-doc-.zip quadremesh-doc-
+	cd /home/claude/quadremesh/build2/lemon && cmake -E remove_directory quadremesh-
+	cd /home/claude/quadremesh/build2/lemon && cmake -E remove_directory quadremesh-doc-
 
 dist: lemon/CMakeFiles/dist
 dist: lemon/CMakeFiles/dist.dir/build.make

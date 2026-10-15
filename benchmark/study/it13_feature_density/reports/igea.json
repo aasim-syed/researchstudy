@@ -1,0 +1,98 @@
+{
+ "method": "it13_feature_density",
+ "faces": {
+  "total": 4843,
+  "quads": 4843,
+  "triangles": 0,
+  "vertices": 4847,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.9686
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.975014,
+   "min": -0.859061,
+   "p05": 0.927468,
+   "median": 0.989036,
+   "p95": 0.999167,
+   "max": 0.999978,
+   "std": 0.0734792
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.975014,
+   "min": -0.859061,
+   "p05": 0.927468,
+   "median": 0.989036,
+   "p95": 0.999167,
+   "max": 0.999978,
+   "std": 0.0734792
+  },
+  "frac_sj_below_0.5": 0.00433616,
+  "inverted_or_degenerate": 7,
+  "planarity": {
+   "mean": 0.0207318,
+   "min": 1.1579e-08,
+   "p05": 0.00108323,
+   "median": 0.0130606,
+   "p95": 0.0657885,
+   "max": 0.215484,
+   "std": 0.0222914
+  },
+  "aspect_ratio": {
+   "mean": 1.22357,
+   "min": 1.00769,
+   "p05": 1.03669,
+   "median": 1.13308,
+   "p95": 1.39501,
+   "max": 77.3216,
+   "std": 1.61585
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0.0143356,
+   "p05": 0.774295,
+   "median": 1.00352,
+   "p95": 1.22541,
+   "max": 2.00084,
+   "std": 0.139284
+  },
+  "edge_length_mean_pct_diag": 1.40067
+ },
+ "topology": {
+  "singularities": 24,
+  "boundary_irregular": 2,
+  "singularities_per_1k_faces": 4.95561,
+  "interior_vertices": 4841,
+  "boundary_vertices": 6,
+  "boundary_edges": 6,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "3": 15,
+   "4": 4817,
+   "5": 9
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0456126,
+  "out_to_in_mean_pct": 0.0440348,
+  "in_to_out_mean_pct": 0.0471904,
+  "rms_pct": 0.0778955,
+  "hausdorff_pct": 1.0748,
+  "area_ratio": 0.98347
+ },
+ "features": {
+  "feature_coverage": 0.447309,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.447309,
+  "feature_length_pct_diag": 35.6743,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 104,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 60.46,
+ "input_faces": 268686,
+ "cmd": "build/quadremesh data/models/igea.obj -o benchmark/study/it13_feature_density/meshes/igea.obj -f 5000 -a 35 --no-uv --trace-all --feature-density 8 --feature-density-width 1.5"
+}

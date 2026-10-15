@@ -25,4 +25,13 @@ std::vector<std::vector<Vector3d>> uncovered_crease_runs(const QuadMesh& m,
 int embed_crease_run(QuadMesh& m, const std::vector<Vector3d>& run, double L, double min_quality = 0.05,
                      std::vector<Vector3d>* crease_vertices = nullptr, double snap = 0.2);
 
+// Near-miss snapping (vertex moves only): for every crease point that is not covered, the best
+// output edge within max_dist*L whose direction is within max_angle of the crease gets both end
+// points moved onto the crease (kept only if the edge then covers the point), unless an end point already carries a covering edge of another crease
+// point, or the move would push an incident face below min(0.1, its quality before). Moved
+// vertices are reported in `moved` (positions) so later relaxation can keep them. Returns the
+// number of edges snapped.
+int snap_near_creases(QuadMesh& m, const std::vector<std::vector<Vector3d>>& chains, double L, double max_dist,
+                      std::vector<Vector3d>* moved = nullptr, double max_angle = 75.0);
+
 }  // namespace qrm

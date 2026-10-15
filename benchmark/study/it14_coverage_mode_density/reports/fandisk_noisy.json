@@ -1,0 +1,99 @@
+{
+ "method": "it14_coverage_mode_density",
+ "faces": {
+  "total": 4050,
+  "quads": 3976,
+  "triangles": 74,
+  "vertices": 4017,
+  "quad_ratio": 0.981728,
+  "target": 5000,
+  "count_ratio": 0.81
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.899493,
+   "min": -1,
+   "p05": 0.514365,
+   "median": 0.973605,
+   "p95": 0.997777,
+   "max": 0.999894,
+   "std": 0.194082
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.905981,
+   "min": -1,
+   "p05": 0.568589,
+   "median": 0.974682,
+   "p95": 0.997827,
+   "max": 0.999894,
+   "std": 0.188146
+  },
+  "frac_sj_below_0.5": 0.0459259,
+  "inverted_or_degenerate": 34,
+  "planarity": {
+   "mean": 0.0242967,
+   "min": 4.82175e-16,
+   "p05": 0.00158161,
+   "median": 0.0184712,
+   "p95": 0.0630657,
+   "max": 0.325715,
+   "std": 0.0247868
+  },
+  "aspect_ratio": {
+   "mean": 1006040.0,
+   "min": 1.00722,
+   "p05": 1.07033,
+   "median": 1.31431,
+   "p95": 2.98103,
+   "max": 1000000000.0,
+   "std": 31702100.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.500501,
+   "median": 0.969382,
+   "p95": 1.54139,
+   "max": 7.86758,
+   "std": 0.36104
+  },
+  "edge_length_mean_pct_diag": 1.60882
+ },
+ "topology": {
+  "singularities": 206,
+  "boundary_irregular": 11,
+  "singularities_per_1k_faces": 50.8642,
+  "interior_vertices": 4005,
+  "boundary_vertices": 12,
+  "boundary_edges": 12,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "3": 72,
+   "4": 3799,
+   "5": 128,
+   "6": 6
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0620966,
+  "out_to_in_mean_pct": 0.0644712,
+  "in_to_out_mean_pct": 0.059722,
+  "rms_pct": 0.135169,
+  "hausdorff_pct": 4.33775,
+  "area_ratio": 0.986574
+ },
+ "features": {
+  "feature_coverage": 0.791095,
+  "boundary_coverage": 0.246746,
+  "combined_coverage": 0.768762,
+  "feature_length_pct_diag": 1121.35,
+  "boundary_length_pct_diag": 47.974,
+  "feature_segments": 869,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 10.39,
+ "input_faces": 12925,
+ "cmd": "build/quadremesh data/models/fandisk_noisy.obj -o benchmark/study/it14_coverage_mode_density/meshes/fandisk_noisy.obj -f 5000 -a 35 --no-uv --coverage-mode --feature-density 8 --feature-density-width 1.5"
+}

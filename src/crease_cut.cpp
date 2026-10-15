@@ -1,4 +1,5 @@
 #include "quadremesh/crease_cut.h"
+#include "quadremesh/metrics.h"
 
 #include <igl/AABB.h>
 
@@ -618,6 +619,121 @@ int embed_crease_run(QuadMesh& m, const std::vector<Vector3d>& run, double L, do
             for (auto& x : I) crease_vertices->push_back(x);
     }
     return (int)out.size() - nf_before;
+}
+
+
+int snap_near_creases(QuadMesh& m, const std::vector<std::vector<Vector3d>>& chains, double L, double max_dist,
+                      std::vector<Vector3d>* moved, double max_angle) {
+    MatrixXi E;
+    mesh_edges(m, E);
+    if (E.rows() == 0 || chains.empty()) return 0;
+    const int nv = (int)m.V.rows();
+    std::vector<std::vector<int>> vinc(nv), vfaces(nv);
+    for (int i = 0; i < E.rows(); ++i) vinc[E(i, 0)].push_back(i), vinc[E(i, 1)].push_back(i);
+    for (int f = 0; f < m.Q.rows(); ++f)
+        for (int j = 0; j < 4; ++j)
+            if (m.Q(f, j) >= 0) vfaces[m.Q(f, j)].push_back(f);
+    auto face_sj = [&](int f) { return scaled_jacobian(m.V, m.Q(f, 0), m.Q(f, 1), m.Q(f, 2), m.Q(f, 3)); };
+    // samples
+    struct Smp { Vector3d p, d; int c; };
+    std::vector<Smp> S;
+    for (int c = 0; c < (int)chains.size(); ++c)
+        for (auto& x : resample(chains[c], 0.1 * L)) S.push_back({x.p, x.d, c});
+    if (S.empty()) return 0;
+    MatrixXd P(S.size(), 3);
+    for (size_t i = 0; i < S.size(); ++i) P.row(i) = S[i].p.transpose();
+    igl::AABB<MatrixXd, 3> tree;
+    tree.init(m.V, E);
+    VectorXd D;
+    VectorXi I;
+    MatrixXd C;
+    tree.squared_distance(m.V, E, P, D, I, C);
+    const double tl = 0.1 * L, cos25 = std::cos(25.0 * M_PI / 180.0);
+    const double cos_cand = std::cos(max_angle * M_PI / 180.0);
+    auto seg_d2 = [&](const Vector3d& p, int e) {
+        return pt_seg_d2(p, m.V.row(E(e, 0)).transpose(), m.V.row(E(e, 1)).transpose());
+    };
+    auto ecos = [&](int e, const Vector3d& d) {
+        Vector3d ev = m.V.row(E(e, 1)) - m.V.row(E(e, 0));
+        double l = ev.norm();
+        return l > 0 ? std::abs(ev.dot(d) / l) : 0.0;
+    };
+    // covered samples protect the end points of their covering edge
+    std::vector<char> prot(nv, 0), cov(S.size(), 0);
+    for (size_t i = 0; i < S.size(); ++i) {
+        if (D[i] > tl * tl) continue;
+        int e0 = I[i];
+        std::vector<int> cand = {e0};
+        for (int v : {E(e0, 0), E(e0, 1)})
+            for (int e : vinc[v]) cand.push_back(e);
+        for (int e : cand)
+            if (ecos(e, S[i].d) >= cos25 && seg_d2(S[i].p, e) <= tl * tl) {
+                cov[i] = 1;
+                prot[E(e, 0)] = prot[E(e, 1)] = 1;
+                break;
+            }
+    }
+    auto closest_on_chain = [&](int c, const Vector3d& x) {
+        const auto& ch = chains[c];
+        Vector3d best = ch.front();
+        double bd = 1e300;
+        for (size_t k = 0; k + 1 < ch.size(); ++k) {
+            Vector3d ab = ch[k + 1] - ch[k];
+            double l2 = ab.squaredNorm();
+            double t = l2 > 0 ? std::clamp((x - ch[k]).dot(ab) / l2, 0.0, 1.0) : 0.0;
+            Vector3d q = ch[k] + t * ab;
+            if ((q - x).squaredNorm() < bd) bd = (q - x).squaredNorm(), best = q;
+        }
+        return best;
+    };
+    int snapped = 0;
+    const double md2 = (max_dist * L) * (max_dist * L);
+    for (size_t i = 0; i < S.size(); ++i) {
+        if (cov[i] || D[i] > md2) continue;
+        // candidate edges: the nearest edge and the edges around its end points
+        int e0 = I[i];
+        std::vector<int> cand = {e0};
+        for (int v : {E(e0, 0), E(e0, 1)})
+            for (int e : vinc[v]) cand.push_back(e);
+        int best = -1;
+        double bscore = 1e300;
+        for (int e : cand) {
+            double d2 = seg_d2(S[i].p, e), cs = ecos(e, S[i].d);
+            if (d2 > md2 || cs < cos_cand) continue;
+            double score = std::sqrt(d2) + 0.5 * L * (1 - cs);
+            if (score < bscore) bscore = score, best = e;
+        }
+        if (best < 0) continue;
+        if (ecos(best, S[i].d) >= cos25 && seg_d2(S[i].p, best) <= tl * tl) { cov[i] = 1; continue; }  // already fixed by an earlier snap
+        int a = E(best, 0), b = E(best, 1);
+        Vector3d pa = m.V.row(a).transpose(), pb = m.V.row(b).transpose();
+        Vector3d qa = closest_on_chain(S[i].c, pa), qb = closest_on_chain(S[i].c, pb);
+        if ((qa - qb).norm() < 0.2 * (pa - pb).norm()) continue;  // edge would collapse onto one crease point
+        bool ok = true;
+        for (int v : {a, b})
+            if (prot[v] && (m.V.row(v).transpose() - (v == a ? qa : qb)).norm() > 0.02 * L) ok = false;
+        if (!ok) continue;
+        std::set<int> fs;
+        for (int v : {a, b})
+            for (int f : vfaces[v]) fs.insert(f);
+        std::map<int, double> before;
+        for (int f : fs) before[f] = face_sj(f);
+        m.V.row(a) = qa.transpose();
+        m.V.row(b) = qb.transpose();
+        for (int f : fs)
+            if (face_sj(f) < std::min(0.1, before[f])) { ok = false; break; }
+        if (ok && (ecos(best, S[i].d) < cos25 || seg_d2(S[i].p, best) > tl * tl)) ok = false;  // the snapped edge must cover
+        if (!ok) {
+            m.V.row(a) = pa.transpose();
+            m.V.row(b) = pb.transpose();
+            continue;
+        }
+        prot[a] = prot[b] = 1;
+        cov[i] = 1;
+        snapped++;
+        if (moved) moved->push_back(qa), moved->push_back(qb);
+    }
+    return snapped;
 }
 
 }  // namespace qrm

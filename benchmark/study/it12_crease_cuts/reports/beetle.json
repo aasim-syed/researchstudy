@@ -1,0 +1,103 @@
+{
+ "method": "it12_crease_cuts",
+ "faces": {
+  "total": 5260,
+  "quads": 5185,
+  "triangles": 75,
+  "vertices": 5531,
+  "quad_ratio": 0.985741,
+  "target": 5000,
+  "count_ratio": 1.052
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.876278,
+   "min": -1,
+   "p05": 0.335792,
+   "median": 0.979921,
+   "p95": 0.999846,
+   "max": 0.999999,
+   "std": 0.23523
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.881712,
+   "min": -1,
+   "p05": 0.36973,
+   "median": 0.980874,
+   "p95": 0.999852,
+   "max": 0.999999,
+   "std": 0.230564
+  },
+  "frac_sj_below_0.5": 0.0730038,
+  "inverted_or_degenerate": 77,
+  "planarity": {
+   "mean": 0.0144689,
+   "min": 0,
+   "p05": 4.60946e-09,
+   "median": 0.00410129,
+   "p95": 0.0648567,
+   "max": 0.485406,
+   "std": 0.0288455
+  },
+  "aspect_ratio": {
+   "mean": 582624,
+   "min": 1.00415,
+   "p05": 1.05099,
+   "median": 1.26835,
+   "p95": 15.5667,
+   "max": 1000000000.0,
+   "std": 24047300.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.298803,
+   "median": 1.0272,
+   "p95": 1.55154,
+   "max": 6.8432,
+   "std": 0.380871
+  },
+  "edge_length_mean_pct_diag": 1.01512
+ },
+ "topology": {
+  "singularities": 299,
+  "boundary_irregular": 54,
+  "singularities_per_1k_faces": 56.8441,
+  "interior_vertices": 4894,
+  "boundary_vertices": 637,
+  "boundary_edges": 637,
+  "nonmanifold_edges": 0,
+  "components": 2,
+  "valence_histogram": {
+   "2": 2,
+   "3": 129,
+   "4": 4595,
+   "5": 146,
+   "6": 17,
+   "7": 3,
+   "9": 1,
+   "10": 1
+  }
+ },
+ "distance": {
+  "mean_pct": 0.035364,
+  "out_to_in_mean_pct": 0.0366354,
+  "in_to_out_mean_pct": 0.0340926,
+  "rms_pct": 0.0939891,
+  "hausdorff_pct": 2.12383,
+  "area_ratio": 0.987763
+ },
+ "features": {
+  "feature_coverage": 0.672798,
+  "boundary_coverage": 0.777093,
+  "combined_coverage": 0.715881,
+  "feature_length_pct_diag": 1250.35,
+  "boundary_length_pct_diag": 880.036,
+  "feature_segments": 1830,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 38.4,
+ "input_faces": 32848,
+ "cmd": "build/quadremesh data/models/beetle.obj -o benchmark/study/it12_crease_cuts/meshes/beetle.obj -f 5000 -a 35 --no-uv --coverage-mode --crease-cuts"
+}

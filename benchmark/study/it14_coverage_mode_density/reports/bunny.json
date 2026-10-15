@@ -1,0 +1,101 @@
+{
+ "method": "it14_coverage_mode_density",
+ "faces": {
+  "total": 4546,
+  "quads": 4472,
+  "triangles": 74,
+  "vertices": 4534,
+  "quad_ratio": 0.983722,
+  "target": 5000,
+  "count_ratio": 0.9092
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.927147,
+   "min": -1,
+   "p05": 0.631728,
+   "median": 0.978133,
+   "p95": 0.99817,
+   "max": 0.999929,
+   "std": 0.157119
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.932458,
+   "min": -1,
+   "p05": 0.680075,
+   "median": 0.978642,
+   "p95": 0.998173,
+   "max": 0.999929,
+   "std": 0.150705
+  },
+  "frac_sj_below_0.5": 0.0279366,
+  "inverted_or_degenerate": 17,
+  "planarity": {
+   "mean": 0.0237969,
+   "min": 0,
+   "p05": 0.00107527,
+   "median": 0.015304,
+   "p95": 0.0788908,
+   "max": 0.300461,
+   "std": 0.0261693
+  },
+  "aspect_ratio": {
+   "mean": 894457,
+   "min": 1.0038,
+   "p05": 1.03935,
+   "median": 1.21185,
+   "p95": 2.36294,
+   "max": 1000000000.0,
+   "std": 29894100.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.521915,
+   "median": 1.02176,
+   "p95": 1.33813,
+   "max": 39.37,
+   "std": 0.486522
+  },
+  "edge_length_mean_pct_diag": 1.4205
+ },
+ "topology": {
+  "singularities": 205,
+  "boundary_irregular": 31,
+  "singularities_per_1k_faces": 45.0946,
+  "interior_vertices": 4476,
+  "boundary_vertices": 58,
+  "boundary_edges": 58,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "2": 3,
+   "3": 73,
+   "4": 4271,
+   "5": 118,
+   "6": 9,
+   "7": 2
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0849875,
+  "out_to_in_mean_pct": 0.0784534,
+  "in_to_out_mean_pct": 0.0915217,
+  "rms_pct": 0.282345,
+  "hausdorff_pct": 9.39305,
+  "area_ratio": 0.986915
+ },
+ "features": {
+  "feature_coverage": 0.696952,
+  "boundary_coverage": 0.479827,
+  "combined_coverage": 0.56624,
+  "feature_length_pct_diag": 89.7017,
+  "boundary_length_pct_diag": 135.687,
+  "feature_segments": 142,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 15.24,
+ "input_faces": 69451,
+ "cmd": "build/quadremesh data/models/bunny.obj -o benchmark/study/it14_coverage_mode_density/meshes/bunny.obj -f 5000 -a 35 --no-uv --coverage-mode --feature-density 8 --feature-density-width 1.5"
+}

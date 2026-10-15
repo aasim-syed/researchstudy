@@ -46,7 +46,11 @@ def run_one(name, flags, e):
             extra.append(tok)
     cmd = [os.path.join(BUILD, "quadremesh"), src, "-o", mesh, "-f", str(tgt), "-a", "35", "--no-uv"] + extra
     t = time.time()
-    r = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=1800, env=env)
+    try:
+        r = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=1800, env=env)
+    except subprocess.TimeoutExpired:
+        json.dump({"failed": True, "timeout_s": 1800, "cmd": cmd}, open(rep, "w"))
+        return e["name"], False
     dt = time.time() - t
     if r.returncode != 0 or not os.path.exists(mesh):
         json.dump({"failed": True, "cmd": cmd, "log": r.stdout[-2000:]}, open(rep, "w"))
@@ -115,8 +119,12 @@ def summary(rs, im):
     fewer = sum(1 for k, v in ok.items() if k in im and "topology" in im[k]
                 and v["topology"]["singularities_per_1k_faces"] < im[k]["topology"]["singularities_per_1k_faces"])
     both = sum(1 for k in ok if k in im and "topology" in im[k])
+    scans = {e["name"] for e in MAN if e["category"] in ("scene scan", "room-scale scan")}
+    obj = [v for k, v in ok.items() if k not in scans]
+    failed = sum(1 for v in rs.values() if "quality" not in v)
     return dict(
-        n=len(ok),
+        n=f"{len(ok)}" + (f" (+{failed} failed)" if failed else ""),
+        feat_obj=st.mean(v["features"]["feature_coverage"] for v in obj) if obj else float("nan"),
         quad=st.mean(v["faces"]["quad_ratio"] for v in ok.values()),
         sj=st.mean(v["quality"]["scaled_jacobian"]["mean"] for v in ok.values()),
         dist=st.mean(v["distance"]["mean_pct"] for v in ok.values()),
@@ -142,8 +150,8 @@ def cmd_report():
          "", "Criteria: quad ≥ 0.98, mean SJ ≥ 0.8, mean distance < 0.5 %, feature coverage ≥ 0.90,",
          "fewer singularities than Instant Meshes at equal face count.", "",
          "## Summary (mean over the models in each run)", "",
-         "| iteration | flags | models | quad | SJ | dist % | **feature cov.** | sing./1k | total sing. | faces / target | fewer sing. than IM |",
-         "|---|---|---|---|---|---|---|---|---|---|---|"]
+         "| iteration | flags | models | quad | SJ | dist % | **feature cov.** | feature cov. (13 non-scan models) | sing./1k | total sing. | faces / target | fewer sing. than IM |",
+         "|---|---|---|---|---|---|---|---|---|---|---|---|"]
     ims = summary({k: v for k, v in im.items()}, im)
     for n in names:
         meta = json.load(open(os.path.join(STUDY, n, "meta.json")))
@@ -151,10 +159,10 @@ def cmd_report():
         if not s:
             continue
         L.append(f"| {n} | `{meta['flags'] or '(default)'}` | {s['n']} | {s['quad']:.3f} | {s['sj']:.3f} | {s['dist']:.3f} | "
-                 f"**{s['feat']:.3f}** | {s['s1k']:.1f} | {s['sing']} | {s['faces_ratio']:.2f} | {s['fewer']} |")
+                 f"**{s['feat']:.3f}** | {s['feat_obj']:.3f} | {s['s1k']:.1f} | {s['sing']} | {s['faces_ratio']:.2f} | {s['fewer']} |")
     if ims:
         L.append(f"| *Instant Meshes* | – | {ims['n']} | {ims['quad']:.3f} | {ims['sj']:.3f} | {ims['dist']:.3f} | "
-                 f"*{ims['feat']:.3f}* | {ims['s1k']:.1f} | {ims['sing']} | {ims['faces_ratio']:.2f} | – |")
+                 f"*{ims['feat']:.3f}* | {ims['feat_obj']:.3f} | {ims['s1k']:.1f} | {ims['sing']} | {ims['faces_ratio']:.2f} | – |")
     L += ["", "## Per-model feature coverage", "",
           "| model | " + " | ".join(names) + " | Instant Meshes |", "|---|" + "---|" * (len(names) + 1)]
     data = {n: load(n) for n in names}

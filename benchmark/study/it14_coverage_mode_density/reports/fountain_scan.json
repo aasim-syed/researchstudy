@@ -1,0 +1,101 @@
+{
+ "method": "it14_coverage_mode_density",
+ "faces": {
+  "total": 14894,
+  "quads": 14669,
+  "triangles": 225,
+  "vertices": 15143,
+  "quad_ratio": 0.984893,
+  "target": 15000,
+  "count_ratio": 0.992933
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.935276,
+   "min": -1,
+   "p05": 0.613136,
+   "median": 0.997947,
+   "p95": 0.999906,
+   "max": 0.999999,
+   "std": 0.216758
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.940345,
+   "min": -1,
+   "p05": 0.661474,
+   "median": 0.998022,
+   "p95": 0.999907,
+   "max": 0.999999,
+   "std": 0.2128
+  },
+  "frac_sj_below_0.5": 0.0384719,
+  "inverted_or_degenerate": 231,
+  "planarity": {
+   "mean": 0.0142766,
+   "min": 0,
+   "p05": 0.00047286,
+   "median": 0.00683154,
+   "p95": 0.0503163,
+   "max": 0.384742,
+   "std": 0.0235853
+  },
+  "aspect_ratio": {
+   "mean": 1363440.0,
+   "min": 1.00057,
+   "p05": 1.00887,
+   "median": 1.05876,
+   "p95": 2.19876,
+   "max": 1000000000.0,
+   "std": 36899300.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.650219,
+   "median": 1.02014,
+   "p95": 1.19846,
+   "max": 2.8757,
+   "std": 0.181279
+  },
+  "edge_length_mean_pct_diag": 0.617961
+ },
+ "topology": {
+  "singularities": 553,
+  "boundary_irregular": 97,
+  "singularities_per_1k_faces": 37.129,
+  "interior_vertices": 14421,
+  "boundary_vertices": 722,
+  "boundary_edges": 723,
+  "nonmanifold_edges": 0,
+  "components": 4,
+  "valence_histogram": {
+   "2": 14,
+   "3": 204,
+   "4": 13868,
+   "5": 311,
+   "6": 23,
+   "7": 1
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0389,
+  "out_to_in_mean_pct": 0.017118,
+  "in_to_out_mean_pct": 0.0606819,
+  "rms_pct": 0.177104,
+  "hausdorff_pct": 16.0852,
+  "area_ratio": 0.932542
+ },
+ "features": {
+  "feature_coverage": 0.0744086,
+  "boundary_coverage": 0.0882555,
+  "combined_coverage": 0.0837143,
+  "feature_length_pct_diag": 1687.31,
+  "boundary_length_pct_diag": 3457.55,
+  "feature_segments": 15097,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 179.2,
+ "input_faces": 1033745,
+ "cmd": "build/quadremesh data/models/fountain_scan.obj -o benchmark/study/it14_coverage_mode_density/meshes/fountain_scan.obj -f 15000 -a 35 --no-uv --coverage-mode --feature-density 8 --feature-density-width 1.5"
+}

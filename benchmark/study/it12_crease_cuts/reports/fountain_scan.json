@@ -1,0 +1,101 @@
+{
+ "method": "it12_crease_cuts",
+ "faces": {
+  "total": 16189,
+  "quads": 15964,
+  "triangles": 225,
+  "vertices": 16648,
+  "quad_ratio": 0.986102,
+  "target": 15000,
+  "count_ratio": 1.07927
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.898051,
+   "min": -1,
+   "p05": 0.309016,
+   "median": 0.991225,
+   "p95": 0.999664,
+   "max": 0.999999,
+   "std": 0.254869
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.903542,
+   "min": -1,
+   "p05": 0.335449,
+   "median": 0.991514,
+   "p95": 0.999667,
+   "max": 0.999999,
+   "std": 0.250658
+  },
+  "frac_sj_below_0.5": 0.0735685,
+  "inverted_or_degenerate": 307,
+  "planarity": {
+   "mean": 0.017289,
+   "min": 0,
+   "p05": 0.000502481,
+   "median": 0.00772439,
+   "p95": 0.0673346,
+   "max": 0.484327,
+   "std": 0.0297042
+  },
+  "aspect_ratio": {
+   "mean": 1503400.0,
+   "min": 1.00066,
+   "p05": 1.01601,
+   "median": 1.13946,
+   "p95": 3.59072,
+   "max": 1000000000.0,
+   "std": 38744300.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.560165,
+   "median": 1.02394,
+   "p95": 1.31639,
+   "max": 3.74035,
+   "std": 0.236691
+  },
+  "edge_length_mean_pct_diag": 0.605183
+ },
+ "topology": {
+  "singularities": 499,
+  "boundary_irregular": 225,
+  "singularities_per_1k_faces": 30.8234,
+  "interior_vertices": 15477,
+  "boundary_vertices": 1171,
+  "boundary_edges": 1173,
+  "nonmanifold_edges": 0,
+  "components": 8,
+  "valence_histogram": {
+   "2": 7,
+   "3": 154,
+   "4": 14978,
+   "5": 306,
+   "6": 29,
+   "7": 3
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0372281,
+  "out_to_in_mean_pct": 0.0175938,
+  "in_to_out_mean_pct": 0.0568624,
+  "rms_pct": 0.172757,
+  "hausdorff_pct": 16.0403,
+  "area_ratio": 0.948559
+ },
+ "features": {
+  "feature_coverage": 0.0877293,
+  "boundary_coverage": 0.105695,
+  "combined_coverage": 0.0998032,
+  "feature_length_pct_diag": 1687.31,
+  "boundary_length_pct_diag": 3457.55,
+  "feature_segments": 15097,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 1780.69,
+ "input_faces": 1033745,
+ "cmd": "build/quadremesh data/models/fountain_scan.obj -o benchmark/study/it12_crease_cuts/meshes/fountain_scan.obj -f 15000 -a 35 --no-uv --coverage-mode --crease-cuts"
+}

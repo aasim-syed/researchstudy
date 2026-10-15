@@ -1,0 +1,101 @@
+{
+ "method": "it13_feature_density",
+ "faces": {
+  "total": 5360,
+  "quads": 5360,
+  "triangles": 0,
+  "vertices": 5509,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 1.072
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.862291,
+   "min": -1,
+   "p05": 0.139165,
+   "median": 0.967994,
+   "p95": 0.999574,
+   "max": 1,
+   "std": 0.256434
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.862291,
+   "min": -1,
+   "p05": 0.139165,
+   "median": 0.967994,
+   "p95": 0.999574,
+   "max": 1,
+   "std": 0.256434
+  },
+  "frac_sj_below_0.5": 0.0977612,
+  "inverted_or_degenerate": 41,
+  "planarity": {
+   "mean": 0.0181164,
+   "min": 0,
+   "p05": 0.000117731,
+   "median": 0.00567094,
+   "p95": 0.0784962,
+   "max": 0.422178,
+   "std": 0.0307329
+  },
+  "aspect_ratio": {
+   "mean": 373157,
+   "min": 1.00036,
+   "p05": 1.04897,
+   "median": 1.39451,
+   "p95": 6.69876,
+   "max": 1000000000.0,
+   "std": 19313100.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.389843,
+   "median": 0.890088,
+   "p95": 1.68498,
+   "max": 15.3881,
+   "std": 0.821059
+  },
+  "edge_length_mean_pct_diag": 1.6502
+ },
+ "topology": {
+  "singularities": 292,
+  "boundary_irregular": 35,
+  "singularities_per_1k_faces": 54.4776,
+  "interior_vertices": 5225,
+  "boundary_vertices": 284,
+  "boundary_edges": 284,
+  "nonmanifold_edges": 0,
+  "components": 13,
+  "valence_histogram": {
+   "3": 196,
+   "4": 4933,
+   "5": 68,
+   "6": 20,
+   "7": 6,
+   "8": 2
+  }
+ },
+ "distance": {
+  "mean_pct": 0.124123,
+  "out_to_in_mean_pct": 0.128073,
+  "in_to_out_mean_pct": 0.120173,
+  "rms_pct": 0.316338,
+  "hausdorff_pct": 4.35868,
+  "area_ratio": 1.03011
+ },
+ "features": {
+  "feature_coverage": 0.881749,
+  "boundary_coverage": 0.70373,
+  "combined_coverage": 0.8007,
+  "feature_length_pct_diag": 735.744,
+  "boundary_length_pct_diag": 614.945,
+  "feature_segments": 772,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 65.27,
+ "input_faces": 39936,
+ "cmd": "build/quadremesh data/models/sheen_chair.obj -o benchmark/study/it13_feature_density/meshes/sheen_chair.obj -f 5000 -a 35 --no-uv --trace-all --feature-density 8 --feature-density-width 1.5"
+}

@@ -339,6 +339,30 @@ apps/quadremesh_cli.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/quadremesh.dir/build.make CMakeFiles/quadremesh.dir/apps/quadremesh_cli.cpp.s
 .PHONY : apps/quadremesh_cli.cpp.s
 
+src/crease_cut.o: src/crease_cut.cpp.o
+.PHONY : src/crease_cut.o
+
+# target to build an object file
+src/crease_cut.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/quadremesh_core.dir/build.make CMakeFiles/quadremesh_core.dir/src/crease_cut.cpp.o
+.PHONY : src/crease_cut.cpp.o
+
+src/crease_cut.i: src/crease_cut.cpp.i
+.PHONY : src/crease_cut.i
+
+# target to preprocess a source file
+src/crease_cut.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/quadremesh_core.dir/build.make CMakeFiles/quadremesh_core.dir/src/crease_cut.cpp.i
+.PHONY : src/crease_cut.cpp.i
+
+src/crease_cut.s: src/crease_cut.cpp.s
+.PHONY : src/crease_cut.s
+
+# target to generate assembly for a file
+src/crease_cut.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/quadremesh_core.dir/build.make CMakeFiles/quadremesh_core.dir/src/crease_cut.cpp.s
+.PHONY : src/crease_cut.cpp.s
+
 src/decimate.o: src/decimate.cpp.o
 .PHONY : src/decimate.o
 
@@ -1351,6 +1375,9 @@ help:
 	@echo "... apps/quadremesh_cli.o"
 	@echo "... apps/quadremesh_cli.i"
 	@echo "... apps/quadremesh_cli.s"
+	@echo "... src/crease_cut.o"
+	@echo "... src/crease_cut.i"
+	@echo "... src/crease_cut.s"
 	@echo "... src/decimate.o"
 	@echo "... src/decimate.i"
 	@echo "... src/decimate.s"

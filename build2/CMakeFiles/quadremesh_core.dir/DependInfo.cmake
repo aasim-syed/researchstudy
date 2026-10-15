@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/claude/quadremesh/src/crease_cut.cpp" "CMakeFiles/quadremesh_core.dir/src/crease_cut.cpp.o" "gcc" "CMakeFiles/quadremesh_core.dir/src/crease_cut.cpp.o.d"
   "/home/claude/quadremesh/src/decimate.cpp" "CMakeFiles/quadremesh_core.dir/src/decimate.cpp.o" "gcc" "CMakeFiles/quadremesh_core.dir/src/decimate.cpp.o.d"
   "/home/claude/quadremesh/src/features.cpp" "CMakeFiles/quadremesh_core.dir/src/features.cpp.o" "gcc" "CMakeFiles/quadremesh_core.dir/src/features.cpp.o.d"
   "/home/claude/quadremesh/src/field.cpp" "CMakeFiles/quadremesh_core.dir/src/field.cpp.o" "gcc" "CMakeFiles/quadremesh_core.dir/src/field.cpp.o.d"

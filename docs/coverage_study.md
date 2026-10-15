@@ -9,43 +9,47 @@ fewer singularities than Instant Meshes at equal face count.
 
 ## Summary (mean over the models in each run)
 
-| iteration | flags | models | quad | SJ | dist % | **feature cov.** | sing./1k | total sing. | faces / target | fewer sing. than IM |
-|---|---|---|---|---|---|---|---|---|---|---|
-| it0_no_feature_paths | `QRM_NO_FEATURE_PATHS=1` | 15 | 1.000 | 0.934 | 0.076 | **0.439** | 33.4 | 3132 | 0.95 | 14/15 |
-| it1_feature_paths | `(default)` | 15 | 1.000 | 0.929 | 0.076 | **0.494** | 33.4 | 3132 | 0.95 | 14/15 |
-| it2_feature_refine | `--feature-refine 2` | 15 | 0.992 | 0.923 | 0.064 | **0.541** | 41.8 | 3901 | 0.95 | 12/15 |
-| it3_loops_extra_faces | `--feature-loops --no-face-match` | 15 | 1.000 | 0.920 | 0.061 | **0.531** | 26.9 | 3072 | 1.15 | 14/15 |
-| it4_loops_equal_faces | `--feature-loops` | 15 | 1.000 | 0.920 | 0.066 | **0.520** | 31.3 | 2994 | 0.97 | 13/15 |
-| it5_partial_loops | `--partial-loops` | 15 | 0.999 | 0.925 | 0.063 | **0.517** | 33.4 | 3163 | 0.95 | 14/15 |
-| it6_partial_loops_curved_splits | `--partial-loops --curved-splits` | 15 | 0.996 | 0.925 | 0.061 | **0.549** | 36.9 | 3482 | 0.95 | 13/15 |
-| it7_hybrid_sb10 | `--partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 10` | 15 | 0.994 | 0.921 | 0.063 | **0.555** | 40.5 | 3787 | 0.94 | 11/15 |
-| it8_hybrid_sb25 | `--partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 25` | 15 | 0.989 | 0.911 | 0.063 | **0.584** | 48.4 | 4531 | 0.96 | 10/15 |
-| it9_trace_all | `--trace-all` | 15 | 1.000 | 0.925 | 0.077 | **0.506** | 33.4 | 3132 | 0.95 | 14/15 |
-| it10_coverage_mode | `--trace-all --partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 25` | 15 | 0.989 | 0.908 | 0.064 | **0.598** | 48.8 | 4519 | 0.96 | 9/15 |
-| it11_scans_field_budget | `--coverage-mode --field-feature-budget 1.0` | 4 | 0.986 | 0.860 | 0.080 | **0.373** | 70.2 | 2392 | 0.96 | 1/4 |
-| *Instant Meshes* | – | 15 | 1.000 | 0.935 | 0.316 | *0.221* | 99.8 | 4782 | 0.91 | – |
+| iteration | flags | models | quad | SJ | dist % | **feature cov.** | feature cov. (13 non-scan models) | sing./1k | total sing. | faces / target | fewer sing. than IM |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| it0_no_feature_paths | `QRM_NO_FEATURE_PATHS=1` | 15 | 1.000 | 0.934 | 0.076 | **0.439** | 0.503 | 33.4 | 3132 | 0.95 | 14/15 |
+| it1_feature_paths | `(default)` | 15 | 1.000 | 0.929 | 0.076 | **0.494** | 0.566 | 33.4 | 3132 | 0.95 | 14/15 |
+| it2_feature_refine | `--feature-refine 2` | 15 | 0.992 | 0.923 | 0.064 | **0.541** | 0.619 | 41.8 | 3901 | 0.95 | 12/15 |
+| it3_loops_extra_faces | `--feature-loops --no-face-match` | 15 | 1.000 | 0.920 | 0.061 | **0.531** | 0.608 | 26.9 | 3072 | 1.15 | 14/15 |
+| it4_loops_equal_faces | `--feature-loops` | 15 | 1.000 | 0.920 | 0.066 | **0.520** | 0.595 | 31.3 | 2994 | 0.97 | 13/15 |
+| it5_partial_loops | `--partial-loops` | 15 | 0.999 | 0.925 | 0.063 | **0.517** | 0.592 | 33.4 | 3163 | 0.95 | 14/15 |
+| it6_partial_loops_curved_splits | `--partial-loops --curved-splits` | 15 | 0.996 | 0.925 | 0.061 | **0.549** | 0.629 | 36.9 | 3482 | 0.95 | 13/15 |
+| it7_hybrid_sb10 | `--partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 10` | 15 | 0.994 | 0.921 | 0.063 | **0.555** | 0.636 | 40.5 | 3787 | 0.94 | 11/15 |
+| it8_hybrid_sb25 | `--partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 25` | 15 | 0.989 | 0.911 | 0.063 | **0.584** | 0.668 | 48.4 | 4531 | 0.96 | 10/15 |
+| it9_trace_all | `--trace-all` | 15 | 1.000 | 0.925 | 0.077 | **0.506** | 0.575 | 33.4 | 3132 | 0.95 | 14/15 |
+| it10_coverage_mode | `--trace-all --partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 25` | 15 | 0.989 | 0.908 | 0.064 | **0.598** | 0.679 | 48.8 | 4519 | 0.96 | 9/15 |
+| it11_scans_field_budget | `--coverage-mode --field-feature-budget 1.0` | 4 | 0.986 | 0.860 | 0.080 | **0.373** | 0.675 | 70.2 | 2392 | 0.96 | 1/4 |
+| it12_crease_cuts | `--coverage-mode --crease-cuts` | 14 (+1 failed) | 0.989 | 0.910 | 0.065 | **0.654** | 0.698 | 46.8 | 3453 | 0.97 | 9/14 |
+| it13_feature_density | `--trace-all --feature-density 8 --feature-density-width 1.5` | 15 | 1.000 | 0.905 | 0.068 | **0.571** | 0.652 | 35.4 | 3285 | 0.92 | 14/15 |
+| it14_coverage_mode_density | `--coverage-mode --feature-density 8 --feature-density-width 1.5` | 15 | 0.989 | 0.894 | 0.073 | **0.622** | 0.708 | 49.3 | 4656 | 0.96 | 9/15 |
+| it15_coverage_search | `--coverage-mode --coverage-search` | 15 | 0.988 | 0.886 | 0.067 | **0.651** | 0.740 | 47.1 | 4566 | 0.98 | 10/15 |
+| *Instant Meshes* | – | 15 | 1.000 | 0.935 | 0.316 | *0.221* | 0.253 | 99.8 | 4782 | 0.91 | – |
 
 ## Per-model feature coverage
 
-| model | it0_no_feature_paths | it1_feature_paths | it2_feature_refine | it3_loops_extra_faces | it4_loops_equal_faces | it5_partial_loops | it6_partial_loops_curved_splits | it7_hybrid_sb10 | it8_hybrid_sb25 | it9_trace_all | it10_coverage_mode | it11_scans_field_budget | Instant Meshes |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| bunny | 0.26 | 0.41 | 0.55 | 0.44 | 0.44 | 0.44 | 0.57 | 0.57 | 0.65 | 0.41 | 0.65 | – | 0.10 |
-| fandisk | 0.94 | 0.98 | 0.98 | 0.98 | 0.98 | 0.98 | 0.98 | 0.99 | 0.99 | 0.98 | 0.99 | – | 0.76 |
-| fandisk_noisy | 0.72 | 0.76 | 0.76 | 0.77 | 0.77 | 0.75 | 0.75 | 0.76 | 0.78 | 0.76 | 0.78 | – | 0.37 |
-| rocker_arm | 0.28 | 0.40 | 0.63 | 0.45 | 0.45 | 0.45 | 0.57 | 0.59 | 0.68 | 0.40 | 0.68 | – | 0.10 |
-| armadillo | 0.09 | 0.13 | 0.18 | 0.18 | 0.18 | 0.18 | 0.18 | 0.20 | 0.20 | 0.13 | 0.20 | – | 0.10 |
-| spot | 0.82 | 0.88 | 0.88 | 0.88 | 0.88 | 0.88 | 0.94 | 0.94 | 0.96 | 0.88 | 0.96 | – | 0.36 |
-| beetle | 0.50 | 0.51 | 0.56 | 0.71 | 0.68 | 0.62 | 0.62 | 0.62 | 0.67 | 0.51 | 0.67 | – | 0.12 |
-| nefertiti | 0.27 | 0.40 | 0.47 | 0.42 | 0.42 | 0.42 | 0.44 | 0.45 | 0.52 | 0.40 | 0.52 | – | 0.07 |
-| igea | 0.16 | 0.35 | 0.42 | 0.30 | 0.30 | 0.30 | 0.38 | 0.50 | 0.51 | 0.35 | 0.51 | – | 0.13 |
-| sheen_chair | 0.74 | 0.75 | 0.83 | 0.80 | 0.71 | 0.79 | 0.85 | 0.77 | 0.79 | 0.75 | 0.79 | – | 0.48 |
-| damask_chair | 0.43 | 0.43 | 0.40 | 0.47 | 0.46 | 0.36 | 0.36 | 0.36 | 0.45 | 0.55 | 0.58 | 0.62 | 0.30 |
-| velvet_sofa | 0.61 | 0.65 | 0.67 | 0.72 | 0.83 | 0.73 | 0.73 | 0.73 | 0.75 | 0.65 | 0.75 | – | 0.39 |
-| leather_sofa | 0.73 | 0.70 | 0.72 | 0.78 | 0.64 | 0.78 | 0.78 | 0.78 | 0.73 | 0.70 | 0.73 | 0.73 | 0.00 |
-| fountain_scan | 0.03 | 0.03 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.07 | 0.09 | 0.09 | 0.01 |
-| lounge_room | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.04 | 0.05 | 0.05 | 0.02 |
+| model | it0_no_feature_paths | it1_feature_paths | it2_feature_refine | it3_loops_extra_faces | it4_loops_equal_faces | it5_partial_loops | it6_partial_loops_curved_splits | it7_hybrid_sb10 | it8_hybrid_sb25 | it9_trace_all | it10_coverage_mode | it11_scans_field_budget | it12_crease_cuts | it13_feature_density | it14_coverage_mode_density | it15_coverage_search | Instant Meshes |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| bunny | 0.26 | 0.41 | 0.55 | 0.44 | 0.44 | 0.44 | 0.57 | 0.57 | 0.65 | 0.41 | 0.65 | – | 0.67 | 0.57 | 0.70 | 0.70 | 0.10 |
+| fandisk | 0.94 | 0.98 | 0.98 | 0.98 | 0.98 | 0.98 | 0.98 | 0.99 | 0.99 | 0.98 | 0.99 | – | 0.99 | 0.80 | 0.81 | 0.99 | 0.76 |
+| fandisk_noisy | 0.72 | 0.76 | 0.76 | 0.77 | 0.77 | 0.75 | 0.75 | 0.76 | 0.78 | 0.76 | 0.78 | – | 0.78 | 0.75 | 0.79 | 0.84 | 0.37 |
+| rocker_arm | 0.28 | 0.40 | 0.63 | 0.45 | 0.45 | 0.45 | 0.57 | 0.59 | 0.68 | 0.40 | 0.68 | – | 0.63 | 0.59 | 0.74 | 0.74 | 0.10 |
+| armadillo | 0.09 | 0.13 | 0.18 | 0.18 | 0.18 | 0.18 | 0.18 | 0.20 | 0.20 | 0.13 | 0.20 | – | 0.32 | 0.27 | 0.32 | 0.36 | 0.10 |
+| spot | 0.82 | 0.88 | 0.88 | 0.88 | 0.88 | 0.88 | 0.94 | 0.94 | 0.96 | 0.88 | 0.96 | – | 0.96 | 0.88 | 0.95 | 0.97 | 0.36 |
+| beetle | 0.50 | 0.51 | 0.56 | 0.71 | 0.68 | 0.62 | 0.62 | 0.62 | 0.67 | 0.51 | 0.67 | – | 0.67 | 0.61 | 0.72 | 0.72 | 0.12 |
+| nefertiti | 0.27 | 0.40 | 0.47 | 0.42 | 0.42 | 0.42 | 0.44 | 0.45 | 0.52 | 0.40 | 0.52 | – | 0.52 | 0.52 | 0.57 | 0.57 | 0.07 |
+| igea | 0.16 | 0.35 | 0.42 | 0.30 | 0.30 | 0.30 | 0.38 | 0.50 | 0.51 | 0.35 | 0.51 | – | 0.58 | 0.45 | 0.53 | 0.58 | 0.13 |
+| sheen_chair | 0.74 | 0.75 | 0.83 | 0.80 | 0.71 | 0.79 | 0.85 | 0.77 | 0.79 | 0.75 | 0.79 | – | 0.78 | 0.88 | 0.83 | 0.90 | 0.48 |
+| damask_chair | 0.43 | 0.43 | 0.40 | 0.47 | 0.46 | 0.36 | 0.36 | 0.36 | 0.45 | 0.55 | 0.58 | 0.62 | 0.60 | 0.60 | 0.60 | 0.61 | 0.30 |
+| velvet_sofa | 0.61 | 0.65 | 0.67 | 0.72 | 0.83 | 0.73 | 0.73 | 0.73 | 0.75 | 0.65 | 0.75 | – | 0.81 | 0.87 | 0.87 | 0.87 | 0.39 |
+| leather_sofa | 0.73 | 0.70 | 0.72 | 0.78 | 0.64 | 0.78 | 0.78 | 0.78 | 0.73 | 0.70 | 0.73 | 0.73 | 0.75 | 0.68 | 0.78 | 0.78 | 0.00 |
+| fountain_scan | 0.03 | 0.03 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.07 | 0.09 | 0.09 | 0.09 | 0.05 | 0.07 | 0.09 | 0.01 |
+| lounge_room | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.04 | 0.05 | 0.05 | – | 0.05 | 0.06 | 0.06 | 0.02 |
 
-Code provenance: every iteration was re-run on the same commit (723c775, recorded in each run's meta.json), so the rows differ only by the flags shown.
+Code provenance: it0-it11 were run on commit 723c775 and it12-it15 on 33a63fe (recorded in each run's meta.json); from it16 on the defaults changed (see it16) - the earlier rows are reproduced at later commits with --legacy prepended to their flags.
 
 ## Iterations
 
@@ -112,4 +116,27 @@ Code provenance: every iteration was re-run on the same commit (723c775, recorde
 - flags: `--coverage-mode --field-feature-budget 1.0` · code: `723c775` · run: 2026-10-15T11:35:22
 - Scans and the dense-crease chair only (4 models - not comparable to the 15-model means above). Hypothesis: on these inputs the field is given only a fraction of the creases (feature budget 0.06 for scans, 0.3 otherwise), so loops are not aligned with the rest. Change: coverage mode + give the field all creases (--field-feature-budget 1.0).
 - Observed (vs it10 on the same 4 models): damask_chair 0.585 -> 0.624 coverage but 361 -> 403 singularities; leather_sofa, fountain_scan and lounge_room are bit-identical, because the dense-scan path keeps its fixed 0.06 field budget regardless of the flag (the integer solve is unstable on 1M-face scans with more constraints). So the hypothesis is untested on the scans and gives a coverage-for-singularities trade on the chair. Not adopted.
+
+### it12_crease_cuts
+- flags: `--coverage-mode --crease-cuts` · code: `33a63fe` · run: 2026-10-15T13:44:43
+- Diagnosis (evaluator sample dump, QRM_EVAL_DUMP): on the organic models most uncovered crease length lies 0.1-0.35 L from an output edge or within 0.1 L but misaligned; the crease sets of pipeline and evaluator are identical (checked edge by edge).
+- Change: crease cuts - every crease piece still uncovered after the coverage stage is traced across the faces (closest-point walk); new vertices are inserted where it crosses edges (or nearby vertices are moved onto it), the crossed faces are split along it (with extra vertices where it bends inside a face; run ends anchored to the best vertex of their face), the polygons are re-split into quads + at most one triangle, non-crease vertices are locally untangled, and the cut is kept only if no face gets worse than SJ 0.05 (or than it was) and the triangle/singularity budgets hold. Cut vertices are pinned during later relaxation.
+- Observed: on the 14 models that finished, 0.654 vs 0.636 for it10 on the same 14 (+1.8 points); most uncovered pieces could not be embedded (cuts across a quad at an angle produce concave pieces that fail the quality check). On the room scan (lounge, ~46k crease pieces) the run exceeded the 30-minute limit and was stopped - recorded as failed. Not adopted.
+
+### it13_feature_density
+- flags: `--trace-all --feature-density 8 --feature-density-width 1.5` · code: `33a63fe` · run: 2026-10-15T13:24:42
+- Hypothesis: the creases that are missed are finer than the elements; smaller elements along creases and larger ones elsewhere (same face count) let the integer grid follow them without any post-hoc topology change.
+- Change: per-vertex density 1 + 8 exp(-(d/1.5L)^2), d = distance to the nearest crease, converted to a conformal scale target for the field solve (QuadriFlow's adaptive-scale path, density ratio clamped at 8, normalised to the same expected face count). Path recovery over all creases (it9) on.
+- Observed: 0.506 -> 0.571 over all 15 (it9 -> it13); 0.575 -> 0.652 on the 13 non-scan models, quads stay 100 %, SJ 0.925 -> 0.905, 14/15 still below Instant Meshes. Largest gains on furniture (velvet, sheen) and curved organic creases (bunny, rocker arm).
+
+### it14_coverage_mode_density
+- flags: `--coverage-mode --feature-density 8 --feature-density-width 1.5` · code: `33a63fe` · run: 2026-10-15T13:34:04
+- it10 (coverage mode) + feature-adaptive element size (it13).
+- Observed: 0.598 -> 0.622 (it10 -> it14); 0.679 -> 0.708 on the 13 non-scan models; singularities as in it10 (9/15).
+
+### it15_coverage_search
+- flags: `--coverage-mode --coverage-search` · code: `33a63fe` · run: 2026-10-15T14:48:53
+- Observation from a parameter sweep: per model the coverage varies strongly with where the size is reduced (e.g. fandisk 0.80-0.99 across widths), so no single setting is best for all inputs.
+- Change: --coverage-search solves 4 candidates (coverage mode without / with feature density 8 at widths 1.5 and 2.5, and width 2.0 with another seed), scores each with the evaluator code itself (same as quadeval) and keeps the one with the highest feature coverage among those with quad >= 0.98, SJ >= 0.8, distance < 0.5 % and at most +10 singularities/1k over the first candidate. 4x runtime.
+- Observed: 0.651 over 15 (0.740 on the 13 non-scan models), SJ 0.886, 10/15 below Instant Meshes; runtime 4x.
 

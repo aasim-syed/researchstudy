@@ -689,8 +689,9 @@ CMakeFiles/quadremesh_core.dir/src/remesh.cpp.o: \
  /home/claude/quadremesh/include/quadremesh/features.h \
  /home/claude/quadremesh/include/quadremesh/geometry.h \
  /home/claude/quadremesh/include/quadremesh/postprocess.h \
+ /home/claude/quadremesh/include/quadremesh/crease_cut.h \
+ /home/claude/quadremesh/include/quadremesh/metrics.h \
  /home/claude/quadremesh/include/quadremesh/preprocess.h \
  /home/claude/quadremesh/include/quadremesh/quadremesh.h \
  /home/claude/quadremesh/include/quadremesh/io.h \
- /home/claude/quadremesh/include/quadremesh/metrics.h \
  /home/claude/quadremesh/include/quadremesh/transfer.h

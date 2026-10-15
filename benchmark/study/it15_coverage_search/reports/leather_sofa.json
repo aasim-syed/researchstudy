@@ -1,0 +1,100 @@
+{
+ "method": "it15_coverage_search",
+ "faces": {
+  "total": 5394,
+  "quads": 5320,
+  "triangles": 74,
+  "vertices": 5928,
+  "quad_ratio": 0.986281,
+  "target": 5000,
+  "count_ratio": 1.0788
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.843103,
+   "min": -1,
+   "p05": 0.201712,
+   "median": 0.975439,
+   "p95": 0.99979,
+   "max": 0.999999,
+   "std": 0.256004
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.846638,
+   "min": -1,
+   "p05": 0.202418,
+   "median": 0.976806,
+   "p95": 0.999797,
+   "max": 0.999999,
+   "std": 0.254467
+  },
+  "frac_sj_below_0.5": 0.113645,
+  "inverted_or_degenerate": 37,
+  "planarity": {
+   "mean": 0.0179133,
+   "min": 0,
+   "p05": 5.74763e-05,
+   "median": 0.00432343,
+   "p95": 0.0831781,
+   "max": 0.336488,
+   "std": 0.0336886
+  },
+  "aspect_ratio": {
+   "mean": 375947,
+   "min": 1.00701,
+   "p05": 1.08089,
+   "median": 1.46515,
+   "p95": 11.6733,
+   "max": 1000000000.0,
+   "std": 19385500.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.265573,
+   "median": 1.02101,
+   "p95": 1.62946,
+   "max": 8.93522,
+   "std": 0.468808
+  },
+  "edge_length_mean_pct_diag": 1.93807
+ },
+ "topology": {
+  "singularities": 398,
+  "boundary_irregular": 126,
+  "singularities_per_1k_faces": 73.7857,
+  "interior_vertices": 4834,
+  "boundary_vertices": 1094,
+  "boundary_edges": 1094,
+  "nonmanifold_edges": 0,
+  "components": 27,
+  "valence_histogram": {
+   "2": 2,
+   "3": 238,
+   "4": 4436,
+   "5": 138,
+   "6": 20
+  }
+ },
+ "distance": {
+  "mean_pct": 0.107431,
+  "out_to_in_mean_pct": 0.113634,
+  "in_to_out_mean_pct": 0.101229,
+  "rms_pct": 0.278982,
+  "hausdorff_pct": 4.04,
+  "area_ratio": 0.944252
+ },
+ "features": {
+  "feature_coverage": 0.778612,
+  "boundary_coverage": 0.513124,
+  "combined_coverage": 0.634182,
+  "feature_length_pct_diag": 2393.13,
+  "boundary_length_pct_diag": 2855.15,
+  "feature_segments": 2169,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 142.02,
+ "input_faces": 46492,
+ "cmd": "build/quadremesh data/models/leather_sofa.obj -o benchmark/study/it15_coverage_search/meshes/leather_sofa.obj -f 5000 -a 35 --no-uv --coverage-mode --coverage-search"
+}

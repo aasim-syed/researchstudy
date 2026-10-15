@@ -425,12 +425,12 @@ static Result quadremesh_once(const TriMesh& input, const Params& p) {
         job.seed = p.seed;
         // feature-adaptive size inside the field solve: smaller elements near creases, larger
         // elsewhere, same expected face count (density -> conformal scale target of the solve)
-        if (p.feature_density > 0 || std::getenv("QRM_FEAT_SCALE")) {
+        if (p.feature_density > 0 || std::getenv("QRM_FEAT_SCALE") || !p.density_focus.empty()) {
             const double k = std::getenv("QRM_FEAT_SCALE") ? std::atof(std::getenv("QRM_FEAT_SCALE")) : p.feature_density;
             const double wdt = std::getenv("QRM_FEAT_WIDTH") ? std::atof(std::getenv("QRM_FEAT_WIDTH")) : p.feature_density_width;
             std::vector<std::pair<int, int>> se;
             for (int e = 0; e < refFE.rows(); ++e) se.push_back({refFE(e, 0), refFE(e, 1)});
-            if (!se.empty() && k > 0) {
+            if (!se.empty() && (k > 0 || !p.density_focus.empty())) {
                 MatrixXd SV(2 * se.size(), 3);
                 MatrixXi SE(se.size(), 2);
                 for (size_t i = 0; i < se.size(); ++i) {
@@ -446,6 +446,17 @@ static Result quadremesh_once(const TriMesh& input, const Params& p) {
                 st.squared_distance(SV, SE, job.V, D, I, C);
                 VectorXd d(job.V.rows());
                 for (int i = 0; i < job.V.rows(); ++i) d[i] = 1.0 + k * std::exp(-D[i] / (wdt * wdt * Lqf * Lqf));
+                // error-driven focus: extra density around crease points a previous solve missed
+                if (!p.density_focus.empty()) {
+                    MatrixXd FP(p.density_focus.size(), 3);
+                    for (size_t i = 0; i < p.density_focus.size(); ++i) FP.row(i) = ((p.density_focus[i] - center) * s).transpose();
+                    const double fw = p.density_focus_width * Lqf;
+                    for (int i = 0; i < job.V.rows(); ++i) {
+                        double best = 1e300;
+                        for (int j = 0; j < FP.rows(); ++j) best = std::min(best, (FP.row(j) - job.V.row(i)).squaredNorm());
+                        d[i] += p.density_focus_strength * std::exp(-best / (fw * fw));
+                    }
+                }
                 job.scale = density_to_scale(job.V, job.F, d, p.max_density_ratio);
                 log("feature scale: ", se.size(), " crease edges, min dist ", std::sqrt(D.minCoeff()) / Lqf, " L, density ",
                     d.minCoeff(), "..", d.maxCoeff(), ", scale ", job.scale.minCoeff(), "..", job.scale.maxCoeff());
@@ -725,7 +736,7 @@ static Result quadremesh_once(const TriMesh& input, const Params& p) {
     // Every coverage operation (edge-loop insertion, local refinement, curved-crease splits) is
     // applied tentatively and kept only if the mesh stays inside two budgets: triangles (quad
     // ratio) and irregular vertices (singularities). Both are topological, so checks are cheap.
-    if (!std::getenv("QRM_NOPOST") && (p.feature_loops || p.feature_refine_rounds > 0 || p.curved_feature_splits || p.crease_cuts)) {
+    if (!std::getenv("QRM_NOPOST") && (p.feature_loops || p.feature_refine_rounds > 0 || p.curved_feature_splits || p.crease_cuts || p.snap_near > 0)) {
         const int T = std::max(1, p.target_faces);
         auto ntris = [&]() { int t = 0; for (int i = 0; i < qm.Q.rows(); ++i) t += qm.Q(i, 3) < 0; return t; };
         auto nsing = [&]() {
@@ -820,12 +831,15 @@ static Result quadremesh_once(const TriMesh& input, const Params& p) {
                 rejected++;
             }
         }
+        // coverage checks use the element size of the requested face count (as the evaluator),
+        // also when face-count control re-solves at a lower budget
+        const double Lc = p.coverage_target_faces > 0 ? std::sqrt(full_area / p.coverage_target_faces) : L;
         // 4. crease cuts: embed the remaining uncovered crease pieces as mesh edges (longest first)
         if (p.crease_cuts) {
             const auto all_chains = ref.feature_chains(0.0);
             for (int round = 0; round < p.crease_cut_rounds; ++round) {
                 double cov = 0, tot = 0;
-                auto runs = uncovered_crease_runs(qm, all_chains, L, 0.15, 0.1, 0.1, 25.0, &cov, &tot);
+                auto runs = uncovered_crease_runs(qm, all_chains, Lc, 0.15, 0.1, 0.1, 25.0, &cov, &tot);
                 std::sort(runs.begin(), runs.end(), [&](const std::vector<Vector3d>& x, const std::vector<Vector3d>& y) {
                     return chain_len(x) > chain_len(y);
                 });
@@ -834,13 +848,13 @@ static Result quadremesh_once(const TriMesh& input, const Params& p) {
                 for (auto& r : runs) {
                     QuadMesh backup = qm;
                     std::vector<Vector3d> cv;
-                    int rc = embed_crease_run(qm, r, L, 0.05, &cv, 0.2);
-                    if (rc == -8) { cv.clear(); rc = embed_crease_run(qm, r, L, 0.05, &cv, 0.34); }
+                    int rc = embed_crease_run(qm, r, Lc, 0.05, &cv, 0.2);
+                    if (rc == -8) { cv.clear(); rc = embed_crease_run(qm, r, Lc, 0.05, &cv, 0.34); }
                     if (rc < 0) { bad++; why[rc]++; continue; }
                     if (std::getenv("QRM_DEBUG_CUT") && std::string(std::getenv("QRM_DEBUG_CUT")) == "2") {
                         double c0 = 0, t0 = 0, c1 = 0, t1 = 0;
-                        uncovered_crease_runs(backup, {r}, L, 1e9, 0, 0.1, 25.0, &c0, &t0);
-                        uncovered_crease_runs(qm, {r}, L, 1e9, 0, 0.1, 25.0, &c1, &t1);
+                        uncovered_crease_runs(backup, {r}, Lc, 1e9, 0, 0.1, 25.0, &c0, &t0);
+                        uncovered_crease_runs(qm, {r}, Lc, 1e9, 0, 0.1, 25.0, &c1, &t1);
                         log("  cut: run ", chain_len(r) / L, " L, faces ", backup.Q.rows(), " -> ", qm.Q.rows(), ", run coverage ",
                             c0 / std::max(t0, 1e-30), " -> ", c1 / std::max(t1, 1e-30));
                     }
@@ -852,15 +866,39 @@ static Result quadremesh_once(const TriMesh& input, const Params& p) {
                     for (auto& w : why) log("  cut failure code ", w.first, ": ", w.second);
                 if (std::getenv("QRM_DEBUG_CUT")) {
                     double c1 = 0, t1 = 0;
-                    uncovered_crease_runs(qm, all_chains, L, 1e9, 0, 0.1, 25.0, &c1, &t1);
+                    uncovered_crease_runs(qm, all_chains, Lc, 1e9, 0, 0.1, 25.0, &c1, &t1);
                     log("  coverage right after cuts (before relaxation): ", c1 / std::max(t1, 1e-30));
                 }
                 if (ok) relax_and_project(qm, ref, L, p.smooth_iterations, pst);
                 double cov2 = 0, tot2 = 0;
-                uncovered_crease_runs(qm, all_chains, L, 1e9, 0, 0.1, 25.0, &cov2, &tot2);
+                uncovered_crease_runs(qm, all_chains, Lc, 1e9, 0, 0.1, 25.0, &cov2, &tot2);
                 log("crease cuts ", round + 1, ": ", runs.size(), " uncovered runs, ", ok, " cut, ", bad, " not embeddable, ", rej,
                     " over budget; coverage ", cov / std::max(tot, 1e-30), " -> ", cov2 / std::max(tot2, 1e-30), ", ", qm.Q.rows(), " faces");
                 if (!ok) break;
+            }
+        }
+        // 5. near-miss snapping: edges running alongside an uncovered crease are moved onto it
+        if (p.snap_near > 0) {
+            const auto all_chains = ref.feature_chains(0.0);
+            const int snap_rounds = std::getenv("QRM_SNAP_ROUNDS") ? std::atoi(std::getenv("QRM_SNAP_ROUNDS")) : 2;
+            for (int round = 0; round < snap_rounds; ++round) {
+                double c0 = 0, t0 = 0, c1 = 0, t1 = 0;
+                uncovered_crease_runs(qm, all_chains, Lc, 1e9, 0, 0.1, 25.0, &c0, &t0);
+                std::vector<Vector3d> mv;
+                int ns = snap_near_creases(qm, all_chains, Lc, p.snap_near, &mv);
+                pst.pinned.insert(pst.pinned.end(), mv.begin(), mv.end());
+                uncovered_crease_runs(qm, all_chains, Lc, 1e9, 0, 0.1, 25.0, &c1, &t1);
+                double c2 = c1;
+                if (ns) {
+                    relax_and_project(qm, ref, L, p.smooth_iterations, pst);
+                    double t2 = 0;
+                    c2 = 0;
+                    uncovered_crease_runs(qm, all_chains, Lc, 1e9, 0, 0.1, 25.0, &c2, &t2);
+                    c2 /= std::max(t2, 1e-30);
+                }
+                log("near-miss snapping ", round + 1, ": ", ns, " edges; coverage ", c0 / std::max(t0, 1e-30), " -> ",
+                    c1 / std::max(t1, 1e-30), " (after relaxation ", c2, ")");
+                if (!ns) break;
             }
         }
         log("coverage stage: ", accepted, " operations kept, ", rejected, " rejected by budget (triangles ", ntris(), "/",
@@ -901,6 +939,7 @@ static Result quadremesh_matched(const TriMesh& input, const Params& p) {
     Result r = quadremesh_once(input, p);
     if (p.target_edge_length > 0 || p.target_faces <= 0 || !p.match_face_count) return r;
     Params q = p;
+    q.coverage_target_faces = p.target_faces;
     double solve_target = p.target_faces;
     for (int it = 0; it < 2; ++it) {
         double ratio = (double)r.mesh.Q.rows() / p.target_faces;
@@ -942,19 +981,25 @@ Result quadremesh(const TriMesh& input, const Params& p) {
     if (!p.coverage_search) return quadremesh_matched(input, p);
     Params base = p;
     base.coverage_search = false;
+    // candidates: as given; crease zone wider; another width and seed; no adaptive crease size
     std::vector<Params> cands;
     cands.push_back(base);
-    for (double w : {1.5, 2.5}) {
+    {
         Params q = base;
-        q.feature_density = 8.0;
-        q.feature_density_width = w;
+        q.feature_density = base.feature_density > 0 ? base.feature_density : 8.0;
+        q.feature_density_width = 2.5;
         cands.push_back(q);
     }
     {
         Params q = base;
-        q.feature_density = 8.0;
+        q.feature_density = base.feature_density > 0 ? base.feature_density : 8.0;
         q.feature_density_width = 2.0;
         q.seed = base.seed + 1;
+        cands.push_back(q);
+    }
+    {
+        Params q = base;
+        q.feature_density = base.feature_density > 0 ? 0.0 : 8.0;
         cands.push_back(q);
     }
     EvalParams ep;
@@ -963,6 +1008,7 @@ Result quadremesh(const TriMesh& input, const Params& p) {
     ep.target_faces = p.target_faces;
     ep.samples = 50000;
     Result best;
+    Params best_params = base;
     double best_cov = -1, s_cap = 1e30;
     std::vector<std::string> notes;
     for (size_t k = 0; k < cands.size(); ++k) {
@@ -988,6 +1034,7 @@ Result quadremesh(const TriMesh& input, const Params& p) {
             if (!ok && best_cov >= 0) continue;
             best = std::move(r);
             best_cov = ok ? cov : -0.5;
+            best_params = cands[k];
         }
     }
     best.log.insert(best.log.begin(), notes.begin(), notes.end());

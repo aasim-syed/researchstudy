@@ -1,0 +1,6 @@
+{
+ "failed": true,
+ "timeout_s": 1800,
+ "note": "quadremesh exceeded the 1800 s limit (TimeoutExpired in the study log of 2026-10-15); report written from that log entry",
+ "cmd": "build/quadremesh data/models/lounge_room.obj -o ... -f 15000 -a 35 --no-uv --coverage-mode --crease-cuts"
+}

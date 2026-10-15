@@ -188,18 +188,18 @@ CMakeFiles/imcore.dir/clean:
 # Target rules for target CMakeFiles/quadremesh_core.dir
 
 # All Build rule for target.
-CMakeFiles/quadremesh_core.dir/all: CMakeFiles/imcore.dir/all
 CMakeFiles/quadremesh_core.dir/all: CMakeFiles/qflow.dir/all
-CMakeFiles/quadremesh_core.dir/all: tbb/CMakeFiles/tbb_static.dir/all
+CMakeFiles/quadremesh_core.dir/all: CMakeFiles/imcore.dir/all
 CMakeFiles/quadremesh_core.dir/all: lemon/lemon/CMakeFiles/lemon.dir/all
+CMakeFiles/quadremesh_core.dir/all: tbb/CMakeFiles/tbb_static.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/quadremesh_core.dir/build.make CMakeFiles/quadremesh_core.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/quadremesh_core.dir/build.make CMakeFiles/quadremesh_core.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/claude/quadremesh/build2/CMakeFiles --progress-num=44,45,46,47,48,49,50,51,52,53,54,55,56 "Built target quadremesh_core"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/claude/quadremesh/build2/CMakeFiles --progress-num=44,45,46,47,48,49,50,51,52,53,54,55,56,57 "Built target quadremesh_core"
 .PHONY : CMakeFiles/quadremesh_core.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/quadremesh_core.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/claude/quadremesh/build2/CMakeFiles 90
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/claude/quadremesh/build2/CMakeFiles 91
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/quadremesh_core.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/claude/quadremesh/build2/CMakeFiles 0
 .PHONY : CMakeFiles/quadremesh_core.dir/rule
@@ -217,11 +217,11 @@ CMakeFiles/quadremesh_core.dir/clean:
 # Target rules for target CMakeFiles/quadremesh.dir
 
 # All Build rule for target.
-CMakeFiles/quadremesh.dir/all: CMakeFiles/imcore.dir/all
 CMakeFiles/quadremesh.dir/all: CMakeFiles/qflow.dir/all
-CMakeFiles/quadremesh.dir/all: tbb/CMakeFiles/tbb_static.dir/all
+CMakeFiles/quadremesh.dir/all: CMakeFiles/imcore.dir/all
 CMakeFiles/quadremesh.dir/all: CMakeFiles/quadremesh_core.dir/all
 CMakeFiles/quadremesh.dir/all: lemon/lemon/CMakeFiles/lemon.dir/all
+CMakeFiles/quadremesh.dir/all: tbb/CMakeFiles/tbb_static.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/quadremesh.dir/build.make CMakeFiles/quadremesh.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/quadremesh.dir/build.make CMakeFiles/quadremesh.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/claude/quadremesh/build2/CMakeFiles --progress-num=42,43 "Built target quadremesh"
@@ -229,7 +229,7 @@ CMakeFiles/quadremesh.dir/all: lemon/lemon/CMakeFiles/lemon.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/quadremesh.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/claude/quadremesh/build2/CMakeFiles 92
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/claude/quadremesh/build2/CMakeFiles 93
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/quadremesh.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/claude/quadremesh/build2/CMakeFiles 0
 .PHONY : CMakeFiles/quadremesh.dir/rule
@@ -247,11 +247,11 @@ CMakeFiles/quadremesh.dir/clean:
 # Target rules for target CMakeFiles/quadeval.dir
 
 # All Build rule for target.
-CMakeFiles/quadeval.dir/all: CMakeFiles/imcore.dir/all
 CMakeFiles/quadeval.dir/all: CMakeFiles/qflow.dir/all
-CMakeFiles/quadeval.dir/all: tbb/CMakeFiles/tbb_static.dir/all
+CMakeFiles/quadeval.dir/all: CMakeFiles/imcore.dir/all
 CMakeFiles/quadeval.dir/all: CMakeFiles/quadremesh_core.dir/all
 CMakeFiles/quadeval.dir/all: lemon/lemon/CMakeFiles/lemon.dir/all
+CMakeFiles/quadeval.dir/all: tbb/CMakeFiles/tbb_static.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/quadeval.dir/build.make CMakeFiles/quadeval.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/quadeval.dir/build.make CMakeFiles/quadeval.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/claude/quadremesh/build2/CMakeFiles --progress-num=40,41 "Built target quadeval"
@@ -259,7 +259,7 @@ CMakeFiles/quadeval.dir/all: lemon/lemon/CMakeFiles/lemon.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/quadeval.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/claude/quadremesh/build2/CMakeFiles 92
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/claude/quadremesh/build2/CMakeFiles 93
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/quadeval.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/claude/quadremesh/build2/CMakeFiles 0
 .PHONY : CMakeFiles/quadeval.dir/rule
@@ -358,7 +358,7 @@ lemon/lemon/CMakeFiles/lemon.dir/clean:
 tbb/CMakeFiles/tbb_def_files.dir/all:
 	$(MAKE) $(MAKESILENT) -f tbb/CMakeFiles/tbb_def_files.dir/build.make tbb/CMakeFiles/tbb_def_files.dir/depend
 	$(MAKE) $(MAKESILENT) -f tbb/CMakeFiles/tbb_def_files.dir/build.make tbb/CMakeFiles/tbb_def_files.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/claude/quadremesh/build2/CMakeFiles --progress-num=57,58 "Built target tbb_def_files"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/claude/quadremesh/build2/CMakeFiles --progress-num=58,59 "Built target tbb_def_files"
 .PHONY : tbb/CMakeFiles/tbb_def_files.dir/all
 
 # Build rule for subdir invocation for target.
@@ -384,7 +384,7 @@ tbb/CMakeFiles/tbb_def_files.dir/clean:
 tbb/CMakeFiles/tbb_static.dir/all:
 	$(MAKE) $(MAKESILENT) -f tbb/CMakeFiles/tbb_static.dir/build.make tbb/CMakeFiles/tbb_static.dir/depend
 	$(MAKE) $(MAKESILENT) -f tbb/CMakeFiles/tbb_static.dir/build.make tbb/CMakeFiles/tbb_static.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/claude/quadremesh/build2/CMakeFiles --progress-num=59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96 "Built target tbb_static"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/claude/quadremesh/build2/CMakeFiles --progress-num=60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97 "Built target tbb_static"
 .PHONY : tbb/CMakeFiles/tbb_static.dir/all
 
 # Build rule for subdir invocation for target.

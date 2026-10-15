@@ -1,0 +1,23 @@
+{
+ "name": "it14_coverage_mode_density",
+ "flags": "--coverage-mode --feature-density 8 --feature-density-width 1.5",
+ "date": "2026-10-15T13:34:04",
+ "git": "33a63fe",
+ "models": [
+  "bunny",
+  "fandisk",
+  "fandisk_noisy",
+  "rocker_arm",
+  "armadillo",
+  "spot",
+  "beetle",
+  "nefertiti",
+  "igea",
+  "sheen_chair",
+  "damask_chair",
+  "velvet_sofa",
+  "leather_sofa",
+  "fountain_scan",
+  "lounge_room"
+ ]
+}

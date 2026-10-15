@@ -26,12 +26,14 @@ static void usage() {
         "  --feature-loops          insert edge loops (strip splits) along creases without an edge path\n"
         "  --partial-loops          like --feature-loops but split only the crease's own run (quad+tri ends)\n"
         "  --curved-splits          split recovered path edges that sag off tightly curved creases\n"
-        "  --feature-density K      smaller elements near creases inside the field solve (0 = off)\n"
+        "  --feature-density K      smaller elements near creases inside the field solve (8, 0 = off)\n"
         "  --feature-density-width W  width of that zone in edge lengths (1.5)\n"
         "  --max-density-ratio R    clamp of the density variation, max/min (8)\n"
+        "  --snap-near D            move edges within D x edge length onto uncovered creases (0.5, 0 = off)\n"
         "  --coverage-search        solve with several crease-size settings, keep the best-scoring result\n"
         "  --crease-cuts            cut the mesh along creases still uncovered after the steps above\n"
-        "  --trace-all              recover edge paths for all creases, not only the field's subset\n"
+        "  --trace-all / --no-trace-all  edge paths for all creases / only the field's subset (default: all)\n"
+        "  --legacy                 earlier defaults: --no-trace-all --feature-density 0 --snap-near 0\n"
         "  --tri-budget F           triangles the coverage stage may add, fraction of target (0.015)\n"
         "  --sing-budget S          irregular vertices it may add per 1k target faces (10)\n"
         "  --refine-max-len K       --feature-refine only around creases <= K x edge length (0 = all)\n"
@@ -114,8 +116,15 @@ int main(int argc, char** argv) {
         else if (a == "--refine-max-len") p.feature_refine_max_len = std::stod(next());
         else if (a == "--sing-budget") p.singularity_budget = std::stod(next());
         else if (a == "--trace-all") p.trace_all_features = true;
+        else if (a == "--no-trace-all") p.trace_all_features = false;
+        else if (a == "--legacy") {  // defaults before 2026-10-15 (no adaptive crease size, no snapping)
+            p.trace_all_features = false;
+            p.feature_density = 0;
+            p.snap_near = 0;
+        }
         else if (a == "--crease-cuts") p.crease_cuts = true;
         else if (a == "--coverage-search") p.coverage_search = true;
+        else if (a == "--snap-near") p.snap_near = std::stod(next());
         else if (a == "--feature-density") p.feature_density = std::stod(next());
         else if (a == "--max-density-ratio") p.max_density_ratio = std::stod(next());
         else if (a == "--feature-density-width") p.feature_density_width = std::stod(next());

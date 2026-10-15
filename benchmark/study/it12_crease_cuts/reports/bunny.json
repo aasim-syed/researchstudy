@@ -1,0 +1,101 @@
+{
+ "method": "it12_crease_cuts",
+ "faces": {
+  "total": 4323,
+  "quads": 4249,
+  "triangles": 74,
+  "vertices": 4309,
+  "quad_ratio": 0.982882,
+  "target": 5000,
+  "count_ratio": 0.8646
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.915212,
+   "min": -1,
+   "p05": 0.651929,
+   "median": 0.962993,
+   "p95": 0.997347,
+   "max": 0.999879,
+   "std": 0.148816
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.92083,
+   "min": -1,
+   "p05": 0.688069,
+   "median": 0.963583,
+   "p95": 0.99738,
+   "max": 0.999879,
+   "std": 0.14138
+  },
+  "frac_sj_below_0.5": 0.0233634,
+  "inverted_or_degenerate": 13,
+  "planarity": {
+   "mean": 0.0250974,
+   "min": 0,
+   "p05": 0.00120025,
+   "median": 0.0160725,
+   "p95": 0.0815632,
+   "max": 0.304791,
+   "std": 0.0276378
+  },
+  "aspect_ratio": {
+   "mean": 1176750.0,
+   "min": 1.00056,
+   "p05": 1.03701,
+   "median": 1.19056,
+   "p95": 2.24238,
+   "max": 1000000000.0,
+   "std": 34283600.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.573185,
+   "median": 1.00941,
+   "p95": 1.33609,
+   "max": 4.92143,
+   "std": 0.256319
+  },
+  "edge_length_mean_pct_diag": 1.46092
+ },
+ "topology": {
+  "singularities": 230,
+  "boundary_irregular": 19,
+  "singularities_per_1k_faces": 53.2038,
+  "interior_vertices": 4259,
+  "boundary_vertices": 50,
+  "boundary_edges": 50,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "2": 5,
+   "3": 85,
+   "4": 4029,
+   "5": 122,
+   "6": 16,
+   "7": 2
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0806076,
+  "out_to_in_mean_pct": 0.0739302,
+  "in_to_out_mean_pct": 0.0872851,
+  "rms_pct": 0.220049,
+  "hausdorff_pct": 3.56154,
+  "area_ratio": 0.983341
+ },
+ "features": {
+  "feature_coverage": 0.665069,
+  "boundary_coverage": 0.394443,
+  "combined_coverage": 0.502148,
+  "feature_length_pct_diag": 89.7017,
+  "boundary_length_pct_diag": 135.687,
+  "feature_segments": 142,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 11.68,
+ "input_faces": 69451,
+ "cmd": "build/quadremesh data/models/bunny.obj -o benchmark/study/it12_crease_cuts/meshes/bunny.obj -f 5000 -a 35 --no-uv --coverage-mode --crease-cuts"
+}

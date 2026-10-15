@@ -1,0 +1,23 @@
+{
+ "name": "it12_crease_cuts",
+ "flags": "--coverage-mode --crease-cuts",
+ "date": "2026-10-15T13:44:43",
+ "git": "33a63fe",
+ "models": [
+  "bunny",
+  "fandisk",
+  "fandisk_noisy",
+  "rocker_arm",
+  "armadillo",
+  "spot",
+  "beetle",
+  "nefertiti",
+  "igea",
+  "sheen_chair",
+  "damask_chair",
+  "velvet_sofa",
+  "leather_sofa",
+  "fountain_scan",
+  "lounge_room"
+ ]
+}
