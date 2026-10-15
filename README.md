@@ -23,10 +23,11 @@ print(res.quad_ratio, res.report["quality"]["scaled_jacobian"]["mean"])
 | 1. preprocess | weld, drop degenerate/duplicate faces, resolve non-manifold edges & vertices (best-pair gluing + fan splitting), consistent/outward orientation, fill small holes, drop tiny fragments | `src/preprocess.cpp` |
 | 2. features | dihedral test + 1-ring and patch-scale tests (noise-robust), chaining, length pruning, corners; guidance strokes → edge paths | `src/features.cpp` |
 | 3. field design | hard constraints: features, boundaries, strokes. soft guidance: principal curvature (scale-aware tensor fit), learned / external field; soft guidance is applied by an angle-limited pass so it cannot add singularities | `src/field.cpp`, `src/qflow_driver.cpp` |
-| 4. sizing | target count or edge length; adaptive density map (per-vertex, sphere regions, curvature-driven) → scale field | `src/field.cpp` |
+| 4. sizing | target count or edge length; adaptive density map (per-vertex, sphere regions, curvature-driven) → scale field; **feature-adaptive size**: smaller elements along creases inside the solve, same face count | `src/field.cpp`, `src/remesh.cpp` |
 | 5. integer grid + extraction | multiresolution orientation / position fields, min-cost-flow singularity optimisation, quad extraction (vendored, patched QuadriFlow); per connected component with coverage-checked retries for thin parts | `third_party/qflow_patched` |
 | 5b. fallbacks | Instant Meshes extractor (second choice; best-of-two on dense scans), best approximate result for parts thinner than an element, QEM-decimated exact fallback | `src/im_driver.cpp`, `src/decimate.cpp` |
 | 6. post-process | cleanup, triangle-pair merging, optional pure-quad split, feature/boundary/corner snapping, **feature edge-path recovery** (Dijkstra edge paths snapped onto every crease chain), optional feature refinement, guarded tangential relaxation + reprojection, untangling | `src/postprocess.cpp` |
+| 6b. coverage stage | budgeted operations that put edges on uncovered creases: **near-miss snapping** (default), path-edge subdivision, loops, local refinement, curved splits, crease cuts (opt-in) | `src/remesh.cpp`, `src/crease_cut.cpp` |
 | 7. symmetry | remesh one half (clipped at the plane, plane boundary preserved), mirror and weld | `src/preprocess.cpp`, `src/postprocess.cpp` |
 | 8. attributes | per-corner UV transfer with UV-chart consistency; generic per-vertex attribute transfer | `src/transfer.cpp` |
 | 9. report | quad ratio, scaled Jacobian, planarity, aspect, distance (mean / RMS / Hausdorff, two-sided), feature & boundary coverage, singularities / valence histogram, topology | `src/metrics.cpp` |
@@ -36,23 +37,27 @@ bit-identical output for repeated runs.
 
 ## Results (15-model benchmark, equal target face count)
 
-| | quadremesh | Instant Meshes | QuadriFlow | Blender QF |
-|---|---|---|---|---|
-| models processed | **15/15** | 15/15 | 12/15 | 8/15 |
-| quad ratio | **100 %** | 100 % | 100 % | 100 % |
-| mean scaled Jacobian (≥ 0.8) | **0.929** | 0.935 | 0.952* | 0.963* |
-| mean distance error (< 0.5 %) | **0.076 %** | 0.316 % | 0.054 %* | 0.051 %* |
-| feature coverage (≥ 90 %) | 49 % | 22 % | 36 %* | 29 %* |
-| singularities / 1k faces | **33.4** | 99.8 | 17.8* | 17.3* |
+<!-- SUMMARY:BEGIN -->
+<!-- SUMMARY:END -->
 
-\* over the models that method could process. Fewer singularities than Instant Meshes on 14/15
-models (3 132 vs 4 782 in total). Feature coverage reaches 98 % on CAD but not on organic
-scans / dense carvings / TSDF rooms. The opt-in `--coverage-mode` (Python: `coverage_mode=True`)
-raises the mean to 60 % (quad 98.9 %, SJ 0.908, distance 0.064 %) but then has fewer
-singularities than Instant Meshes on only 9/15 models. Every coverage experiment, including
-the failed ones, is in the generated study [`docs/coverage_study.md`](docs/coverage_study.md)
-(reproduce with `python benchmark/coverage_study.py run NAME "FLAGS"` + `report`);
-`docs/technical_writeup.pdf` has the analysis.
+Two settings are reported. The **default** keeps every other criterion on every model (the
+room scan's singularities excepted, see the write-up). **Max coverage** -
+`--coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search`
+(Python: `coverage_mode=True, path_subdivision=3, sing_budget_im=True, coverage_search=True`) -
+trades runtime (4 solves) and some element quality for feature coverage, while keeping quads
+≥ 98 %, SJ ≥ 0.8, distance < 0.5 % and the singularity count below Instant Meshes'.
+
+Feature coverage per model:
+
+<!-- PERMODEL:BEGIN -->
+<!-- PERMODEL:END -->
+
+The ≥ 90 % coverage target is not met on the mean. Every coverage experiment (22 iterations,
+including the failed ones) is in the generated study [`docs/coverage_study.md`](docs/coverage_study.md)
+(`python benchmark/coverage_study.py run NAME "FLAGS"` + `report`), and the geometric limits of the
+metric - why the room scan cannot reach 90 % at 15k faces and why the organic scans need edges
+shorter than the element size - are measured in [`docs/crease_bounds.md`](docs/crease_bounds.md)
+(`python benchmark/crease_bounds.py`). `docs/technical_writeup.pdf` §6.1 has the analysis.
 
 ## Build
 
@@ -73,6 +78,8 @@ PYTHONPATH=python python -m pytest tests          # Python tests
 ```
 quadremesh INPUT(.obj|.ply|.glb|.gltf|.off) -o OUT.obj [options]
   -f/--faces N  -e/--edge-length X  -a/--feature-angle DEG  --min-feature-length K
+  --feature-density K [--feature-density-width W]  --snap-near D  --path-subdiv K  --sing-budget-im
+  --coverage-search  --legacy  --crease-cuts
   --coverage-mode  --feature-refine N  --feature-loops  --partial-loops  --curved-splits
   --trace-all  --tri-budget F  --sing-budget S  --refine-max-len K  --no-face-match
   --no-boundary  --curvature-weight W  --strokes FILE [--strokes-as-edges]

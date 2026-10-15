@@ -108,13 +108,16 @@
  ],
  "it18_path_subdiv_sb10": [
   "Bound (measured on the crease polylines): the fraction of crease length within 25 deg of the chord through +-0.5 L is 0.43 (armadillo), 0.66 (igea), 0.67 (nefertiti), 0.83 (bunny), 0.76 (rocker arm) - edges of length ~L cannot cover more on these scans; with chords of 0.5 L it is 0.74-1.00 and with 0.25 L 0.98-1.00. Furniture/CAD creases are 0.96-1.00 already at L.",
-  "Change: path-edge subdivision - every recovered path edge whose chord misses its piece of the crease is split into 3 at crease points (edges ranked by the crease length the split recovers); the quad on each side becomes a hexagon that is split into 2 quads with the diagonal from the first new vertex on one side and from the second on the other (no valence-2 vertices). Pure quads; costs about 4 irregular vertices per split edge, applied in chunks within the singularity budget (+10 per 1k target faces here)."
+  "Change: path-edge subdivision - every recovered path edge whose chord misses its piece of the crease is split into 3 at crease points (edges ranked by the crease length the split recovers); the quad on each side becomes a hexagon that is split into 2 quads with the diagonal from the first new vertex on one side and from the second on the other (no valence-2 vertices). Pure quads; costs about 4 irregular vertices per split edge, applied in chunks within the singularity budget (+10 per 1k target faces here).",
+  "Observed: 0.648 -> 0.671 over 15 (0.737 -> 0.763 on the 13 non-scan models), quads 100 %, SJ 0.897; singularities 35.6 -> 47.5 per 1k, 11/15 below Instant Meshes."
  ],
  "it19_path_subdiv_sb25": [
-  "it18 with a singularity budget of +25 per 1k target faces."
+  "it18 with a singularity budget of +25 per 1k target faces.",
+  "Observed: 0.703 over 15, 0.798 on the 13 non-scan models, quads 100 %, SJ 0.884; 57.4 singularities per 1k and only 5/15 below Instant Meshes - a fixed budget overspends on models whose own Instant Meshes rate is low."
  ],
  "it20_coverage_mode_subdiv": [
-  "Coverage mode (budgeted loops / refinement / curved splits, +25 singularities per 1k) + path-edge subdivision, on the new defaults."
+  "Coverage mode (budgeted loops / refinement / curved splits, +25 singularities per 1k) + path-edge subdivision, on the new defaults.",
+  "Observed: 0.708 over 15, 0.803 on the 13 non-scan models, quad 0.989, SJ 0.884; 6/15 below Instant Meshes."
  ],
  "it21_im_budget": [
   "Singularity budget referenced to the criterion itself: before the coverage stage, Instant Meshes (the same library the benchmark runs, here on the preprocessed surface) remeshes the input at the requested face count; the stage may add irregular vertices up to 85 % of its singularity rate (85 % because the internal reference landed up to ~14 % above the benchmark's Instant Meshes run on rocker arm / fandisk_noisy in a test). Coverage mode + path-edge subdivision (--coverage-mode --path-subdiv 3 --sing-budget-im)."

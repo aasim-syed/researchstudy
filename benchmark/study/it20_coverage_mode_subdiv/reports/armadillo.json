@@ -1,0 +1,101 @@
+{
+ "method": "it20_coverage_mode_subdiv",
+ "faces": {
+  "total": 4436,
+  "quads": 4432,
+  "triangles": 4,
+  "vertices": 4437,
+  "quad_ratio": 0.999098,
+  "target": 5000,
+  "count_ratio": 0.8872
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.903124,
+   "min": -0.946953,
+   "p05": 0.599034,
+   "median": 0.975643,
+   "p95": 0.997862,
+   "max": 0.999974,
+   "std": 0.202935
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.903707,
+   "min": -0.946953,
+   "p05": 0.60005,
+   "median": 0.975662,
+   "p95": 0.997862,
+   "max": 0.999974,
+   "std": 0.201963
+  },
+  "frac_sj_below_0.5": 0.0387737,
+  "inverted_or_degenerate": 73,
+  "planarity": {
+   "mean": 0.0315247,
+   "min": 1.68026e-15,
+   "p05": 0.00139951,
+   "median": 0.0213784,
+   "p95": 0.0977819,
+   "max": 0.299321,
+   "std": 0.0327326
+  },
+  "aspect_ratio": {
+   "mean": 6.24908,
+   "min": 1.00746,
+   "p05": 1.04842,
+   "median": 1.24987,
+   "p95": 2.70797,
+   "max": 10497,
+   "std": 201.038
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 2.85802e-05,
+   "p05": 0.464558,
+   "median": 1.00428,
+   "p95": 1.51474,
+   "max": 2.85056,
+   "std": 0.309044
+  },
+  "edge_length_mean_pct_diag": 1.22326
+ },
+ "topology": {
+  "singularities": 298,
+  "boundary_irregular": 5,
+  "singularities_per_1k_faces": 67.1776,
+  "interior_vertices": 4431,
+  "boundary_vertices": 6,
+  "boundary_edges": 6,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "3": 164,
+   "4": 4133,
+   "5": 115,
+   "6": 13,
+   "7": 4,
+   "8": 2
+  }
+ },
+ "distance": {
+  "mean_pct": 0.121632,
+  "out_to_in_mean_pct": 0.0976598,
+  "in_to_out_mean_pct": 0.145604,
+  "rms_pct": 0.242404,
+  "hausdorff_pct": 3.53221,
+  "area_ratio": 0.914919
+ },
+ "features": {
+  "feature_coverage": 0.57659,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.57659,
+  "feature_length_pct_diag": 22.4361,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 88,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 15.81,
+ "input_faces": 99976,
+ "cmd": "build/quadremesh data/models/armadillo.obj -o benchmark/study/it20_coverage_mode_subdiv/meshes/armadillo.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3"
+}

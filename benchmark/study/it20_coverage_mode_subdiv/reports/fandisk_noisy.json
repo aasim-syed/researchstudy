@@ -1,0 +1,99 @@
+{
+ "method": "it20_coverage_mode_subdiv",
+ "faces": {
+  "total": 4070,
+  "quads": 3996,
+  "triangles": 74,
+  "vertices": 4037,
+  "quad_ratio": 0.981818,
+  "target": 5000,
+  "count_ratio": 0.814
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.88655,
+   "min": -1,
+   "p05": 0.418939,
+   "median": 0.972716,
+   "p95": 0.997853,
+   "max": 0.99992,
+   "std": 0.223485
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.892485,
+   "min": -1,
+   "p05": 0.46496,
+   "median": 0.973891,
+   "p95": 0.99786,
+   "max": 0.99992,
+   "std": 0.219695
+  },
+  "frac_sj_below_0.5": 0.0584767,
+  "inverted_or_degenerate": 54,
+  "planarity": {
+   "mean": 0.0248875,
+   "min": 0,
+   "p05": 0.0013676,
+   "median": 0.0182069,
+   "p95": 0.0648868,
+   "max": 0.331789,
+   "std": 0.0276826
+  },
+  "aspect_ratio": {
+   "mean": 2252250.0,
+   "min": 1.01445,
+   "p05": 1.0717,
+   "median": 1.31945,
+   "p95": 3.35833,
+   "max": 1000000000.0,
+   "std": 47404400.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.485387,
+   "median": 0.973398,
+   "p95": 1.5485,
+   "max": 7.8597,
+   "std": 0.36495
+  },
+  "edge_length_mean_pct_diag": 1.61043
+ },
+ "topology": {
+  "singularities": 241,
+  "boundary_irregular": 11,
+  "singularities_per_1k_faces": 59.2138,
+  "interior_vertices": 4025,
+  "boundary_vertices": 12,
+  "boundary_edges": 12,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "3": 91,
+   "4": 3784,
+   "5": 141,
+   "6": 9
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0609896,
+  "out_to_in_mean_pct": 0.0641541,
+  "in_to_out_mean_pct": 0.0578251,
+  "rms_pct": 0.132958,
+  "hausdorff_pct": 4.37067,
+  "area_ratio": 0.989902
+ },
+ "features": {
+  "feature_coverage": 0.845705,
+  "boundary_coverage": 0.252844,
+  "combined_coverage": 0.821382,
+  "feature_length_pct_diag": 1121.35,
+  "boundary_length_pct_diag": 47.974,
+  "feature_segments": 869,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 10.33,
+ "input_faces": 12925,
+ "cmd": "build/quadremesh data/models/fandisk_noisy.obj -o benchmark/study/it20_coverage_mode_subdiv/meshes/fandisk_noisy.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3"
+}

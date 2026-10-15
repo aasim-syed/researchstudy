@@ -15,37 +15,33 @@ proven solvers: a patched QuadriFlow for the integer-grid stage (11 documented p
 Instant Meshes extractor as a second extractor for inputs QuadriFlow cannot handle.
 
 Benchmark: **15 models × 5 methods** (ours, ours + learned field, Instant Meshes, QuadriFlow,
-Blender QuadriFlow). Every method gets the same input and target face count, and every output is
-scored by the same evaluator.
+Blender QuadriFlow), plus two quadremesh settings (default and max coverage). Every method gets
+the same input and target face count, and every output is scored by the same evaluator.
 
-| criterion (benchmark mean, 15 models) | target | **quadremesh** (default) | quadremesh `--coverage-mode` | Instant Meshes | QuadriFlow | Blender QF |
-|---|---|---|---|---|---|---|
-| models processed | – | **15 / 15** | 15 / 15 | 15 / 15 | 12 / 15 | 8 / 15 |
-| quad ratio | ≥ 98 % | **100 %** | 98.9 % | 100 % | 100 % | 100 % |
-| mean scaled Jacobian | ≥ 0.8 | **0.929** | 0.908 | 0.935 | 0.952* | 0.963* |
-| mean distance error | < 0.5 % | **0.076 %** | 0.064 % | 0.316 % | 0.054 %* | 0.051 %* |
-| feature coverage | ≥ 90 % | **49 %** ✗ | 60 % ✗ | 22 % | 36 %* | 29 %* |
-| singularities / 1k faces | < IM | **33.4** | 48.8 | 99.8 | 17.8* | 17.3* |
-| fewer singularities than IM (per model) | all | **14 / 15** | 9 / 15 | – | – | – |
-| total singularities (15 models) | < IM | **3 132** | 4 519 | 4 782 | – | – |
+<!-- SUMMARY:BEGIN -->
+<!-- SUMMARY:END -->
 
-\* Means over the models that method managed to process (QuadriFlow failed on 3, Blender on 7).
-The `--coverage-mode` column is iteration it10 of the coverage study
-([`docs/coverage_study.md`](coverage_study.md)), generated from per-model evaluator reports.
+**Met by the default:** quad ratio, scaled Jacobian and distance error on every model, and fewer
+singularities than Instant Meshes on every model except the room scan (lounge, where the integer
+solver fails and our Instant Meshes fallback takes over).
 
-**Met:** quad ratio, scaled Jacobian, distance error, and fewer singularities than Instant Meshes
-on 14 of 15 models (35 % fewer in total; 3.0× fewer per 1k faces on average).
-**Not met:** feature coverage ≥ 90 %. It is reached on CAD (fandisk 98 %, spot 88 %) but not on
-organic scans, furniture with dense carvings, or room scans. §6.1 explains why, measures the
-opt-in feature refinement and loop insertion (more coverage, but only with more faces or worse
-quad ratio / singularities), and shows that at equal face count coverage under this strict
-definition is resolution-bound. Coverage is still 2.2× Instant Meshes and the best of all
-methods on every model. The opt-in `--coverage-mode` raises it to 60 % (2.7× Instant Meshes)
-while keeping quads, SJ and distance within target, but then beats Instant Meshes on
-singularities on only 9 of 15 models. Every coverage experiment (11 iterations, including the
-ones that made things worse) is in the generated study `docs/coverage_study.md`.
-The one model where we lose on singularities is the room scan (lounge): the integer solver fails
-there and our own Instant-Meshes fallback takes over (72.8 vs 68.8 per 1k).
+**Feature coverage ≥ 90 %: not met on the benchmark mean.** What was done about it, and what
+limits it, is measured in §6.1 and in the generated study
+[`docs/coverage_study.md`](coverage_study.md) (22 iterations, every number produced by a script
+from the evaluator's per-model reports, including the attempts that failed). In short:
+
+* Four changes that keep every other criterion raised the default's coverage by about a third:
+  edge-path recovery over all creases, a **feature-adaptive element size inside the field solve**
+  (smaller quads along creases at the same face count), **near-miss snapping** (edges running
+  next to a crease are moved onto it) and a quality guard.
+* A max-coverage setting adds **path-edge subdivision** (curved/zigzag creases get edges shorter
+  than the element size, pure quads), the budgeted loop/refinement stage, a singularity budget
+  referenced to Instant Meshes itself, and a search over four solves scored with the evaluator.
+* The remaining gap is geometric and measured in [`docs/crease_bounds.md`](crease_bounds.md):
+  on the room scan the evaluator's 35° "creases" are TSDF noise; covering 90 % of them needs more
+  separately aligned edges than a 15k-face mesh has in total. On the organic scans the creases
+  zigzag below the element size, so straight edges of length ~L cannot be within 25° of them;
+  only local refinement helps, and it costs singularities, which is what limits those models.
 
 ## 2. Pipeline
 
@@ -58,9 +54,14 @@ input (.obj/.ply/.glb)
               ↳ best approximate (parts thinner than one element)
               ↳ QEM-decimate + triangle pairing + quad split (exact, last resort)
         ─ cleanup ─ triangle-pair merge ─ [density refinement] ─ [pure-quad split]
-        ─ feature/boundary/corner snapping ─ feature edge-path recovery ─ [feature refinement]
+        ─ feature/boundary/corner snapping ─ feature edge-path recovery (all creases)
         ─ guarded relaxation + reprojection ─ untangling
+        ─ coverage stage (budgeted: [loops] [local refinement] [curved splits] [crease cuts]
+              [path-edge subdivision] near-miss snapping)
         ─ [mirror + weld] ─ UV transfer ─ report
+  quality guard: mean SJ < 0.81 → re-solve with less feature-adaptive size
+  face-count control: output > 1.10 × target → re-solve at a lower budget
+  [coverage search: 4 solves, each scored by the evaluator, best kept]
 ```
 
 | stage | file | key choices |
@@ -69,11 +70,12 @@ input (.obj/.ply/.glb)
 | preprocess | `src/preprocess.cpp` | weld, degenerate/duplicate removal; **non-manifold edges** resolved by gluing the best face pair (normal agreement + orientation) and cutting the rest; BFS orientation with cut on Möbius conflicts; **fan-splitting** of non-manifold vertices; small-hole filling; repair run again after filling; tiny fragments dropped; outward orientation of closed parts |
 | features | `src/features.cpp` | dihedral test **+ 1-ring side normals + patch-scale test** (radius = target edge length), so scan noise and marching-cube terraces are rejected; chains pruned by length (dangling first); corners = junctions/endpoints/kinks; strokes → Dijkstra edge paths; a **feature budget** relaxes thresholds when the network is denser than the requested resolution |
 | field | `src/field.cpp`, `src/qflow_driver.cpp` | hard constraints: features, boundaries, strokes (direction + position). Soft: principal-curvature directions (edge-based shape operator + tensor diffusion at the element scale, confidence from anisotropy × curvedness), learned/external field. **Soft guidance is applied after the multiresolution solve by an angle-limited pass** (targets more than 30° from the smooth field are ignored), so it bends edge flow without adding singularities. Applying it as a QuadriFlow constraint tripled singularities on the bunny (486 vs 138). |
-| sizing | `src/remesh.cpp`, `src/postprocess.cpp` | target count or edge length; density map (per-vertex file, sphere regions, curvature) |
+| sizing | `src/remesh.cpp`, `src/postprocess.cpp`, `src/qflow_driver.cpp` | target count or edge length; density map (per-vertex file, sphere regions, curvature); **feature-adaptive size** (default): density 1 + 8·exp(−(d/1.5L)²) with d the distance to the nearest crease, passed to the solve as a conformal scale target, normalised to the same expected face count |
 | integer grid | `third_party/qflow_patched` | QuadriFlow orientation/position fields + flow-based singularity optimisation + extraction, run **per connected component** with a budget proportional to area |
 | fallbacks | `src/remesh.cpp`, `src/im_driver.cpp`, `src/decimate.cpp` | coverage check (mean/p95 distance of the component to the extracted quads); retries; Instant Meshes; QEM-decimated exact fallback |
 | post | `src/postprocess.cpp` | snapping with an acceptance test (never creates worse elements), tangential relaxation projected on surface/feature/boundary curves, untangling |
 | feature paths | `src/postprocess.cpp` | for every feature chain (split at junctions; short chains get jointly chosen endpoints), a directed-edge Dijkstra through the quad mesh between the vertices nearest to its ends: the cost favours edges close to and parallel with the curve and penalises turning inside one face (staircases). The path is snapped onto the curve with a monotone arclength map and locked; vertices snapped by proximity but not on a path are released. Opt-ins: refine (conforming templates) around chains without a path (`--feature-refine N`), or split the quad strip each such chain runs along (`--feature-loops`); with face-count control the solve is re-run at a lower budget so the output stays at the target |
+| coverage stage | `src/remesh.cpp`, `src/crease_cut.cpp` | operations applied tentatively and kept only inside a triangle budget and a singularity budget (fixed, or 85 % of an internal Instant Meshes solve with `--sing-budget-im`). **Near-miss snapping** (default): an edge within 0.5 L running along an uncovered crease gets both ends moved onto it, if no face drops below SJ 0.1 and no covered crease point is lost. **Path-edge subdivision** (`--path-subdiv 3`): path edges whose chord misses a curved crease are split into three at crease points; each side's quad becomes two quads. Crease cuts (`--crease-cuts`) are available but not used (study it12) |
 | symmetry | `src/preprocess.cpp`, `src/postprocess.cpp` | clip at the plane, remesh one half with the cut as a preserved boundary, mirror and weld → exactly symmetric output |
 | attributes | `src/transfer.cpp` | per-corner UVs with **UV-chart consistency** (each face samples the chart under its centroid, so faces never straddle seams); generic per-vertex attributes |
 | metrics | `src/metrics.cpp` | one evaluator shared by the pipeline report, `quadeval` and the benchmark |
@@ -105,6 +107,13 @@ input (.obj/.ply/.glb)
    - 3 or more split edges → the face is refined.
 
    Transition singularities are expected and visible in `demo_density.png`.
+
+   The **feature-adaptive size** is different: a smooth band of moderately smaller elements
+   along creases (density ratio clamped at 8) is passed to the solve itself as a scale target
+   (QuadriFlow's adaptive path plus our restriction of the scale to the coarse levels). That
+   variation is small enough for the solve to carry; stronger ratios (32–64) were tried and
+   made results erratic (distance error up to 0.5 %, coverage dropping on some models), so they
+   are not used.
 4. **Thin parts.** Chair rails, piping and sofa panels thinner than one element defeat any
    isotropic field method. The coverage check detects this.
    - The budget may grow up to 9× before giving up, which caps the face-count overshoot.
@@ -225,55 +234,62 @@ singularity overlay, the scaled-Jacobian heatmap, the cross field, and all metho
 
 ## 6. Failure cases (honest)
 
-1. **Feature coverage (49 % default, 60 % in coverage mode; target 90 %).** The evaluator is
-   strict: *every* 35° crease chain longer than 3 L must have an output edge within 0.1 L and
-   within 25° of it. All numbers below are from the generated study
-   ([`docs/coverage_study.md`](coverage_study.md)); each iteration is one command over all 15 models.
+1. **Feature coverage (target 90 %; see the summary table for the generated means).** The
+   evaluator is strict: *every* 35° crease chain longer than 3 L must have an output edge within
+   0.1 L and within 25° of it, on every point. All numbers below are generated from the study
+   runs (each iteration = one command over all 15 models, per-model evaluator reports).
 
-   | iteration | change | coverage | quad | sing./1k | faces/target | fewer sing. than IM |
-   |---|---|---|---|---|---|---|
-   | it0 | feature constraints in the field + vertex snapping only | 0.439 | 1.000 | 33.4 | 0.95 | 14/15 |
-   | it1 | + edge-path recovery (**default**) | 0.494 | 1.000 | 33.4 | 0.95 | 14/15 |
-   | it2 | + 2 rounds of refinement around untraced creases | 0.541 | 0.992 | 41.8 | 0.95 | 12/15 |
-   | it3 | + whole-strip edge loops, extra faces allowed | 0.531 | 1.000 | 26.9 | 1.15 | 14/15 |
-   | it4 | it3 with face-count control | 0.520 | 1.000 | 31.3 | 0.97 | 13/15 |
-   | it5 | partial loops (only the crease's run) | 0.517 | 0.999 | 33.4 | 0.95 | 14/15 |
-   | it6 | + curved-crease splits | 0.549 | 0.996 | 36.9 | 0.95 | 13/15 |
-   | it7 | budgeted hybrid (loops + short-crease refinement + splits), +10 sing./1k budget | 0.555 | 0.994 | 40.5 | 0.94 | 11/15 |
-   | it8 | it7 with +25 sing./1k budget | 0.584 | 0.989 | 48.4 | 0.96 | 10/15 |
-   | it9 | it1 + path recovery over all creases | 0.506 | 1.000 | 33.4 | 0.95 | 14/15 |
-   | it10 | it8 + it9 (`--coverage-mode`) | 0.598 | 0.989 | 48.8 | 0.96 | 9/15 |
-   | Instant Meshes | – | 0.221 | 1.000 | 99.8 | 0.91 | – |
+<!-- STUDY:BEGIN -->
+<!-- STUDY:END -->
 
-   - **What works for free:** edge-path recovery (it1) and recovering paths over the full crease
-     set (it9) only move vertices, so they cost nothing in quads or singularities.
-   - **What costs:** every topological operation that gives a crease its own loop adds faces
-     (it3: whole strips, 1.15× faces), triangles (partial loops end in quad + triangle: a
-     pure-quad mesh cannot end an edge loop in the middle of a surface without singularities),
-     or irregular vertices (refinement fronts). Whole-strip loops with face-count control (it4)
-     keep most of their gain (0.520) but unevenly per model. The budgeted hybrid (it7/it8/it10)
-     applies each operation tentatively and keeps it only within a triangle budget (1.5 % of
-     target) and a singularity budget; coverage rises with that budget while the singularity
-     win over Instant Meshes erodes (14/15 → 9/15).
-   - **Where the rest is lost (measured):**
-     - *Highest on CAD and clean furniture (coverage mode):* fandisk 0.99, spot 0.96, sheen chair 0.79,
-       fandisk with noise 0.78, velvet sofa 0.75.
-     - *Curved creases:* an edge of length L cannot follow a crease with a radius of about L;
-       the chord sags more than 0.1 L and turns more than 25°. Curved splits (it6 vs it5) help on
-       bunny (0.44 → 0.57), rocker arm (0.45 → 0.57) and spot (0.88 → 0.94).
-     - *Organic scans* (armadillo 0.20, igea 0.51, nefertiti 0.52): the 35° "creases" are
-       short sculpting/scan detail at or below the element size.
-     - *Room scans* (fountain 0.09, lounge 0.05): the creases are marching-cube/TSDF
-       artefacts; no method exceeds 0.10.
-   - **Resolution test:** at 4× the face count (20k), the default reaches 57–75 % on rocker
-     arm, bunny, velvet and beetle (the evaluator's feature set also grows as L shrinks).
-   - **Conclusion:** at equal face count, ≥ 90 % coverage under this strict definition is not
-     reached on this benchmark without failing the quad-ratio or singularity criteria; the
-     default therefore stays at it1 and the trade-off is exposed as `--coverage-mode`.
-     Relaxing the tolerance would "pass", but at 0.5 L almost every point is within tolerance
-     of some edge, so that number would be meaningless; it is not used. Closing the gap needs
-     feature-aligned *anisotropic* sizing inside the field solve (thin quads along dense
-     creases), so that budget moves to features instead of being added on top.
+   **What limits coverage (measured, [`docs/crease_bounds.md`](crease_bounds.md)).** Computed on
+   the evaluator's own crease polylines by `benchmark/crease_bounds.py`:
+   - *Room scan (lounge):* 45 965 crease segments, 6 950 L of crease (mean segment 0.15 L). Split
+     into the longest pieces one straight edge can cover, 90 % of the length needs 33 981 such
+     pieces; a 15k-face quad mesh has ~30 000 edges in total. So **90 % is not reachable on the
+     lounge at this face count by any method**; the fountain needs ~9 300 crease-aligned edges.
+     These creases are marching-cubes/TSDF artefacts; no method exceeds 0.10 there.
+   - *Organic scans:* the creases zigzag below the element size. The fraction of crease length
+     that is within 25° of the chord through ±0.5 L - the best a straight edge of length ~L can do -
+     is 0.43 (armadillo), 0.66 (igea), 0.67 (nefertiti), 0.76 (rocker arm), 0.825 (bunny). With
+     edges of L/4 along the crease it is ≥ 0.98, so these models need local refinement, which costs
+     irregular vertices: their coverage is limited by the singularity criterion, not by the method's
+     reach.
+   - *CAD / furniture:* ≥ 0.96 of the crease length is coverable with edges of length L, and 90 %
+     needs only 58–762 crease-aligned edges out of ~10 000. Here the limit is the method; the
+     remaining misses are mostly edges running 0.1–0.35 L next to the crease (evaluator sample
+     dumps, `QRM_EVAL_DUMP`), which is what near-miss snapping and path subdivision target.
+
+   **What worked**, in the order it was found (iterations in the study):
+   - *Edge-path recovery* (it1) and recovering paths over the full crease set (it9): vertex moves
+     only, no cost.
+   - *Feature-adaptive element size* in the field solve (it13): the largest single gain at no
+     cost in quads; a mean-SJ guard (it17) removes it where dense carvings would push SJ below 0.8.
+   - *Near-miss snapping* (it16/it17): vertex moves only.
+   - *Path-edge subdivision* (it18–it20): edges shorter than the element along curved creases;
+     pure quads, ~4 irregular vertices per split edge.
+   - *Singularity budget referenced to Instant Meshes* (it21): the coverage stage spends irregular
+     vertices only up to 85 % of the rate of an internal Instant Meshes solve of the same input, so
+     the per-model singularity comparison is kept while coverage is maximised.
+   - *Coverage search* (it15, it22): the field solve is sensitive to the size band's width and
+     seed, so four solves are scored with the evaluator and the best valid one is kept (4× time).
+
+   **What did not work** (all kept in the study or noted as exploratory):
+   - whole-strip edge loops: coverage only with extra faces (it3/it4);
+   - local refinement / loops / curved splits without a budget: quad ratio < 98 % or many
+     singularities (it2, it8);
+   - crease cuts - cutting the mesh along uncovered creases (it12): most cuts produce concave
+     pieces and are rejected; +1.8 points, and it timed out on the room scan;
+   - giving the field all creases on scans (it11): no effect on the scans;
+   - exploratory, on 4–5 models only (not adopted, not in the study tables): density ratios of
+     32–64, an error-driven second solve with extra density around missed creases, chaining
+     creases through junctions, and sliding path vertices along the crease by dynamic programming
+     (no change at all).
+
+   **Conclusion.** Coverage went from 0.44 to the values in the table without relaxing the metric.
+   At 0.5 L tolerance almost every point would pass, so that number would be meaningless and is
+   not used. The remaining gap on CAD/furniture is method-limited; on organic scans it is bounded
+   by the singularity criterion; on room scans 90 % is out of reach at this face count.
 2. **Lounge singularities.** QuadriFlow's integer stage fails on this TSDF room (inconsistent
    edge offsets in its subdivision), even after isotropic remeshing, so we fall back to Instant
    Meshes and inherit its singularity rate.

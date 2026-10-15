@@ -73,7 +73,8 @@ def method_cmd(method, src, dst, target):
     if method == "ours_featref":
         return [QUADREMESH, src, "-o", dst, "-f", str(target), "-a", str(FEATURE_ANGLE), "--no-uv", "--feature-refine", "2"]
     if method == "ours_coverage":
-        return [QUADREMESH, src, "-o", dst, "-f", str(target), "-a", str(FEATURE_ANGLE), "--no-uv", "--coverage-mode"]
+        return [QUADREMESH, src, "-o", dst, "-f", str(target), "-a", str(FEATURE_ANGLE), "--no-uv", "--coverage-mode", "--path-subdiv", "3",
+                "--sing-budget-im", "--coverage-search"]
     if method == "ours_learned":
         return [sys.executable, "-c", OURS_LEARNED_SNIPPET, src, dst, str(target), str(FEATURE_ANGLE)]
     if method == "instant_meshes":
@@ -95,6 +96,8 @@ def main():
     ap.add_argument("--out", default=os.path.join(ROOT, "benchmark/results"))
     ap.add_argument("--timeout", type=int, default=1500)
     ap.add_argument("--skip-existing", action="store_true")
+    ap.add_argument("--import-study", default="", help="RUN:METHOD - take the meshes and quadeval reports of a "
+                    "coverage-study run made with exactly this method's command instead of recomputing them")
     args = ap.parse_args()
     manifest = json.load(open(os.path.join(ROOT, "data/manifest.json")))
     full_manifest = list(manifest)
@@ -102,6 +105,25 @@ def main():
         keep = set(args.models.split(","))
         manifest = [m for m in manifest if m["name"] in keep]
     methods = args.methods.split(",")
+    if args.import_study:
+        run, method = args.import_study.split(":")
+        sd = os.path.join(ROOT, "benchmark", "study", run)
+        meta = json.load(open(os.path.join(sd, "meta.json")))
+        for entry in manifest:
+            rep = os.path.join(sd, "reports", entry["name"] + ".json")
+            if not os.path.exists(rep):
+                continue
+            d = json.load(open(rep))
+            d["method"] = method
+            d["imported_from"] = f"benchmark/study/{run} (flags: {meta['flags']}, code {meta['git']})"
+            json.dump(d, open(os.path.join(args.out, "reports", f"{entry['name']}__{method}.json"), "w"), indent=1)
+            src_mesh = os.path.join(sd, "meshes", entry["name"] + ".obj")
+            if os.path.exists(src_mesh):
+                import shutil
+                shutil.copy(src_mesh, os.path.join(args.out, "meshes", f"{entry['name']}__{method}.obj"))
+            print(f"{entry['name']:15s} {method:20s} imported from {run}")
+        summarize(args.out, json.load(open(os.path.join(ROOT, "data/manifest.json"))), ALL_METHODS.split(","))
+        return
     os.makedirs(os.path.join(args.out, "meshes"), exist_ok=True)
     os.makedirs(os.path.join(args.out, "reports"), exist_ok=True)
     os.makedirs(os.path.join(args.out, "logs"), exist_ok=True)

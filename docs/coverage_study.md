@@ -29,27 +29,30 @@ fewer singularities than Instant Meshes at equal face count.
 | it15_coverage_search | `--coverage-mode --coverage-search` | 15 | 0.988 | 0.886 | 0.067 | **0.651** | 0.740 | 47.1 | 4566 | 0.98 | 10/15 |
 | it16_snap_default | `(default)` | 15 | 1.000 | 0.902 | 0.070 | **0.637** | 0.725 | 35.4 | 3285 | 0.92 | 14/15 |
 | it17_default_guarded | `(default)` | 15 | 1.000 | 0.904 | 0.086 | **0.648** | 0.737 | 35.6 | 3276 | 0.92 | 14/15 |
+| it18_path_subdiv_sb10 | `--path-subdiv 3 --sing-budget 10` | 15 | 1.000 | 0.897 | 0.073 | **0.671** | 0.763 | 47.5 | 4290 | 0.93 | 11/15 |
+| it19_path_subdiv_sb25 | `--path-subdiv 3 --sing-budget 25` | 15 | 1.000 | 0.884 | 0.075 | **0.703** | 0.798 | 57.4 | 5391 | 0.95 | 5/15 |
+| it20_coverage_mode_subdiv | `--coverage-mode --path-subdiv 3` | 15 | 0.989 | 0.884 | 0.073 | **0.708** | 0.803 | 57.1 | 5356 | 0.95 | 6/15 |
 | *Instant Meshes* | – | 15 | 1.000 | 0.935 | 0.316 | *0.221* | 0.253 | 99.8 | 4782 | 0.91 | – |
 
 ## Per-model feature coverage
 
-| model | it0_no_feature_paths | it1_feature_paths | it2_feature_refine | it3_loops_extra_faces | it4_loops_equal_faces | it5_partial_loops | it6_partial_loops_curved_splits | it7_hybrid_sb10 | it8_hybrid_sb25 | it9_trace_all | it10_coverage_mode | it11_scans_field_budget | it12_crease_cuts | it13_feature_density | it14_coverage_mode_density | it15_coverage_search | it16_snap_default | it17_default_guarded | Instant Meshes |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| bunny | 0.26 | 0.41 | 0.55 | 0.44 | 0.44 | 0.44 | 0.57 | 0.57 | 0.65 | 0.41 | 0.65 | – | 0.67 | 0.57 | 0.70 | 0.70 | 0.68 | 0.70 | 0.10 |
-| fandisk | 0.94 | 0.98 | 0.98 | 0.98 | 0.98 | 0.98 | 0.98 | 0.99 | 0.99 | 0.98 | 0.99 | – | 0.99 | 0.80 | 0.81 | 0.99 | 0.91 | 0.94 | 0.76 |
-| fandisk_noisy | 0.72 | 0.76 | 0.76 | 0.77 | 0.77 | 0.75 | 0.75 | 0.76 | 0.78 | 0.76 | 0.78 | – | 0.78 | 0.75 | 0.79 | 0.84 | 0.80 | 0.82 | 0.37 |
-| rocker_arm | 0.28 | 0.40 | 0.63 | 0.45 | 0.45 | 0.45 | 0.57 | 0.59 | 0.68 | 0.40 | 0.68 | – | 0.63 | 0.59 | 0.74 | 0.74 | 0.63 | 0.65 | 0.10 |
-| armadillo | 0.09 | 0.13 | 0.18 | 0.18 | 0.18 | 0.18 | 0.18 | 0.20 | 0.20 | 0.13 | 0.20 | – | 0.32 | 0.27 | 0.32 | 0.36 | 0.43 | 0.43 | 0.10 |
-| spot | 0.82 | 0.88 | 0.88 | 0.88 | 0.88 | 0.88 | 0.94 | 0.94 | 0.96 | 0.88 | 0.96 | – | 0.96 | 0.88 | 0.95 | 0.97 | 0.90 | 0.91 | 0.36 |
-| beetle | 0.50 | 0.51 | 0.56 | 0.71 | 0.68 | 0.62 | 0.62 | 0.62 | 0.67 | 0.51 | 0.67 | – | 0.67 | 0.61 | 0.72 | 0.72 | 0.72 | 0.74 | 0.12 |
-| nefertiti | 0.27 | 0.40 | 0.47 | 0.42 | 0.42 | 0.42 | 0.44 | 0.45 | 0.52 | 0.40 | 0.52 | – | 0.52 | 0.52 | 0.57 | 0.57 | 0.59 | 0.60 | 0.07 |
-| igea | 0.16 | 0.35 | 0.42 | 0.30 | 0.30 | 0.30 | 0.38 | 0.50 | 0.51 | 0.35 | 0.51 | – | 0.58 | 0.45 | 0.53 | 0.58 | 0.49 | 0.49 | 0.13 |
-| sheen_chair | 0.74 | 0.75 | 0.83 | 0.80 | 0.71 | 0.79 | 0.85 | 0.77 | 0.79 | 0.75 | 0.79 | – | 0.78 | 0.88 | 0.83 | 0.90 | 0.91 | 0.93 | 0.48 |
-| damask_chair | 0.43 | 0.43 | 0.40 | 0.47 | 0.46 | 0.36 | 0.36 | 0.36 | 0.45 | 0.55 | 0.58 | 0.62 | 0.60 | 0.60 | 0.60 | 0.61 | 0.66 | 0.62 | 0.30 |
-| velvet_sofa | 0.61 | 0.65 | 0.67 | 0.72 | 0.83 | 0.73 | 0.73 | 0.73 | 0.75 | 0.65 | 0.75 | – | 0.81 | 0.87 | 0.87 | 0.87 | 0.88 | 0.87 | 0.39 |
-| leather_sofa | 0.73 | 0.70 | 0.72 | 0.78 | 0.64 | 0.78 | 0.78 | 0.78 | 0.73 | 0.70 | 0.73 | 0.73 | 0.75 | 0.68 | 0.78 | 0.78 | 0.81 | 0.88 | 0.00 |
-| fountain_scan | 0.03 | 0.03 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.07 | 0.09 | 0.09 | 0.09 | 0.05 | 0.07 | 0.09 | 0.07 | 0.07 | 0.01 |
-| lounge_room | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.04 | 0.05 | 0.05 | – | 0.05 | 0.06 | 0.06 | 0.06 | 0.07 | 0.02 |
+| model | it0_no_feature_paths | it1_feature_paths | it2_feature_refine | it3_loops_extra_faces | it4_loops_equal_faces | it5_partial_loops | it6_partial_loops_curved_splits | it7_hybrid_sb10 | it8_hybrid_sb25 | it9_trace_all | it10_coverage_mode | it11_scans_field_budget | it12_crease_cuts | it13_feature_density | it14_coverage_mode_density | it15_coverage_search | it16_snap_default | it17_default_guarded | it18_path_subdiv_sb10 | it19_path_subdiv_sb25 | it20_coverage_mode_subdiv | Instant Meshes |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| bunny | 0.26 | 0.41 | 0.55 | 0.44 | 0.44 | 0.44 | 0.57 | 0.57 | 0.65 | 0.41 | 0.65 | – | 0.67 | 0.57 | 0.70 | 0.70 | 0.68 | 0.70 | 0.78 | 0.83 | 0.83 | 0.10 |
+| fandisk | 0.94 | 0.98 | 0.98 | 0.98 | 0.98 | 0.98 | 0.98 | 0.99 | 0.99 | 0.98 | 0.99 | – | 0.99 | 0.80 | 0.81 | 0.99 | 0.91 | 0.94 | 0.89 | 0.88 | 0.91 | 0.76 |
+| fandisk_noisy | 0.72 | 0.76 | 0.76 | 0.77 | 0.77 | 0.75 | 0.75 | 0.76 | 0.78 | 0.76 | 0.78 | – | 0.78 | 0.75 | 0.79 | 0.84 | 0.80 | 0.82 | 0.83 | 0.84 | 0.85 | 0.37 |
+| rocker_arm | 0.28 | 0.40 | 0.63 | 0.45 | 0.45 | 0.45 | 0.57 | 0.59 | 0.68 | 0.40 | 0.68 | – | 0.63 | 0.59 | 0.74 | 0.74 | 0.63 | 0.65 | 0.71 | 0.81 | 0.84 | 0.10 |
+| armadillo | 0.09 | 0.13 | 0.18 | 0.18 | 0.18 | 0.18 | 0.18 | 0.20 | 0.20 | 0.13 | 0.20 | – | 0.32 | 0.27 | 0.32 | 0.36 | 0.43 | 0.43 | 0.49 | 0.49 | 0.58 | 0.10 |
+| spot | 0.82 | 0.88 | 0.88 | 0.88 | 0.88 | 0.88 | 0.94 | 0.94 | 0.96 | 0.88 | 0.96 | – | 0.96 | 0.88 | 0.95 | 0.97 | 0.90 | 0.91 | 0.95 | 0.96 | 0.99 | 0.36 |
+| beetle | 0.50 | 0.51 | 0.56 | 0.71 | 0.68 | 0.62 | 0.62 | 0.62 | 0.67 | 0.51 | 0.67 | – | 0.67 | 0.61 | 0.72 | 0.72 | 0.72 | 0.74 | 0.73 | 0.75 | 0.82 | 0.12 |
+| nefertiti | 0.27 | 0.40 | 0.47 | 0.42 | 0.42 | 0.42 | 0.44 | 0.45 | 0.52 | 0.40 | 0.52 | – | 0.52 | 0.52 | 0.57 | 0.57 | 0.59 | 0.60 | 0.64 | 0.68 | 0.65 | 0.07 |
+| igea | 0.16 | 0.35 | 0.42 | 0.30 | 0.30 | 0.30 | 0.38 | 0.50 | 0.51 | 0.35 | 0.51 | – | 0.58 | 0.45 | 0.53 | 0.58 | 0.49 | 0.49 | 0.56 | 0.71 | 0.72 | 0.13 |
+| sheen_chair | 0.74 | 0.75 | 0.83 | 0.80 | 0.71 | 0.79 | 0.85 | 0.77 | 0.79 | 0.75 | 0.79 | – | 0.78 | 0.88 | 0.83 | 0.90 | 0.91 | 0.93 | 0.94 | 0.94 | 0.79 | 0.48 |
+| damask_chair | 0.43 | 0.43 | 0.40 | 0.47 | 0.46 | 0.36 | 0.36 | 0.36 | 0.45 | 0.55 | 0.58 | 0.62 | 0.60 | 0.60 | 0.60 | 0.61 | 0.66 | 0.62 | 0.60 | 0.72 | 0.68 | 0.30 |
+| velvet_sofa | 0.61 | 0.65 | 0.67 | 0.72 | 0.83 | 0.73 | 0.73 | 0.73 | 0.75 | 0.65 | 0.75 | – | 0.81 | 0.87 | 0.87 | 0.87 | 0.88 | 0.87 | 0.90 | 0.86 | 0.88 | 0.39 |
+| leather_sofa | 0.73 | 0.70 | 0.72 | 0.78 | 0.64 | 0.78 | 0.78 | 0.78 | 0.73 | 0.70 | 0.73 | 0.73 | 0.75 | 0.68 | 0.78 | 0.78 | 0.81 | 0.88 | 0.89 | 0.90 | 0.91 | 0.00 |
+| fountain_scan | 0.03 | 0.03 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.07 | 0.09 | 0.09 | 0.09 | 0.05 | 0.07 | 0.09 | 0.07 | 0.07 | 0.08 | 0.09 | 0.10 | 0.01 |
+| lounge_room | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.04 | 0.05 | 0.05 | – | 0.05 | 0.06 | 0.06 | 0.06 | 0.07 | 0.07 | 0.08 | 0.08 | 0.02 |
 
 Code provenance: it0-it11 were run on commit 723c775 and it12-it15 on 33a63fe (recorded in each run's meta.json); from it16 on the defaults changed (see it16) - the earlier rows are reproduced at later commits with --legacy prepended to their flags.
 
@@ -153,4 +156,20 @@ Code provenance: it0-it11 were run on commit 723c775 and it12-it15 on 33a63fe (r
 - flags: `(default)` · code: `a13228d` · run: 2026-10-15T15:53:50
 - Two fixes on it16. (1) Snapping protection made precise: a vertex that already carries a covering edge may move if every crease point it was covering is still covered afterwards (it16 never moved such vertices). (2) Quality guard: if the mean SJ of the result is below 0.81, the solve is repeated with half the feature-adaptive strength, then without it.
 - Observed: 0.648 over 15, 0.737 on the 13 non-scan models; every model meets quad >= 98 %, SJ >= 0.8 (damask 0.816) and distance < 0.5 %; 14/15 below Instant Meshes (lounge, solved by the Instant Meshes fallback, is the exception as in every iteration). This is the new default.
+
+### it18_path_subdiv_sb10
+- flags: `--path-subdiv 3 --sing-budget 10` · code: `3e68f40` · run: 2026-10-15T16:36:29
+- Bound (measured on the crease polylines): the fraction of crease length within 25 deg of the chord through +-0.5 L is 0.43 (armadillo), 0.66 (igea), 0.67 (nefertiti), 0.83 (bunny), 0.76 (rocker arm) - edges of length ~L cannot cover more on these scans; with chords of 0.5 L it is 0.74-1.00 and with 0.25 L 0.98-1.00. Furniture/CAD creases are 0.96-1.00 already at L.
+- Change: path-edge subdivision - every recovered path edge whose chord misses its piece of the crease is split into 3 at crease points (edges ranked by the crease length the split recovers); the quad on each side becomes a hexagon that is split into 2 quads with the diagonal from the first new vertex on one side and from the second on the other (no valence-2 vertices). Pure quads; costs about 4 irregular vertices per split edge, applied in chunks within the singularity budget (+10 per 1k target faces here).
+- Observed: 0.648 -> 0.671 over 15 (0.737 -> 0.763 on the 13 non-scan models), quads 100 %, SJ 0.897; singularities 35.6 -> 47.5 per 1k, 11/15 below Instant Meshes.
+
+### it19_path_subdiv_sb25
+- flags: `--path-subdiv 3 --sing-budget 25` · code: `3e68f40` · run: 2026-10-15T16:47:09
+- it18 with a singularity budget of +25 per 1k target faces.
+- Observed: 0.703 over 15, 0.798 on the 13 non-scan models, quads 100 %, SJ 0.884; 57.4 singularities per 1k and only 5/15 below Instant Meshes - a fixed budget overspends on models whose own Instant Meshes rate is low.
+
+### it20_coverage_mode_subdiv
+- flags: `--coverage-mode --path-subdiv 3` · code: `c25f918` · run: 2026-10-15T17:01:05
+- Coverage mode (budgeted loops / refinement / curved splits, +25 singularities per 1k) + path-edge subdivision, on the new defaults.
+- Observed: 0.708 over 15, 0.803 on the 13 non-scan models, quad 0.989, SJ 0.884; 6/15 below Instant Meshes.
 

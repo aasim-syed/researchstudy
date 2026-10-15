@@ -1,0 +1,103 @@
+{
+ "method": "it20_coverage_mode_subdiv",
+ "faces": {
+  "total": 5011,
+  "quads": 4972,
+  "triangles": 39,
+  "vertices": 4997,
+  "quad_ratio": 0.992217,
+  "target": 5000,
+  "count_ratio": 1.0022
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.954231,
+   "min": -1,
+   "p05": 0.870393,
+   "median": 0.991787,
+   "p95": 0.999358,
+   "max": 0.999939,
+   "std": 0.185521
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.956867,
+   "min": -1,
+   "p05": 0.897664,
+   "median": 0.991897,
+   "p95": 0.999361,
+   "max": 0.999939,
+   "std": 0.182611
+  },
+  "frac_sj_below_0.5": 0.0243464,
+  "inverted_or_degenerate": 58,
+  "planarity": {
+   "mean": 0.0213383,
+   "min": 0,
+   "p05": 0.00101813,
+   "median": 0.0131869,
+   "p95": 0.0687538,
+   "max": 0.397269,
+   "std": 0.0241097
+  },
+  "aspect_ratio": {
+   "mean": 1810140.0,
+   "min": 1.00464,
+   "p05": 1.02998,
+   "median": 1.10206,
+   "p95": 1.52675,
+   "max": 1000000000.0,
+   "std": 42507200.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.68465,
+   "median": 1.02014,
+   "p95": 1.26726,
+   "max": 2.04096,
+   "std": 0.195691
+  },
+  "edge_length_mean_pct_diag": 1.362
+ },
+ "topology": {
+  "singularities": 149,
+  "boundary_irregular": 8,
+  "singularities_per_1k_faces": 29.7346,
+  "interior_vertices": 4987,
+  "boundary_vertices": 10,
+  "boundary_edges": 13,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "2": 5,
+   "3": 70,
+   "4": 4838,
+   "5": 56,
+   "6": 9,
+   "7": 6,
+   "8": 2,
+   "10": 1
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0477459,
+  "out_to_in_mean_pct": 0.0458114,
+  "in_to_out_mean_pct": 0.0496805,
+  "rms_pct": 0.0856302,
+  "hausdorff_pct": 1.14123,
+  "area_ratio": 0.983067
+ },
+ "features": {
+  "feature_coverage": 0.724854,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.724854,
+  "feature_length_pct_diag": 35.6743,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 104,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 29.83,
+ "input_faces": 268686,
+ "cmd": "build/quadremesh data/models/igea.obj -o benchmark/study/it20_coverage_mode_subdiv/meshes/igea.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3"
+}
