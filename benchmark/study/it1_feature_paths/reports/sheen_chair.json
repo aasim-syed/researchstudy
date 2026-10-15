@@ -1,0 +1,102 @@
+{
+ "method": "it1_feature_paths",
+ "faces": {
+  "total": 4609,
+  "quads": 4609,
+  "triangles": 0,
+  "vertices": 4722,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.9218
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.902988,
+   "min": -0.981863,
+   "p05": 0.220002,
+   "median": 0.989577,
+   "p95": 0.99986,
+   "max": 0.999999,
+   "std": 0.230559
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.902988,
+   "min": -0.981863,
+   "p05": 0.220002,
+   "median": 0.989577,
+   "p95": 0.99986,
+   "max": 0.999999,
+   "std": 0.230559
+  },
+  "frac_sj_below_0.5": 0.0765893,
+  "inverted_or_degenerate": 12,
+  "planarity": {
+   "mean": 0.0139548,
+   "min": 0,
+   "p05": 9.60784e-05,
+   "median": 0.00438862,
+   "p95": 0.0614205,
+   "max": 0.319135,
+   "std": 0.025118
+  },
+  "aspect_ratio": {
+   "mean": 30.3497,
+   "min": 1.00443,
+   "p05": 1.04739,
+   "median": 1.21168,
+   "p95": 5.52595,
+   "max": 88834.3,
+   "std": 1352.79
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 6.8908e-06,
+   "p05": 0.465404,
+   "median": 0.955395,
+   "p95": 1.45111,
+   "max": 14.3081,
+   "std": 0.769195
+  },
+  "edge_length_mean_pct_diag": 1.77476
+ },
+ "topology": {
+  "singularities": 275,
+  "boundary_irregular": 23,
+  "singularities_per_1k_faces": 59.6659,
+  "interior_vertices": 4518,
+  "boundary_vertices": 204,
+  "boundary_edges": 204,
+  "nonmanifold_edges": 0,
+  "components": 13,
+  "valence_histogram": {
+   "2": 2,
+   "3": 189,
+   "4": 4243,
+   "5": 56,
+   "6": 20,
+   "7": 6,
+   "8": 2
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0905312,
+  "out_to_in_mean_pct": 0.0947464,
+  "in_to_out_mean_pct": 0.0863159,
+  "rms_pct": 0.169228,
+  "hausdorff_pct": 2.1112,
+  "area_ratio": 1.03159
+ },
+ "features": {
+  "feature_coverage": 0.810528,
+  "boundary_coverage": 0.706267,
+  "combined_coverage": 0.76306,
+  "feature_length_pct_diag": 735.744,
+  "boundary_length_pct_diag": 614.945,
+  "feature_segments": 772,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 152.45,
+ "input_faces": 39936,
+ "cmd": "build/quadremesh data/models/sheen_chair.obj -o benchmark/study/it1_feature_paths/meshes/sheen_chair.obj -f 5000 -a 35 --no-uv"
+}

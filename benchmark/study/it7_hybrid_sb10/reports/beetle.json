@@ -1,0 +1,100 @@
+{
+ "method": "it7_hybrid_sb10",
+ "faces": {
+  "total": 4887,
+  "quads": 4859,
+  "triangles": 28,
+  "vertices": 5177,
+  "quad_ratio": 0.994271,
+  "target": 5000,
+  "count_ratio": 0.9774
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.898384,
+   "min": -0.982196,
+   "p05": 0.430429,
+   "median": 0.984423,
+   "p95": 0.999887,
+   "max": 0.999999,
+   "std": 0.215016
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.900898,
+   "min": -0.982196,
+   "p05": 0.452026,
+   "median": 0.984775,
+   "p95": 0.999887,
+   "max": 0.999999,
+   "std": 0.212
+  },
+  "frac_sj_below_0.5": 0.0585226,
+  "inverted_or_degenerate": 58,
+  "planarity": {
+   "mean": 0.0139653,
+   "min": 0,
+   "p05": 5.19548e-09,
+   "median": 0.00398356,
+   "p95": 0.0610953,
+   "max": 0.485406,
+   "std": 0.0281997
+  },
+  "aspect_ratio": {
+   "mean": 1296.17,
+   "min": 1.00733,
+   "p05": 1.0501,
+   "median": 1.23365,
+   "p95": 7.01765,
+   "max": 5132470.0,
+   "std": 74123.3
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 1.91787e-07,
+   "p05": 0.418884,
+   "median": 1.00768,
+   "p95": 1.54661,
+   "max": 6.6422,
+   "std": 0.350417
+  },
+  "edge_length_mean_pct_diag": 1.04584
+ },
+ "topology": {
+  "singularities": 225,
+  "boundary_irregular": 51,
+  "singularities_per_1k_faces": 46.0405,
+  "interior_vertices": 4549,
+  "boundary_vertices": 628,
+  "boundary_edges": 628,
+  "nonmanifold_edges": 0,
+  "components": 2,
+  "valence_histogram": {
+   "3": 105,
+   "4": 4324,
+   "5": 113,
+   "6": 6,
+   "9": 1
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0366033,
+  "out_to_in_mean_pct": 0.0377189,
+  "in_to_out_mean_pct": 0.0354878,
+  "rms_pct": 0.0953736,
+  "hausdorff_pct": 2.12566,
+  "area_ratio": 0.985531
+ },
+ "features": {
+  "feature_coverage": 0.620323,
+  "boundary_coverage": 0.771929,
+  "combined_coverage": 0.68295,
+  "feature_length_pct_diag": 1250.35,
+  "boundary_length_pct_diag": 880.036,
+  "feature_segments": 1830,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 32.3,
+ "input_faces": 32848,
+ "cmd": "build/quadremesh data/models/beetle.obj -o benchmark/study/it7_hybrid_sb10/meshes/beetle.obj -f 5000 -a 35 --no-uv --partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 10"
+}

@@ -1,0 +1,102 @@
+{
+ "method": "it0_no_feature_paths",
+ "faces": {
+  "total": 12810,
+  "quads": 12809,
+  "triangles": 1,
+  "vertices": 13573,
+  "quad_ratio": 0.999922,
+  "target": 15000,
+  "count_ratio": 0.854
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.916181,
+   "min": -1,
+   "p05": 0.568626,
+   "median": 0.991444,
+   "p95": 0.99981,
+   "max": 0.999999,
+   "std": 0.163394
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.916244,
+   "min": -1,
+   "p05": 0.568776,
+   "median": 0.991444,
+   "p95": 0.99981,
+   "max": 0.999999,
+   "std": 0.163249
+  },
+  "frac_sj_below_0.5": 0.0371585,
+  "inverted_or_degenerate": 25,
+  "planarity": {
+   "mean": 0.0187567,
+   "min": 1.90943e-14,
+   "p05": 0.000266945,
+   "median": 0.00417379,
+   "p95": 0.0980406,
+   "max": 0.360572,
+   "std": 0.0362304
+  },
+  "aspect_ratio": {
+   "mean": 78071.6,
+   "min": 1.00069,
+   "p05": 1.0181,
+   "median": 1.15672,
+   "p95": 2.72397,
+   "max": 1000000000.0,
+   "std": 8835380.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.625166,
+   "median": 0.995273,
+   "p95": 1.35236,
+   "max": 3.97511,
+   "std": 0.245677
+  },
+  "edge_length_mean_pct_diag": 0.749008
+ },
+ "topology": {
+  "singularities": 933,
+  "boundary_irregular": 281,
+  "singularities_per_1k_faces": 72.8337,
+  "interior_vertices": 12103,
+  "boundary_vertices": 1470,
+  "boundary_edges": 1497,
+  "nonmanifold_edges": 0,
+  "components": 26,
+  "valence_histogram": {
+   "2": 146,
+   "3": 465,
+   "4": 11170,
+   "5": 297,
+   "6": 21,
+   "7": 3,
+   "8": 1
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0790068,
+  "out_to_in_mean_pct": 0.0323673,
+  "in_to_out_mean_pct": 0.125646,
+  "rms_pct": 0.236521,
+  "hausdorff_pct": 7.86331,
+  "area_ratio": 0.824416
+ },
+ "features": {
+  "feature_coverage": 0.0201807,
+  "boundary_coverage": 0.094622,
+  "combined_coverage": 0.0594152,
+  "feature_length_pct_diag": 5223.34,
+  "boundary_length_pct_diag": 5820.91,
+  "feature_segments": 45965,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 89.49,
+ "input_faces": 999999,
+ "cmd": "QRM_NO_FEATURE_PATHS=1 build/quadremesh data/models/lounge_room.obj -o benchmark/study/it0_no_feature_paths/meshes/lounge_room.obj -f 15000 -a 35 --no-uv"
+}

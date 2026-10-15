@@ -1,0 +1,23 @@
+{
+ "name": "it6_partial_loops_curved_splits",
+ "flags": "--partial-loops --curved-splits",
+ "date": "2026-10-15T08:55:35",
+ "git": "f0a388b",
+ "models": [
+  "bunny",
+  "fandisk",
+  "fandisk_noisy",
+  "rocker_arm",
+  "armadillo",
+  "spot",
+  "beetle",
+  "nefertiti",
+  "igea",
+  "sheen_chair",
+  "damask_chair",
+  "velvet_sofa",
+  "leather_sofa",
+  "fountain_scan",
+  "lounge_room"
+ ]
+}

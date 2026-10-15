@@ -1,0 +1,102 @@
+{
+ "method": "it6_partial_loops_curved_splits",
+ "faces": {
+  "total": 15529,
+  "quads": 15478,
+  "triangles": 51,
+  "vertices": 16051,
+  "quad_ratio": 0.996716,
+  "target": 15000,
+  "count_ratio": 1.03527
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.934017,
+   "min": -1,
+   "p05": 0.585279,
+   "median": 0.992337,
+   "p95": 0.999597,
+   "max": 0.999995,
+   "std": 0.191403
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.935943,
+   "min": -1,
+   "p05": 0.609227,
+   "median": 0.992397,
+   "p95": 0.999598,
+   "max": 0.999995,
+   "std": 0.188285
+  },
+  "frac_sj_below_0.5": 0.0417284,
+  "inverted_or_degenerate": 127,
+  "planarity": {
+   "mean": 0.0158712,
+   "min": 0,
+   "p05": 0.000519615,
+   "median": 0.0075243,
+   "p95": 0.0581828,
+   "max": 0.484327,
+   "std": 0.0272528
+  },
+  "aspect_ratio": {
+   "mean": 1485980.0,
+   "min": 1.002,
+   "p05": 1.01852,
+   "median": 1.13233,
+   "p95": 2.34439,
+   "max": 1000000000.0,
+   "std": 38519800.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.678063,
+   "median": 1.00999,
+   "p95": 1.26875,
+   "max": 3.84618,
+   "std": 0.203836
+  },
+  "edge_length_mean_pct_diag": 0.616512
+ },
+ "topology": {
+  "singularities": 305,
+  "boundary_irregular": 217,
+  "singularities_per_1k_faces": 19.6407,
+  "interior_vertices": 14934,
+  "boundary_vertices": 1117,
+  "boundary_edges": 1117,
+  "nonmanifold_edges": 7,
+  "components": 8,
+  "valence_histogram": {
+   "2": 23,
+   "3": 112,
+   "4": 14629,
+   "5": 150,
+   "6": 17,
+   "7": 2,
+   "8": 1
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0363525,
+  "out_to_in_mean_pct": 0.0167548,
+  "in_to_out_mean_pct": 0.0559502,
+  "rms_pct": 0.17282,
+  "hausdorff_pct": 16.0403,
+  "area_ratio": 0.948251
+ },
+ "features": {
+  "feature_coverage": 0.0378824,
+  "boundary_coverage": 0.102322,
+  "combined_coverage": 0.0811882,
+  "feature_length_pct_diag": 1687.31,
+  "boundary_length_pct_diag": 3457.55,
+  "feature_segments": 15097,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 123.81,
+ "input_faces": 1033745,
+ "cmd": "build/quadremesh data/models/fountain_scan.obj -o benchmark/study/it6_partial_loops_curved_splits/meshes/fountain_scan.obj -f 15000 -a 35 --no-uv --partial-loops --curved-splits"
+}

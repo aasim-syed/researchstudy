@@ -94,6 +94,14 @@ int main(int argc, char** argv) {
         else if (a == "--no-boundary") p.preserve_boundary = false;
         else if (a == "--feature-refine") p.feature_refine_rounds = std::stoi(next());
         else if (a == "--feature-loops") p.feature_loops = true;
+        else if (a == "--partial-loops") p.feature_loops = p.feature_loop_partial = true;
+        else if (a == "--loop-budget") p.feature_loop_budget = std::stod(next());
+        else if (a == "--curved-splits") p.curved_feature_splits = true;
+        else if (a == "--tri-budget") p.triangle_budget = std::stod(next());
+        else if (a == "--refine-max-len") p.feature_refine_max_len = std::stod(next());
+        else if (a == "--sing-budget") p.singularity_budget = std::stod(next());
+        else if (a == "--trace-all") p.trace_all_features = true;
+        else if (a == "--field-feature-budget") p.feature_field_budget = std::stod(next());
         else if (a == "--no-face-match") p.match_face_count = false;
         else if (a == "--curvature-weight") p.curvature_weight = std::stod(next());
         else if (a == "--strokes") p.strokes = read_strokes(next());

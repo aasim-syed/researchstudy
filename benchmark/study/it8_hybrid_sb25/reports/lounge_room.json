@@ -1,0 +1,102 @@
+{
+ "method": "it8_hybrid_sb25",
+ "faces": {
+  "total": 13540,
+  "quads": 13314,
+  "triangles": 226,
+  "vertices": 14214,
+  "quad_ratio": 0.983309,
+  "target": 15000,
+  "count_ratio": 0.902667
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.889626,
+   "min": -1,
+   "p05": 0.440188,
+   "median": 0.988889,
+   "p95": 0.999795,
+   "max": 0.999999,
+   "std": 0.211647
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.894999,
+   "min": -1,
+   "p05": 0.459435,
+   "median": 0.989651,
+   "p95": 0.999799,
+   "max": 0.999999,
+   "std": 0.207397
+  },
+  "frac_sj_below_0.5": 0.0621861,
+  "inverted_or_degenerate": 99,
+  "planarity": {
+   "mean": 0.0195776,
+   "min": 8.18759e-17,
+   "p05": 0.000272833,
+   "median": 0.00440511,
+   "p95": 0.101861,
+   "max": 0.326081,
+   "std": 0.0370528
+  },
+  "aspect_ratio": {
+   "mean": 375546,
+   "min": 1.00053,
+   "p05": 1.01871,
+   "median": 1.18104,
+   "p95": 3.40783,
+   "max": 1000000000.0,
+   "std": 19375300.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.498182,
+   "median": 1.01953,
+   "p95": 1.39282,
+   "max": 4.09552,
+   "std": 0.282065
+  },
+  "edge_length_mean_pct_diag": 0.726989
+ },
+ "topology": {
+  "singularities": 1175,
+  "boundary_irregular": 303,
+  "singularities_per_1k_faces": 86.7799,
+  "interior_vertices": 12697,
+  "boundary_vertices": 1517,
+  "boundary_edges": 1544,
+  "nonmanifold_edges": 0,
+  "components": 26,
+  "valence_histogram": {
+   "2": 138,
+   "3": 512,
+   "4": 11522,
+   "5": 485,
+   "6": 36,
+   "7": 3,
+   "8": 1
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0810445,
+  "out_to_in_mean_pct": 0.0333345,
+  "in_to_out_mean_pct": 0.128754,
+  "rms_pct": 0.239597,
+  "hausdorff_pct": 7.8691,
+  "area_ratio": 0.821554
+ },
+ "features": {
+  "feature_coverage": 0.0242982,
+  "boundary_coverage": 0.0993905,
+  "combined_coverage": 0.0638758,
+  "feature_length_pct_diag": 5223.34,
+  "boundary_length_pct_diag": 5820.91,
+  "feature_segments": 45965,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 111.21,
+ "input_faces": 999999,
+ "cmd": "build/quadremesh data/models/lounge_room.obj -o benchmark/study/it8_hybrid_sb25/meshes/lounge_room.obj -f 15000 -a 35 --no-uv --partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 25"
+}

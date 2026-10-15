@@ -1,0 +1,99 @@
+{
+ "method": "it4_loops_equal_faces",
+ "faces": {
+  "total": 5130,
+  "quads": 5130,
+  "triangles": 0,
+  "vertices": 5398,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 1.026
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.802185,
+   "min": -1,
+   "p05": 0.156504,
+   "median": 0.925388,
+   "p95": 0.999025,
+   "max": 0.999988,
+   "std": 0.267788
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.802185,
+   "min": -1,
+   "p05": 0.156504,
+   "median": 0.925388,
+   "p95": 0.999025,
+   "max": 0.999988,
+   "std": 0.267788
+  },
+  "frac_sj_below_0.5": 0.127096,
+  "inverted_or_degenerate": 76,
+  "planarity": {
+   "mean": 0.0143412,
+   "min": 0,
+   "p05": 5.94516e-09,
+   "median": 0.00412045,
+   "p95": 0.0595684,
+   "max": 0.491734,
+   "std": 0.0280184
+  },
+  "aspect_ratio": {
+   "mean": 779739,
+   "min": 1.01145,
+   "p05": 1.15303,
+   "median": 2.427,
+   "p95": 35.7547,
+   "max": 1000000000.0,
+   "std": 27912700.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.0986788,
+   "median": 1.03626,
+   "p95": 2.08884,
+   "max": 8.78921,
+   "std": 0.66353
+  },
+  "edge_length_mean_pct_diag": 1.06734
+ },
+ "topology": {
+  "singularities": 148,
+  "boundary_irregular": 63,
+  "singularities_per_1k_faces": 28.8499,
+  "interior_vertices": 4838,
+  "boundary_vertices": 560,
+  "boundary_edges": 560,
+  "nonmanifold_edges": 0,
+  "components": 2,
+  "valence_histogram": {
+   "2": 2,
+   "3": 75,
+   "4": 4690,
+   "5": 71
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0575201,
+  "out_to_in_mean_pct": 0.0568467,
+  "in_to_out_mean_pct": 0.0581936,
+  "rms_pct": 0.140006,
+  "hausdorff_pct": 2.34735,
+  "area_ratio": 0.998371
+ },
+ "features": {
+  "feature_coverage": 0.578657,
+  "boundary_coverage": 0.684181,
+  "combined_coverage": 0.622248,
+  "feature_length_pct_diag": 1250.35,
+  "boundary_length_pct_diag": 880.036,
+  "feature_segments": 1830,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 30.53,
+ "input_faces": 32848,
+ "cmd": "build/quadremesh data/models/beetle.obj -o benchmark/study/it4_loops_equal_faces/meshes/beetle.obj -f 5000 -a 35 --no-uv --feature-loops"
+}

@@ -1,0 +1,1 @@
+/usr/bin/c++ -O2 -DNDEBUG CMakeFiles/quadeval.dir/apps/quadeval_cli.cpp.o -o quadeval  libquadremesh_core.a libqflow.a lemon/lemon/libemon.a libimcore.a tbb/libtbb_static.a -ldl -lpthread 

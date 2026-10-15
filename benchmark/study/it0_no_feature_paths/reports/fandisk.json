@@ -1,0 +1,98 @@
+{
+ "method": "it0_no_feature_paths",
+ "faces": {
+  "total": 4913,
+  "quads": 4913,
+  "triangles": 0,
+  "vertices": 4916,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.9826
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.951035,
+   "min": -0.475674,
+   "p05": 0.778703,
+   "median": 0.995707,
+   "p95": 0.999887,
+   "max": 0.999999,
+   "std": 0.133153
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.951035,
+   "min": -0.475674,
+   "p05": 0.778703,
+   "median": 0.995707,
+   "p95": 0.999887,
+   "max": 0.999999,
+   "std": 0.133153
+  },
+  "frac_sj_below_0.5": 0.0191329,
+  "inverted_or_degenerate": 28,
+  "planarity": {
+   "mean": 0.00197211,
+   "min": 0,
+   "p05": 0,
+   "median": 1.35816e-05,
+   "p95": 0.00504334,
+   "max": 0.306021,
+   "std": 0.0124919
+  },
+  "aspect_ratio": {
+   "mean": 1.36409,
+   "min": 1.00193,
+   "p05": 1.01682,
+   "median": 1.13962,
+   "p95": 2.02068,
+   "max": 98.4981,
+   "std": 2.18375
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0.00990404,
+   "p05": 0.710667,
+   "median": 0.986787,
+   "p95": 1.34899,
+   "max": 3.88329,
+   "std": 0.23527
+  },
+  "edge_length_mean_pct_diag": 1.47345
+ },
+ "topology": {
+  "singularities": 58,
+  "boundary_irregular": 5,
+  "singularities_per_1k_faces": 11.8054,
+  "interior_vertices": 4910,
+  "boundary_vertices": 6,
+  "boundary_edges": 6,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "3": 33,
+   "4": 4852,
+   "5": 25
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0082586,
+  "out_to_in_mean_pct": 0.00758486,
+  "in_to_out_mean_pct": 0.00893234,
+  "rms_pct": 0.0461975,
+  "hausdorff_pct": 3.56169,
+  "area_ratio": 0.997948
+ },
+ "features": {
+  "feature_coverage": 0.936108,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.936108,
+  "feature_length_pct_diag": 910.838,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 716,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 9.39,
+ "input_faces": 12946,
+ "cmd": "QRM_NO_FEATURE_PATHS=1 build/quadremesh data/models/fandisk.obj -o benchmark/study/it0_no_feature_paths/meshes/fandisk.obj -f 5000 -a 35 --no-uv"
+}

@@ -175,6 +175,9 @@ static Result quadremesh_once(const TriMesh& input, const Params& p) {
     // ---------------------------------------------------------------- features
     const bool dense_input = input.F.rows() > 30LL * std::max(1, p.target_faces);
     FeatureSet fs = detect_features(wm.V, wm.F, p.feature_angle, p.min_feature_length * Lqf, 1.0 * Lqf);
+    // the unreduced crease set: used for edge-path recovery (vertex moves only), even where the
+    // field below only gets a reduced set as hard constraints
+    const FeatureSet fs_full = fs;
     // Feature budget: a quad mesh with N faces can carry roughly O(sqrt(N)) edge loops; when the
     // detected feature network is far denser than the resolution (typical for raw scans), keep
     // only the strongest/longest creases (raise angle and minimum chain length) - otherwise the
@@ -186,7 +189,7 @@ static Result quadremesh_once(const TriMesh& input, const Params& p) {
             return l;
         };
         // dense scans (input much finer than the target) get a stricter budget than CAD-like inputs
-        const double budget = (dense_input ? 0.06 : 0.3) * qf_total * Lqf;
+        const double budget = (dense_input ? 0.06 : p.feature_field_budget) * qf_total * Lqf;
         double ang = p.feature_angle, ml = p.min_feature_length;
         for (int it = 0; it < 4 && p.feature_angle > 0 && feature_len(fs) > budget; ++it) {
             ang = std::min(ang + 10.0, 80.0);
@@ -223,7 +226,7 @@ static Result quadremesh_once(const TriMesh& input, const Params& p) {
         std::vector<std::pair<int, int>> fe, be;
         for (size_t e = 0; e < topo.ev.size(); ++e) {
             if (topo.ehe[e].size() == 1) be.push_back(topo.ev[e]);
-            else if (fs.he_sharp[topo.ehe[e][0]]) fe.push_back(topo.ev[e]);
+            else if ((p.trace_all_features ? fs_full : fs).he_sharp[topo.ehe[e][0]]) fe.push_back(topo.ev[e]);
         }
         refFE.resize(fe.size(), 2);
         for (size_t i = 0; i < fe.size(); ++i) refFE.row(i) << fe[i].first, fe[i].second;
@@ -679,52 +682,107 @@ static Result quadremesh_once(const TriMesh& input, const Params& p) {
     if (!std::getenv("QRM_NOPOST")) relax_and_project(qm, ref, L, p.smooth_iterations, pst);
     log("feature paths: ", pst.feature_paths, "/", pst.feature_chains, " chains, length ", pst.feature_len_traced, "/",
         pst.feature_len_total);
-    // Feature loop insertion: give every crease without an edge path its own edge loop by splitting
-    // the quad strip it runs along (pure quads, no new irregular vertices), then trace again.
-    if (p.feature_loops && !pst.untraced.empty() && !std::getenv("QRM_NOPOST")) {
-        int budget_add = (int)(p.feature_loop_budget * std::max(1, p.target_faces));
-        int nadd = insert_feature_loops(qm, pst.untraced, L, budget_add);
-        if (nadd > 0) {
-            cleanup(qm, pst);
+    // ---- budgeted feature-coverage stage ----------------------------------------------------
+    // Every coverage operation (edge-loop insertion, local refinement, curved-crease splits) is
+    // applied tentatively and kept only if the mesh stays inside two budgets: triangles (quad
+    // ratio) and irregular vertices (singularities). Both are topological, so checks are cheap.
+    if (!std::getenv("QRM_NOPOST") && (p.feature_loops || p.feature_refine_rounds > 0 || p.curved_feature_splits)) {
+        const int T = std::max(1, p.target_faces);
+        auto ntris = [&]() { int t = 0; for (int i = 0; i < qm.Q.rows(); ++i) t += qm.Q(i, 3) < 0; return t; };
+        auto nsing = [&]() {
+            std::vector<std::array<int, 4>> qq(qm.Q.rows());
+            for (int i = 0; i < qm.Q.rows(); ++i) qq[i] = {qm.Q(i, 0), qm.Q(i, 1), qm.Q(i, 2), qm.Q(i, 3)};
+            return count_singularities((int)qm.V.rows(), qq);
+        };
+        const int tri_cap = ntris() + (int)(p.triangle_budget * T);
+        const int sing_cap = nsing() + (int)(p.singularity_budget * T / 1000.0);
+        int accepted = 0, rejected = 0;
+        auto within = [&]() { return ntris() <= tri_cap && nsing() <= sing_cap; };
+        auto chain_len = [](const std::vector<Vector3d>& c) {
+            double l = 0;
+            for (size_t k = 0; k + 1 < c.size(); ++k) l += (c[k + 1] - c[k]).norm();
+            return l;
+        };
+        // 1. edge-loop insertion for creases without a path (longest first)
+        if (p.feature_loops && !pst.untraced.empty()) {
+            auto chains = pst.untraced;
+            std::sort(chains.begin(), chains.end(), [&](const std::vector<Vector3d>& x, const std::vector<Vector3d>& y) {
+                return chain_len(x) > chain_len(y);
+            });
+            int budget_add = (int)(p.feature_loop_budget * T), added = 0;
+            for (auto& ch : chains) {
+                if (p.feature_refine_rounds > 0 && p.feature_refine_max_len > 0 && chain_len(ch) <= p.feature_refine_max_len * L)
+                    continue;  // short creases are left to local refinement
+                QuadMesh backup = qm;
+                int nadd = insert_feature_loops(qm, {ch}, L, budget_add - added, p.feature_loop_partial ? 8 : -1, -1);
+                if (!nadd) continue;
+                merge_triangle_pairs(qm, pst);
+                cleanup(qm, pst);
+                if (within()) { added += nadd; accepted++; }
+                else { qm = backup; rejected++; }
+            }
             relax_and_project(qm, ref, L, p.smooth_iterations, pst);
-            log("feature loops: +", nadd, " faces -> ", qm.Q.rows(), "; paths ", pst.feature_paths, "/", pst.feature_chains,
+            log("feature loops: +", added, " faces -> ", qm.Q.rows(), "; paths ", pst.feature_paths, "/", pst.feature_chains,
                 ", length ", pst.feature_len_traced, "/", pst.feature_len_total);
         }
-    }
-    // Feature-driven refinement: where no edge path could follow a feature (features closer than
-    // one element, or crossing the field diagonally), refine the quads around it once with the
-    // conforming templates and trace again at the finer resolution.
-    for (int round = 0; round < p.feature_refine_rounds && !pst.untraced.empty() && !p.pure_quad &&
-                        !std::getenv("QRM_NOPOST");
-         ++round) {
-        std::vector<Vector3d> a, b;
-        for (auto& ch : pst.untraced)
-            for (size_t k = 0; k + 1 < ch.size(); ++k) a.push_back(ch[k]), b.push_back(ch[k + 1]);
-        MatrixXd SV(2 * a.size(), 3);
-        MatrixXi SE(a.size(), 2);
-        for (size_t k = 0; k < a.size(); ++k) {
-            SV.row(2 * k) = a[k].transpose();
-            SV.row(2 * k + 1) = b[k].transpose();
-            SE.row(k) << (int)(2 * k), (int)(2 * k + 1);
+        // 2. local refinement around short creases without a path (shortest first)
+        for (int round = 0; round < p.feature_refine_rounds && !pst.untraced.empty() && !p.pure_quad; ++round) {
+            auto chains = pst.untraced;
+            std::sort(chains.begin(), chains.end(), [&](const std::vector<Vector3d>& x, const std::vector<Vector3d>& y) {
+                return chain_len(x) < chain_len(y);
+            });
+            const double Lr = L / (1 << round);
+            int nref_total = 0;
+            for (auto& ch : chains) {
+                if (p.feature_refine_max_len > 0 && chain_len(ch) > p.feature_refine_max_len * L) continue;
+                MatrixXd SV(2 * (ch.size() - 1), 3);
+                MatrixXi SE(ch.size() - 1, 2);
+                for (size_t k = 0; k + 1 < ch.size(); ++k) {
+                    SV.row(2 * k) = ch[k].transpose();
+                    SV.row(2 * k + 1) = ch[k + 1].transpose();
+                    SE.row(k) << (int)(2 * k), (int)(2 * k + 1);
+                }
+                if (SE.rows() == 0) continue;
+                igl::AABB<MatrixXd, 3> stree;
+                stree.init(SV, SE);
+                auto target = [&](const MatrixXd& P) -> VectorXd {
+                    VectorXd D, t(P.rows());
+                    VectorXi I;
+                    MatrixXd C;
+                    stree.squared_distance(SV, SE, P, D, I, C);
+                    for (int i = 0; i < P.rows(); ++i) t[i] = D[i] < (1.2 * Lr) * (1.2 * Lr) ? 0.5 * Lr : 1e30;
+                    return t;
+                };
+                QuadMesh backup = qm;
+                int nref = refine_to_size(qm, target, 1);
+                if (!nref) continue;
+                merge_triangle_pairs(qm, pst);
+                cleanup(qm, pst);
+                if (within()) { nref_total += nref; accepted++; }
+                else { qm = backup; rejected++; }
+            }
+            if (!nref_total) break;
+            relax_and_project(qm, ref, L, p.smooth_iterations, pst);
+            log("feature refinement ", round + 1, ": ", nref_total, " faces split -> ", qm.Q.rows(), " faces; paths ",
+                pst.feature_paths, "/", pst.feature_chains, ", length ", pst.feature_len_traced, "/", pst.feature_len_total);
         }
-        igl::AABB<MatrixXd, 3> st;
-        st.init(SV, SE);
-        const double Lr = L / (1 << round);
-        auto target = [&](const MatrixXd& P) -> VectorXd {
-            VectorXd D, t(P.rows());
-            VectorXi I;
-            MatrixXd C;
-            st.squared_distance(SV, SE, P, D, I, C);
-            for (int i = 0; i < P.rows(); ++i) t[i] = D[i] < (1.2 * Lr) * (1.2 * Lr) ? 0.5 * Lr : 1e30;
-            return t;
-        };
-        int nref = refine_to_size(qm, target, 1);
-        if (!nref) break;
-        merge_triangle_pairs(qm, pst);
-        cleanup(qm, pst);
-        relax_and_project(qm, ref, L, p.smooth_iterations, pst);
-        log("feature refinement ", round + 1, ": ", nref, " faces split -> ", qm.Q.rows(), " faces; paths ",
-            pst.feature_paths, "/", pst.feature_chains, ", length ", pst.feature_len_traced, "/", pst.feature_len_total);
+        // 3. curved creases: split path edges whose chord leaves the crease (budget halved on overrun)
+        if (p.curved_feature_splits && !pst.paths.empty()) {
+            int tri_left = std::max(0, tri_cap - ntris());
+            for (int attempt = 0; attempt < 5 && tri_left >= 2; ++attempt) {
+                QuadMesh backup = qm;
+                PostStats bst = pst;
+                int ns = split_curved_paths(qm, pst, L, 0.09, 23.0, 2, tri_left);
+                cleanup(qm, pst);
+                if (within()) { log("curved feature splits: ", ns, " -> ", qm.Q.rows(), " faces"); accepted++; break; }
+                qm = backup;
+                pst = bst;
+                tri_left /= 2;
+                rejected++;
+            }
+        }
+        log("coverage stage: ", accepted, " operations kept, ", rejected, " rejected by budget (triangles ", ntris(), "/",
+            tri_cap, ", singularities ", nsing(), "/", sing_cap, ")");
     }
     if (sym) {
         mirror_and_weld(qm, p.symmetry_axis, sym_off, 1e-9);
@@ -764,7 +822,7 @@ Result quadremesh(const TriMesh& input, const Params& p) {
     double solve_target = p.target_faces;
     for (int it = 0; it < 2; ++it) {
         double ratio = (double)r.mesh.Q.rows() / p.target_faces;
-        if (ratio < 1.08) break;
+        if (ratio < 1.10) break;
         solve_target = std::max(0.25 * p.target_faces, solve_target / ratio);
         q.target_faces = (int)std::lround(solve_target);
         q.feature_loop_budget = p.feature_loop_budget * p.target_faces / std::max(1.0, solve_target);

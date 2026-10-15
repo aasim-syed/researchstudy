@@ -1,0 +1,98 @@
+{
+ "method": "it0_no_feature_paths",
+ "faces": {
+  "total": 4389,
+  "quads": 4389,
+  "triangles": 0,
+  "vertices": 4391,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.8778
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.92351,
+   "min": 0.128702,
+   "p05": 0.687163,
+   "median": 0.965437,
+   "p95": 0.997319,
+   "max": 0.999891,
+   "std": 0.10484
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.92351,
+   "min": 0.128702,
+   "p05": 0.687163,
+   "median": 0.965437,
+   "p95": 0.997319,
+   "max": 0.999891,
+   "std": 0.10484
+  },
+  "frac_sj_below_0.5": 0.00637959,
+  "inverted_or_degenerate": 0,
+  "planarity": {
+   "mean": 0.0326103,
+   "min": 3.04095e-06,
+   "p05": 0.00213151,
+   "median": 0.0217089,
+   "p95": 0.0995343,
+   "max": 0.243989,
+   "std": 0.0330189
+  },
+  "aspect_ratio": {
+   "mean": 1.42026,
+   "min": 1.01557,
+   "p05": 1.0621,
+   "median": 1.27362,
+   "p95": 2.23527,
+   "max": 8.14481,
+   "std": 0.482147
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0.155865,
+   "p05": 0.654021,
+   "median": 0.974231,
+   "p95": 1.4626,
+   "max": 2.94596,
+   "std": 0.25044
+  },
+  "edge_length_mean_pct_diag": 1.269
+ },
+ "topology": {
+  "singularities": 180,
+  "boundary_irregular": 0,
+  "singularities_per_1k_faces": 41.0116,
+  "interior_vertices": 4391,
+  "boundary_vertices": 0,
+  "boundary_edges": 0,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "3": 94,
+   "4": 4211,
+   "5": 86
+  }
+ },
+ "distance": {
+  "mean_pct": 0.112944,
+  "out_to_in_mean_pct": 0.0883908,
+  "in_to_out_mean_pct": 0.137498,
+  "rms_pct": 0.241072,
+  "hausdorff_pct": 3.658,
+  "area_ratio": 0.919195
+ },
+ "features": {
+  "feature_coverage": 0.0935498,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.0935498,
+  "feature_length_pct_diag": 22.4361,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 88,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 15.62,
+ "input_faces": 99976,
+ "cmd": "QRM_NO_FEATURE_PATHS=1 build/quadremesh data/models/armadillo.obj -o benchmark/study/it0_no_feature_paths/meshes/armadillo.obj -f 5000 -a 35 --no-uv"
+}

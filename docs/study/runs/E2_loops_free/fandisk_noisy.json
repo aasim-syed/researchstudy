@@ -1,0 +1,97 @@
+{
+"method": "E2_loops_free",
+"faces": {
+  "total": 5228,
+  "quads": 5228,
+  "triangles": 0,
+  "vertices": 5238,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 1.0456
+},
+"quality": {
+  "scaled_jacobian": {
+    "mean": 0.925698,
+    "min": -1,
+    "p05": 0.679089,
+    "median": 0.978197,
+    "p95": 0.998231,
+    "max": 0.999986,
+    "std": 0.169756
+  },
+  "scaled_jacobian_quads": {
+    "mean": 0.925698,
+    "min": -1,
+    "p05": 0.679089,
+    "median": 0.978197,
+    "p95": 0.998231,
+    "max": 0.999986,
+    "std": 0.169756
+  },
+  "frac_sj_below_0.5": 0.0283091,
+  "inverted_or_degenerate": 35,
+  "planarity": {
+    "mean": 0.0239256,
+    "min": 0,
+    "p05": 0.00189643,
+    "median": 0.0184824,
+    "p95": 0.0617344,
+    "max": 0.356428,
+    "std": 0.0225136
+  },
+  "aspect_ratio": {
+    "mean": 1.7215e+06,
+    "min": 1.00493,
+    "p05": 1.05367,
+    "median": 1.33035,
+    "p95": 2.62441,
+    "max": 1e+09,
+    "std": 4.14552e+07
+  },
+  "edge_length_rel": {
+    "mean": 1,
+    "min": 0,
+    "p05": 0.604906,
+    "median": 0.957251,
+    "p95": 1.42323,
+    "max": 21.4593,
+    "std": 0.586095
+  },
+  "edge_length_mean_pct_diag": 1.46122
+},
+"topology": {
+  "singularities": 138,
+  "boundary_irregular": 16,
+  "singularities_per_1k_faces": 26.3963,
+  "interior_vertices": 5210,
+  "boundary_vertices": 28,
+  "boundary_edges": 28,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+    "3": 68,
+    "4": 5072,
+    "5": 70
+  }
+},
+"distance": {
+  "mean_pct": 0.0848667,
+  "out_to_in_mean_pct": 0.115932,
+  "in_to_out_mean_pct": 0.053801,
+  "rms_pct": 0.309577,
+  "hausdorff_pct": 5.3865,
+  "area_ratio": 1.02053
+},
+"features": {
+  "feature_coverage": 0.772027,
+  "boundary_coverage": 0.24855,
+  "combined_coverage": 0.75055,
+  "feature_length_pct_diag": 1121.35,
+  "boundary_length_pct_diag": 47.974,
+  "feature_segments": 869,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+},
+"runtime_s": 10.043,
+"input_faces": 12925
+}

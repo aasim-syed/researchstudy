@@ -1,0 +1,23 @@
+{
+ "name": "it4_loops_equal_faces",
+ "flags": "--feature-loops",
+ "date": "2026-10-15T08:32:00",
+ "git": "f0a388b",
+ "models": [
+  "bunny",
+  "fandisk",
+  "fandisk_noisy",
+  "rocker_arm",
+  "armadillo",
+  "spot",
+  "beetle",
+  "nefertiti",
+  "igea",
+  "sheen_chair",
+  "damask_chair",
+  "velvet_sofa",
+  "leather_sofa",
+  "fountain_scan",
+  "lounge_room"
+ ]
+}

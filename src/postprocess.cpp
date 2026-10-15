@@ -512,6 +512,8 @@ int trace_feature_paths(QuadMesh& m, const std::vector<Face>& f, const std::vect
     }
     std::vector<int> piece_end(chains.size(), -1);  // output vertex where each traced piece ended
     st.untraced.clear();
+    st.paths.clear();
+    st.path_chains.clear();
     st.feature_chains = (int)chains.size();
     if (chains.empty()) return 0;
     // consecutive (x, u, y) corners -> turning inside a face
@@ -731,6 +733,8 @@ int trace_feature_paths(QuadMesh& m, const std::vector<Face>& f, const std::vect
             }
         }
         piece_end[ci] = path.back();
+        st.paths.push_back(path);
+        st.path_chains.push_back(C);
         traced++;
     }
     st.feature_len_traced = len_ok;
@@ -749,8 +753,11 @@ int trace_feature_paths(QuadMesh& m, const std::vector<Face>& f, const std::vect
 }
 }  // namespace
 
-int insert_feature_loops(QuadMesh& m, const std::vector<std::vector<Vector3d>>& chains_in, double L, int max_added) {
+int insert_feature_loops(QuadMesh& m, const std::vector<std::vector<Vector3d>>& chains_in, double L, int max_added,
+                         int partial_ext, int max_tris) {
     int added = 0;
+    auto tri_count = [&]() { int t = 0; for (int i = 0; i < m.Q.rows(); ++i) t += m.Q(i, 3) < 0; return t; };
+    const int tris0 = tri_count();
     std::vector<std::vector<Vector3d>> chains = chains_in;
     std::sort(chains.begin(), chains.end(), [](const std::vector<Vector3d>& a, const std::vector<Vector3d>& b) {
         double la = 0, lb = 0;
@@ -849,7 +856,8 @@ int insert_feature_loops(QuadMesh& m, const std::vector<std::vector<Vector3d>>& 
                 for (int fi : fseq) quads += fsize(f[fi]) == 4;
                 std::fprintf(stderr, "  loop chain: faces=%zu adjacent-pairs=%d quads=%d best_run=%d\n", fseq.size(), adj, quads, best_len);
             }
-            if (best_len < 2) break;
+            if (best_len < (partial_ext >= 0 ? 3 : 2)) break;
+            if (partial_ext >= 0 && max_tris >= 0 && tri_count() - tris0 + 2 > max_tris) return added;
             // the strip through fseq[best_s]: entry rung index
             int f0 = fseq[best_s];
             int k_in0 = -1;
@@ -900,6 +908,23 @@ int insert_feature_loops(QuadMesh& m, const std::vector<std::vector<Vector3d>>& 
                 }
             }
             if (!ok || strip.empty()) { if (std::getenv("QRM_DEBUG_LOOPS")) std::fprintf(stderr, "  strip rejected ok=%d size=%zu\n", ok, strip.size()); break; }
+            if (partial_ext >= 0) {
+                // partial loop: only the run, extended to the strip's end if that is <= partial_ext
+                // faces away (clean termination at a boundary / triangle); open ends leave one
+                // hanging vertex each, resolved below as quad + triangle
+                int i0 = -1;
+                for (size_t i = 0; i < strip.size(); ++i)
+                    if (strip[i].first == f0 && strip[i].second == k_in0) { i0 = (int)i; break; }
+                if (i0 >= 0) {
+                    int i1 = std::min((int)strip.size() - 1, i0 + best_len - 1);
+                    int lo = i0, hi = i1;
+                    if (!closed && i0 <= partial_ext) lo = 0;
+                    if (!closed && (int)strip.size() - 1 - i1 <= partial_ext) hi = (int)strip.size() - 1;
+                    if (closed && (int)strip.size() <= best_len + 2 * partial_ext) lo = 0, hi = (int)strip.size() - 1;
+                    std::vector<std::pair<int, int>> sub(strip.begin() + lo, strip.begin() + hi + 1);
+                    strip.swap(sub);
+                }
+            }
             if (added + (int)strip.size() > max_added) return added;
             // new vertex per rung
             std::map<std::pair<int, int>, int> rung_vertex;
@@ -944,28 +969,56 @@ int insert_feature_loops(QuadMesh& m, const std::vector<std::vector<Vector3d>>& 
                 }
                 replaced[fi] = 1;
             }
-            // neighbours across the strip's open end rungs that are triangles: become quads
+            // faces next to the cut that received a new vertex on one of their edges: insert it
+            // and re-split the polygon (tri+1 -> quad, quad+1 -> quad+tri, quad+2 -> 2 quads)
+            auto pos = [&](int v) { return v < n0 ? Vector3d(m.V.row(v)) : newV[v - n0]; };
+            auto sj_poly = [&](const std::vector<int>& q) {
+                MatrixXd PV(q.size(), 3);
+                for (size_t k = 0; k < q.size(); ++k) PV.row(k) = pos(q[k]).transpose();
+                return scaled_jacobian(PV, 0, 1, 2, q.size() == 4 ? 3 : -1);
+            };
             std::vector<Face> out;
             for (int i = 0; i < nf; ++i) {
                 if (replaced[i]) continue;
-                Face q = f[i];
-                if (fsize(q) == 3) {
-                    for (int k = 0; k < 3; ++k) {
-                        int a = q[k], b = q[(k + 1) % 3];
-                        auto it = rung_vertex.find({std::min(a, b), std::max(a, b)});
-                        if (it != rung_vertex.end()) {
-                            Face nq = {-1, -1, -1, -1};
-                            int c = 0;
-                            for (int j = 0; j < 3; ++j) {
-                                nq[c++] = q[j];
-                                if (j == k) nq[c++] = it->second;
-                            }
-                            q = nq;
-                            break;
-                        }
-                    }
+                const Face& q = f[i];
+                std::vector<int> poly;
+                int n = fsize(q);
+                for (int k = 0; k < n; ++k) {
+                    poly.push_back(q[k]);
+                    int a = q[k], b = q[(k + 1) % n];
+                    auto it = rung_vertex.find({std::min(a, b), std::max(a, b)});
+                    if (it != rung_vertex.end()) poly.push_back(it->second);
                 }
-                out.push_back(q);
+                int pn = (int)poly.size();
+                if (pn == n) { out.push_back(q); continue; }
+                if (pn == 4) { out.push_back({poly[0], poly[1], poly[2], poly[3]}); continue; }
+                if (pn == 5) {
+                    double best = -1e9;
+                    int bi = 0;
+                    for (int s0 = 0; s0 < 5; ++s0) {
+                        std::vector<int> qa = {poly[s0], poly[(s0 + 1) % 5], poly[(s0 + 2) % 5], poly[(s0 + 3) % 5]};
+                        std::vector<int> ta = {poly[(s0 + 3) % 5], poly[(s0 + 4) % 5], poly[s0]};
+                        double sc = std::min(sj_poly(qa), sj_poly(ta));
+                        if (sc > best) best = sc, bi = s0;
+                    }
+                    out.push_back({poly[bi], poly[(bi + 1) % 5], poly[(bi + 2) % 5], poly[(bi + 3) % 5]});
+                    out.push_back({poly[(bi + 3) % 5], poly[(bi + 4) % 5], poly[bi], -1});
+                    continue;
+                }
+                if (pn == 6) {
+                    double best = -1e9;
+                    int bi = 0;
+                    for (int s0 = 0; s0 < 3; ++s0) {
+                        std::vector<int> qa = {poly[s0], poly[s0 + 1], poly[s0 + 2], poly[s0 + 3]};
+                        std::vector<int> qb = {poly[s0 + 3], poly[(s0 + 4) % 6], poly[(s0 + 5) % 6], poly[s0]};
+                        double sc = std::min(sj_poly(qa), sj_poly(qb));
+                        if (sc > best) best = sc, bi = s0;
+                    }
+                    out.push_back({poly[bi], poly[bi + 1], poly[bi + 2], poly[bi + 3]});
+                    out.push_back({poly[bi + 3], poly[(bi + 4) % 6], poly[(bi + 5) % 6], poly[bi]});
+                    continue;
+                }
+                for (int k = 1; k + 1 < pn; ++k) out.push_back({poly[0], poly[k], poly[k + 1], -1});  // rare
             }
             for (auto& q : addf) out.push_back(q);
             MatrixXd V2(n0 + newV.size(), 3);
@@ -1177,6 +1230,127 @@ void relax_and_project(QuadMesh& m, const SurfaceRef& ref, double L, int iterati
         }
     }
     untangle(20);
+}
+
+int split_curved_paths(QuadMesh& m, PostStats& st, double L, double tol, double max_angle, int rounds, int max_tris) {
+    int total = 0;
+    int tri_budget = max_tris;
+    const double cos_max = std::cos(max_angle * M_PI / 180.0);
+    for (int round = 0; round < rounds; ++round) {
+        std::vector<Face> f = to_faces(m);
+        std::map<std::pair<int, int>, std::vector<int>> ef;
+        for (size_t i = 0; i < f.size(); ++i)
+            for (int k = 0; k < fsize(f[i]); ++k) {
+                int a = f[i][k], b = f[i][(k + 1) % fsize(f[i])];
+                ef[{std::min(a, b), std::max(a, b)}].push_back((int)i);
+            }
+        // closest point / tangent on a polyline
+        auto closest = [](const std::vector<Vector3d>& C, const Vector3d& p, Vector3d& c, Vector3d& tan) {
+            double best = 1e300;
+            for (size_t k = 0; k + 1 < C.size(); ++k) {
+                Vector3d ab = C[k + 1] - C[k];
+                double l2 = ab.squaredNorm();
+                double t = l2 > 0 ? std::max(0.0, std::min(1.0, (p - C[k]).dot(ab) / l2)) : 0.0;
+                Vector3d q = C[k] + t * ab;
+                double d = (p - q).squaredNorm();
+                if (d < best) best = d, c = q, tan = l2 > 0 ? Vector3d(ab / std::sqrt(l2)) : Vector3d(1, 0, 0);
+            }
+            return std::sqrt(best);
+        };
+        std::map<std::pair<int, int>, int> split_v;  // edge -> new vertex
+        std::vector<Vector3d> newV;
+        const int n0 = (int)m.V.rows();
+        std::vector<std::vector<int>> newpaths = st.paths;
+        struct SplitCand { double score; std::pair<int, int> key; Vector3d c; };
+        std::vector<SplitCand> cand;
+        for (size_t pi = 0; pi < st.paths.size(); ++pi) {
+            const auto& P = st.paths[pi];
+            const auto& C = st.path_chains[pi];
+            std::vector<int> np = {P[0]};
+            for (size_t k = 0; k + 1 < P.size(); ++k) {
+                int a = P[k], b = P[k + 1];
+                Vector3d pa = m.V.row(a), pb = m.V.row(b), mid = 0.5 * (pa + pb), c, tan;
+                double d = closest(C, mid, c, tan);
+                Vector3d e = pb - pa;
+                double el = e.norm();
+                bool bad = el > 0.3 * L && (d > tol * L || std::abs(e.dot(tan)) / el < cos_max);
+                auto key = std::make_pair(std::min(a, b), std::max(a, b));
+                if (bad && ef.count(key) && ef[key].size() <= 2) cand.push_back({d / L + (1.0 - std::abs(e.dot(tan)) / el), key, c});
+                np.push_back(b);
+            }
+            newpaths[pi] = np;
+        }
+        // worst deviations first, within the triangle budget (each split adds <= 2 triangles)
+        std::sort(cand.begin(), cand.end(), [](const SplitCand& x, const SplitCand& y) { return x.score > y.score; });
+        for (auto& cd : cand) {
+            if (tri_budget >= 0 && tri_budget < 2) break;
+            if (split_v.count(cd.key)) continue;
+            split_v[cd.key] = n0 + (int)newV.size();
+            newV.push_back(cd.c);
+            if (tri_budget >= 0) tri_budget -= 2;
+        }
+        // rebuild the paths with the accepted split vertices
+        for (size_t pi = 0; pi < st.paths.size(); ++pi) {
+            const auto& P = st.paths[pi];
+            std::vector<int> np = {P[0]};
+            for (size_t k = 0; k + 1 < P.size(); ++k) {
+                auto it = split_v.find({std::min(P[k], P[k + 1]), std::max(P[k], P[k + 1])});
+                if (it != split_v.end()) np.push_back(it->second);
+                np.push_back(P[k + 1]);
+            }
+            newpaths[pi] = np;
+        }
+        if (split_v.empty()) break;
+        MatrixXd V2(n0 + newV.size(), 3);
+        V2.topRows(n0) = m.V;
+        for (size_t k = 0; k < newV.size(); ++k) V2.row(n0 + k) = newV[k].transpose();
+        m.V = V2;
+        auto sjp = [&](const std::vector<int>& q) { return scaled_jacobian(m.V, q[0], q[1], q[2], q.size() == 4 ? q[3] : -1); };
+        std::vector<Face> out;
+        for (auto& q : f) {
+            int n = fsize(q);
+            std::vector<int> poly;
+            for (int k = 0; k < n; ++k) {
+                poly.push_back(q[k]);
+                int a = q[k], b = q[(k + 1) % n];
+                auto it = split_v.find({std::min(a, b), std::max(a, b)});
+                if (it != split_v.end()) poly.push_back(it->second);
+            }
+            int pn = (int)poly.size();
+            if (pn == n) { out.push_back(q); continue; }
+            if (pn == 4) { out.push_back({poly[0], poly[1], poly[2], poly[3]}); continue; }
+            if (pn == 5) {
+                double best = -1e9;
+                int bi = 0;
+                for (int s0 = 0; s0 < 5; ++s0) {
+                    double sc = std::min(sjp({poly[s0], poly[(s0 + 1) % 5], poly[(s0 + 2) % 5], poly[(s0 + 3) % 5]}),
+                                         sjp({poly[(s0 + 3) % 5], poly[(s0 + 4) % 5], poly[s0]}));
+                    if (sc > best) best = sc, bi = s0;
+                }
+                out.push_back({poly[bi], poly[(bi + 1) % 5], poly[(bi + 2) % 5], poly[(bi + 3) % 5]});
+                out.push_back({poly[(bi + 3) % 5], poly[(bi + 4) % 5], poly[bi], -1});
+                continue;
+            }
+            if (pn == 6) {
+                double best = -1e9;
+                int bi = 0;
+                for (int s0 = 0; s0 < 3; ++s0) {
+                    double sc = std::min(sjp({poly[s0], poly[s0 + 1], poly[s0 + 2], poly[s0 + 3]}),
+                                         sjp({poly[s0 + 3], poly[(s0 + 4) % 6], poly[(s0 + 5) % 6], poly[s0]}));
+                    if (sc > best) best = sc, bi = s0;
+                }
+                out.push_back({poly[bi], poly[bi + 1], poly[bi + 2], poly[bi + 3]});
+                out.push_back({poly[bi + 3], poly[(bi + 4) % 6], poly[(bi + 5) % 6], poly[bi]});
+                continue;
+            }
+            for (int k = 1; k + 1 < pn; ++k) out.push_back({poly[0], poly[k], poly[k + 1], -1});
+        }
+        from_faces(m, out);
+        st.paths = newpaths;
+        total += (int)split_v.size();
+    }
+    st.curved_splits = total;
+    return total;
 }
 
 void mirror_and_weld(QuadMesh& m, int axis, double offset, double tol) {

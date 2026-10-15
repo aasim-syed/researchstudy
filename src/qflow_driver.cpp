@@ -130,6 +130,11 @@ QFResult run_quadriflow(const QFJob& job) {
         if (same) H.mExtS = job.scale;
     }
     qflow::Optimizer::optimize_scale(H, P->rho, P->flag_adaptive_scale);
+    if (const char* ts = std::getenv("QRM_TEST_S")) {  // experiment hook: force a constant scale
+        double v = std::atof(ts);
+        for (auto& S : H.mS) S.setConstant(v);
+        P->flag_adaptive_scale = 1;
+    }
     if (adaptive && std::getenv("QRM_DEBUG_SCALE")) {
         std::fprintf(stderr, "scale target min %g max %g | solved S min %g max %g | mScale %g\n", job.scale.minCoeff(),
                      job.scale.maxCoeff(), H.mS[0].minCoeff(), H.mS[0].maxCoeff(), H.mScale);
@@ -150,7 +155,7 @@ QFResult run_quadriflow(const QFJob& job) {
     P->flag_adaptive_scale = 1;
     qflow::Optimizer::optimize_positions(H, P->flag_adaptive_scale);
     P->ComputePositionSingularities();
-    P->ComputeIndexMap(adaptive ? 1 : 0);
+    P->ComputeIndexMap((adaptive || std::getenv("QRM_TEST_S")) ? 1 : 0);
 
     res.V.resize(P->O_compact.size(), 3);
     for (size_t i = 0; i < P->O_compact.size(); ++i) {

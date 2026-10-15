@@ -1,0 +1,60 @@
+{
+ "order": [
+  "it0_no_feature_paths",
+  "it1_feature_paths",
+  "it2_feature_refine",
+  "it3_loops_extra_faces",
+  "it4_loops_equal_faces",
+  "it5_partial_loops",
+  "it6_partial_loops_curved_splits",
+  "it7_hybrid_sb10",
+  "it8_hybrid_sb25",
+  "it9_trace_all",
+  "it10_coverage_mode"
+ ],
+ "it0_no_feature_paths": [
+  "Baseline before any coverage-specific post-processing: hard feature constraints in the field + proximity snapping of vertices to creases (the default before edge-path recovery). Reproduced with the current code by disabling path recovery (QRM_NO_FEATURE_PATHS=1)."
+ ],
+ "it1_feature_paths": [
+  "Hypothesis: many creases have an edge loop running next to them (offset by a fraction of an element) but not on them.",
+  "Change: edge-path recovery - for every crease chain, a directed-edge Dijkstra through the quad mesh (cost: distance to the crease, misalignment, turning inside a face), the path is snapped onto the crease with a monotone arclength map and locked during relaxation; short chains get jointly chosen endpoints.",
+  "Cost: none by construction (no topology change). Current default."
+ ],
+ "it2_feature_refine": [
+  "Hypothesis: creases closer than one element need more vertices locally.",
+  "Change: refine (1->4 with conforming hanging-node templates) the quads around every chain without a path, then trace again; two rounds.",
+  "Observed trade-off: template triangles lower the quad ratio and the transition fronts add irregular vertices; the face count grows. Kept as opt-in (--feature-refine 2)."
+ ],
+ "it3_loops_extra_faces": [
+  "Hypothesis: a crease that runs lengthwise along a quad strip can get its own edge loop by splitting that strip lengthwise (pure quads, no new irregular vertices).",
+  "Change: for each chain without a path, find the longest run of quads it crosses rung-to-rung and split the whole strip (through the crease inside the run, on the midline elsewhere); self-crossing strips split their crossing faces into 4. No face-count control in this run (--no-face-match).",
+  "Observed: whole strips are 10-60x longer than the crease runs, so most added faces do not help coverage."
+ ],
+ "it4_loops_equal_faces": [
+  "Same as it3 but with face-count control: if the output exceeds 1.08x the target, the field is re-solved at a proportionally lower budget so the output lands on the target face count.",
+  "Purpose: fair comparison at equal face count."
+ ],
+ "it5_partial_loops": [
+  "Hypothesis: splitting only the crease's own run (plus up to 8 faces when that reaches the strip's end) gives the same local loop at a fraction of the face cost; each open end leaves one hanging vertex, resolved as quad + triangle, and adjacent triangles are re-paired.",
+  "Guards: runs shorter than 3 faces are skipped; loop insertion stops at 0.6 x triangle budget (triangle budget = 1.2 % of the target faces), so the quad ratio cannot drop below ~98.8 % from this step. Face-count control on."
+ ],
+ "it6_partial_loops_curved_splits": [
+  "Hypothesis: on tightly curved creases the path vertices are on the crease but the straight edges between them are not (chord sag > 0.1 L or turn > 25 deg).",
+  "Change: split every recovered path edge whose chord midpoint is > 0.09 L from the crease or whose direction deviates > 23 deg, at the crease point; the two adjacent quads become quad + triangle. Worst deviations first, within the remaining triangle budget; two passes."
+ ],
+ "it7_hybrid_sb10": [
+  "Hybrid, per crease: partial edge loops for long creases without a path, one round of local refinement only around short creases (<= 8 L), curved-crease splits.",
+  "Every operation is applied tentatively and kept only if the mesh stays within a triangle budget (+1.5 % of target faces) and a singularity budget (+10 irregular vertices per 1k target faces); checks are topological, so this is cheap.",
+  "Face-count control re-solves only above 1.10x the target (Instant Meshes itself lands at 0.84-1.03x)."
+ ],
+ "it8_hybrid_sb25": [
+  "Same as it7 with a singularity budget of +25 per 1k target faces: measures the coverage / singularity trade-off."
+ ],
+ "it9_trace_all": [
+  "Hypothesis: on inputs whose crease network is denser than the resolution, the field gets a reduced crease set (to keep the integer solve stable), so path recovery never sees the remaining creases. Change: path recovery uses the full crease set while the field keeps the reduced one. Vertex moves only - no topology change."
+ ],
+ "it10_coverage_mode": [
+  "it8 (hybrid, singularity budget 25) + full-set path recovery (it9)."
+ ],
+ "code_note": "it0-it8 ran on the working tree between commits f0a388b and the commit that adds this note; it5/it6 used an earlier triangle budget (1.2 %, loops limited to 0.6 of it) and face-count threshold (1.08x). From it9 on, each run's meta.json records the exact commit."
+}

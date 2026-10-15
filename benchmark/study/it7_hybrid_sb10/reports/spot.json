@@ -1,0 +1,99 @@
+{
+ "method": "it7_hybrid_sb10",
+ "faces": {
+  "total": 4539,
+  "quads": 4507,
+  "triangles": 32,
+  "vertices": 4525,
+  "quad_ratio": 0.99295,
+  "target": 5000,
+  "count_ratio": 0.9078
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.948399,
+   "min": -0.1374,
+   "p05": 0.78218,
+   "median": 0.982854,
+   "p95": 0.998891,
+   "max": 0.999962,
+   "std": 0.105931
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.95113,
+   "min": -0.1374,
+   "p05": 0.798738,
+   "median": 0.983099,
+   "p95": 0.998902,
+   "max": 0.999962,
+   "std": 0.100471
+  },
+  "frac_sj_below_0.5": 0.0129985,
+  "inverted_or_degenerate": 6,
+  "planarity": {
+   "mean": 0.0133867,
+   "min": 2.66573e-10,
+   "p05": 0.000685755,
+   "median": 0.00811918,
+   "p95": 0.0442523,
+   "max": 0.168749,
+   "std": 0.0164959
+  },
+  "aspect_ratio": {
+   "mean": 1.29749,
+   "min": 1.00311,
+   "p05": 1.03592,
+   "median": 1.18407,
+   "p95": 1.84454,
+   "max": 10.1119,
+   "std": 0.451091
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0.084327,
+   "p05": 0.72485,
+   "median": 0.986036,
+   "p95": 1.30549,
+   "max": 3.99933,
+   "std": 0.198527
+  },
+  "edge_length_mean_pct_diag": 1.38935
+ },
+ "topology": {
+  "singularities": 134,
+  "boundary_irregular": 0,
+  "singularities_per_1k_faces": 29.5219,
+  "interior_vertices": 4525,
+  "boundary_vertices": 0,
+  "boundary_edges": 0,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "3": 56,
+   "4": 4391,
+   "5": 76,
+   "6": 2
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0337962,
+  "out_to_in_mean_pct": 0.0325377,
+  "in_to_out_mean_pct": 0.0350546,
+  "rms_pct": 0.0664509,
+  "hausdorff_pct": 1.75478,
+  "area_ratio": 0.990122
+ },
+ "features": {
+  "feature_coverage": 0.942568,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.942568,
+  "feature_length_pct_diag": 131.743,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 150,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 4.91,
+ "input_faces": 23424,
+ "cmd": "build/quadremesh data/models/spot.obj -o benchmark/study/it7_hybrid_sb10/meshes/spot.obj -f 5000 -a 35 --no-uv --partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 10"
+}

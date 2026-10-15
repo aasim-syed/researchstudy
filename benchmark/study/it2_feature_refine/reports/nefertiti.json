@@ -1,0 +1,100 @@
+{
+ "method": "it2_feature_refine",
+ "faces": {
+  "total": 4794,
+  "quads": 4609,
+  "triangles": 185,
+  "vertices": 4705,
+  "quad_ratio": 0.96141,
+  "target": 5000,
+  "count_ratio": 0.9588
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.914542,
+   "min": -0.749795,
+   "p05": 0.577411,
+   "median": 0.983056,
+   "p95": 0.999216,
+   "max": 0.999956,
+   "std": 0.174057
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.925751,
+   "min": -0.749795,
+   "p05": 0.617749,
+   "median": 0.984374,
+   "p95": 0.999241,
+   "max": 0.999956,
+   "std": 0.164899
+  },
+  "frac_sj_below_0.5": 0.0390071,
+  "inverted_or_degenerate": 25,
+  "planarity": {
+   "mean": 0.0160839,
+   "min": 1.42771e-10,
+   "p05": 0.000290812,
+   "median": 0.00622916,
+   "p95": 0.0653272,
+   "max": 0.34331,
+   "std": 0.02634
+  },
+  "aspect_ratio": {
+   "mean": 416960,
+   "min": 1.00001,
+   "p05": 1.03496,
+   "median": 1.18199,
+   "p95": 2.72789,
+   "max": 1178200000.0,
+   "std": 20517500.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 1.17973e-09,
+   "p05": 0.362514,
+   "median": 1.07152,
+   "p95": 1.33366,
+   "max": 2.7427,
+   "std": 0.288552
+  },
+  "edge_length_mean_pct_diag": 1.28811
+ },
+ "topology": {
+  "singularities": 334,
+  "boundary_irregular": 5,
+  "singularities_per_1k_faces": 69.6704,
+  "interior_vertices": 4698,
+  "boundary_vertices": 7,
+  "boundary_edges": 7,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "3": 89,
+   "4": 4364,
+   "5": 224,
+   "6": 20,
+   "7": 1
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0471499,
+  "out_to_in_mean_pct": 0.0386073,
+  "in_to_out_mean_pct": 0.0556925,
+  "rms_pct": 0.1274,
+  "hausdorff_pct": 1.61074,
+  "area_ratio": 0.965517
+ },
+ "features": {
+  "feature_coverage": 0.548758,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.548758,
+  "feature_length_pct_diag": 194.693,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 682,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 63.54,
+ "input_faces": 99938,
+ "cmd": "build/quadremesh data/models/nefertiti.obj -o benchmark/study/it2_feature_refine/meshes/nefertiti.obj -f 5000 -a 35 --no-uv --feature-refine 2"
+}

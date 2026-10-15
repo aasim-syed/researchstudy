@@ -1,0 +1,98 @@
+{
+ "method": "it5_partial_loops",
+ "faces": {
+  "total": 4913,
+  "quads": 4913,
+  "triangles": 0,
+  "vertices": 4916,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.9826
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.948361,
+   "min": -0.469048,
+   "p05": 0.769976,
+   "median": 0.995911,
+   "p95": 0.99989,
+   "max": 0.999999,
+   "std": 0.144571
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.948361,
+   "min": -0.469048,
+   "p05": 0.769976,
+   "median": 0.995911,
+   "p95": 0.99989,
+   "max": 0.999999,
+   "std": 0.144571
+  },
+  "frac_sj_below_0.5": 0.0223896,
+  "inverted_or_degenerate": 38,
+  "planarity": {
+   "mean": 0.00130406,
+   "min": 0,
+   "p05": 0,
+   "median": 1.31517e-05,
+   "p95": 0.00435738,
+   "max": 0.306021,
+   "std": 0.00821302
+  },
+  "aspect_ratio": {
+   "mean": 1.37086,
+   "min": 1.00193,
+   "p05": 1.01641,
+   "median": 1.13826,
+   "p95": 2.03512,
+   "max": 98.4981,
+   "std": 2.19345
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0.00989399,
+   "p05": 0.709887,
+   "median": 0.985534,
+   "p95": 1.34762,
+   "max": 3.9311,
+   "std": 0.242728
+  },
+  "edge_length_mean_pct_diag": 1.47495
+ },
+ "topology": {
+  "singularities": 58,
+  "boundary_irregular": 5,
+  "singularities_per_1k_faces": 11.8054,
+  "interior_vertices": 4910,
+  "boundary_vertices": 6,
+  "boundary_edges": 6,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "3": 33,
+   "4": 4852,
+   "5": 25
+  }
+ },
+ "distance": {
+  "mean_pct": 0.00616835,
+  "out_to_in_mean_pct": 0.00606985,
+  "in_to_out_mean_pct": 0.00626685,
+  "rms_pct": 0.0337609,
+  "hausdorff_pct": 4.00649,
+  "area_ratio": 0.99929
+ },
+ "features": {
+  "feature_coverage": 0.980761,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.980761,
+  "feature_length_pct_diag": 910.838,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 716,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 4.75,
+ "input_faces": 12946,
+ "cmd": "build/quadremesh data/models/fandisk.obj -o benchmark/study/it5_partial_loops/meshes/fandisk.obj -f 5000 -a 35 --no-uv --partial-loops"
+}

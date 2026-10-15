@@ -1,0 +1,99 @@
+{
+ "method": "it7_hybrid_sb10",
+ "faces": {
+  "total": 5021,
+  "quads": 5005,
+  "triangles": 16,
+  "vertices": 5545,
+  "quad_ratio": 0.996813,
+  "target": 5000,
+  "count_ratio": 1.0042
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.889816,
+   "min": -1,
+   "p05": 0.251898,
+   "median": 0.996081,
+   "p95": 0.999914,
+   "max": 0.999998,
+   "std": 0.240848
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.890724,
+   "min": -1,
+   "p05": 0.25345,
+   "median": 0.996143,
+   "p95": 0.999914,
+   "max": 0.999998,
+   "std": 0.240321
+  },
+  "frac_sj_below_0.5": 0.0886278,
+  "inverted_or_degenerate": 34,
+  "planarity": {
+   "mean": 0.0140197,
+   "min": 0,
+   "p05": 3.16959e-05,
+   "median": 0.00221834,
+   "p95": 0.0695335,
+   "max": 0.319199,
+   "std": 0.0307464
+  },
+  "aspect_ratio": {
+   "mean": 1198810.0,
+   "min": 1.00217,
+   "p05": 1.01816,
+   "median": 1.19219,
+   "p95": 11.3066,
+   "max": 1000000000.0,
+   "std": 34602900.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.311837,
+   "median": 1.05867,
+   "p95": 1.36774,
+   "max": 4.69913,
+   "std": 0.323651
+  },
+  "edge_length_mean_pct_diag": 2.00251
+ },
+ "topology": {
+  "singularities": 287,
+  "boundary_irregular": 97,
+  "singularities_per_1k_faces": 57.1599,
+  "interior_vertices": 4547,
+  "boundary_vertices": 998,
+  "boundary_edges": 998,
+  "nonmanifold_edges": 0,
+  "components": 25,
+  "valence_histogram": {
+   "3": 204,
+   "4": 4260,
+   "5": 74,
+   "6": 9
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0802787,
+  "out_to_in_mean_pct": 0.0711107,
+  "in_to_out_mean_pct": 0.0894466,
+  "rms_pct": 0.165058,
+  "hausdorff_pct": 1.68497,
+  "area_ratio": 0.925777
+ },
+ "features": {
+  "feature_coverage": 0.78142,
+  "boundary_coverage": 0.49561,
+  "combined_coverage": 0.625935,
+  "feature_length_pct_diag": 2393.13,
+  "boundary_length_pct_diag": 2855.15,
+  "feature_segments": 2169,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 25.35,
+ "input_faces": 46492,
+ "cmd": "build/quadremesh data/models/leather_sofa.obj -o benchmark/study/it7_hybrid_sb10/meshes/leather_sofa.obj -f 5000 -a 35 --no-uv --partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 10"
+}

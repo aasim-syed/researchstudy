@@ -1,0 +1,98 @@
+{
+ "method": "it0_no_feature_paths",
+ "faces": {
+  "total": 4158,
+  "quads": 4158,
+  "triangles": 0,
+  "vertices": 4181,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.8316
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.928222,
+   "min": -0.0280104,
+   "p05": 0.744168,
+   "median": 0.963702,
+   "p95": 0.99749,
+   "max": 0.999926,
+   "std": 0.0991622
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.928222,
+   "min": -0.0280104,
+   "p05": 0.744168,
+   "median": 0.963702,
+   "p95": 0.99749,
+   "max": 0.999926,
+   "std": 0.0991622
+  },
+  "frac_sj_below_0.5": 0.00817701,
+  "inverted_or_degenerate": 2,
+  "planarity": {
+   "mean": 0.0252242,
+   "min": 8.41805e-06,
+   "p05": 0.00125651,
+   "median": 0.0159328,
+   "p95": 0.0813936,
+   "max": 0.304791,
+   "std": 0.0283186
+  },
+  "aspect_ratio": {
+   "mean": 1.31613,
+   "min": 1.00918,
+   "p05": 1.04468,
+   "median": 1.20973,
+   "p95": 1.80107,
+   "max": 10.454,
+   "std": 0.426648
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0.106908,
+   "p05": 0.706882,
+   "median": 0.985388,
+   "p95": 1.29939,
+   "max": 4.77599,
+   "std": 0.215572
+  },
+  "edge_length_mean_pct_diag": 1.50554
+ },
+ "topology": {
+  "singularities": 119,
+  "boundary_irregular": 19,
+  "singularities_per_1k_faces": 28.6195,
+  "interior_vertices": 4131,
+  "boundary_vertices": 50,
+  "boundary_edges": 50,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "3": 64,
+   "4": 4012,
+   "5": 55
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0689729,
+  "out_to_in_mean_pct": 0.0705874,
+  "in_to_out_mean_pct": 0.0673585,
+  "rms_pct": 0.157055,
+  "hausdorff_pct": 3.43664,
+  "area_ratio": 0.989401
+ },
+ "features": {
+  "feature_coverage": 0.255352,
+  "boundary_coverage": 0.393902,
+  "combined_coverage": 0.338761,
+  "feature_length_pct_diag": 89.7017,
+  "boundary_length_pct_diag": 135.687,
+  "feature_segments": 142,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 14.43,
+ "input_faces": 69451,
+ "cmd": "QRM_NO_FEATURE_PATHS=1 build/quadremesh data/models/bunny.obj -o benchmark/study/it0_no_feature_paths/meshes/bunny.obj -f 5000 -a 35 --no-uv"
+}

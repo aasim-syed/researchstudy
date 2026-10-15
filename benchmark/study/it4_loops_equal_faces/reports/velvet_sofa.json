@@ -1,0 +1,98 @@
+{
+ "method": "it4_loops_equal_faces",
+ "faces": {
+  "total": 3951,
+  "quads": 3951,
+  "triangles": 0,
+  "vertices": 3971,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.7902
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.951136,
+   "min": -0.352909,
+   "p05": 0.766568,
+   "median": 0.987065,
+   "p95": 0.999711,
+   "max": 0.99999,
+   "std": 0.114108
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.951136,
+   "min": -0.352909,
+   "p05": 0.766568,
+   "median": 0.987065,
+   "p95": 0.999711,
+   "max": 0.99999,
+   "std": 0.114108
+  },
+  "frac_sj_below_0.5": 0.0134143,
+  "inverted_or_degenerate": 8,
+  "planarity": {
+   "mean": 0.013438,
+   "min": 1.44246e-11,
+   "p05": 2.93411e-07,
+   "median": 0.0021977,
+   "p95": 0.0688942,
+   "max": 0.261963,
+   "std": 0.026286
+  },
+  "aspect_ratio": {
+   "mean": 1.49388,
+   "min": 1.00758,
+   "p05": 1.04282,
+   "median": 1.26584,
+   "p95": 2.68476,
+   "max": 19.7394,
+   "std": 0.981513
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0.0223974,
+   "p05": 0.236572,
+   "median": 1.11786,
+   "p95": 1.56288,
+   "max": 2.77389,
+   "std": 0.426034
+  },
+  "edge_length_mean_pct_diag": 1.3789
+ },
+ "topology": {
+  "singularities": 116,
+  "boundary_irregular": 0,
+  "singularities_per_1k_faces": 29.3597,
+  "interior_vertices": 3971,
+  "boundary_vertices": 0,
+  "boundary_edges": 0,
+  "nonmanifold_edges": 0,
+  "components": 10,
+  "valence_histogram": {
+   "3": 98,
+   "4": 3855,
+   "5": 18
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0401845,
+  "out_to_in_mean_pct": 0.0359572,
+  "in_to_out_mean_pct": 0.0444118,
+  "rms_pct": 0.100723,
+  "hausdorff_pct": 1.56754,
+  "area_ratio": 0.973959
+ },
+ "features": {
+  "feature_coverage": 0.615672,
+  "boundary_coverage": 0.0356286,
+  "combined_coverage": 0.598877,
+  "feature_length_pct_diag": 1072.41,
+  "boundary_length_pct_diag": 31.9776,
+  "feature_segments": 731,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 15.46,
+ "input_faces": 16784,
+ "cmd": "build/quadremesh data/models/velvet_sofa.obj -o benchmark/study/it4_loops_equal_faces/meshes/velvet_sofa.obj -f 5000 -a 35 --no-uv --feature-loops"
+}

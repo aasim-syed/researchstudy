@@ -35,6 +35,9 @@ struct PostStats {
     int feature_chains = 0;
     double feature_len_traced = 0, feature_len_total = 0;
     std::vector<std::vector<Vector3d>> untraced;  // feature chains without a recovered edge path
+    std::vector<std::vector<int>> paths;          // recovered edge paths (output vertex ids)
+    std::vector<std::vector<Vector3d>> path_chains;  // the feature chain each path follows
+    int curved_splits = 0;
 };
 
 void cleanup(QuadMesh& m, PostStats& st);
@@ -50,8 +53,16 @@ void relax_and_project(QuadMesh& m, const SurfaceRef& ref, double L, int iterati
 // rung-to-rung (lengthwise along a quad strip) and split that whole strip lengthwise, with the cut
 // through the chain inside the run and on the strip midline elsewhere. Pure quads in, pure quads
 // out; no new irregular vertices. Returns faces added (stops at max_added).
-int insert_feature_loops(QuadMesh& m, const std::vector<std::vector<Vector3d>>& chains, double L, int max_added);
+// partial_ext < 0: split whole strips; >= 0: split only the crease's run (+ up to partial_ext
+// faces to reach the strip's end), leaving one triangle per open end.
+int insert_feature_loops(QuadMesh& m, const std::vector<std::vector<Vector3d>>& chains, double L, int max_added,
+                         int partial_ext = -1, int max_tris = -1);
 // Mirror across the plane and weld seam vertices (those within tol of the plane).
+// Curved creases: split every recovered path edge whose chord leaves the crease by more than
+// tol*L (or turns > max_angle deg against it) at the crease point; each adjacent quad becomes
+// quad + triangle. Up to `rounds` passes. Returns the number of splits.
+int split_curved_paths(QuadMesh& m, PostStats& st, double L, double tol, double max_angle, int rounds,
+                       int max_tris = -1);
 void mirror_and_weld(QuadMesh& m, int axis, double offset, double tol);
 
 }  // namespace qrm

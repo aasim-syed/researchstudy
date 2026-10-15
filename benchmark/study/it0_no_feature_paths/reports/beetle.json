@@ -1,0 +1,98 @@
+{
+ "method": "it0_no_feature_paths",
+ "faces": {
+  "total": 4407,
+  "quads": 4407,
+  "triangles": 0,
+  "vertices": 4704,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.8814
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.935928,
+   "min": -1,
+   "p05": 0.669142,
+   "median": 0.989085,
+   "p95": 0.999883,
+   "max": 0.999999,
+   "std": 0.146942
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.935928,
+   "min": -1,
+   "p05": 0.669142,
+   "median": 0.989085,
+   "p95": 0.999883,
+   "max": 0.999999,
+   "std": 0.146942
+  },
+  "frac_sj_below_0.5": 0.0224643,
+  "inverted_or_degenerate": 14,
+  "planarity": {
+   "mean": 0.0137412,
+   "min": 0,
+   "p05": 5.47662e-09,
+   "median": 0.00432815,
+   "p95": 0.0582379,
+   "max": 0.491848,
+   "std": 0.0279917
+  },
+  "aspect_ratio": {
+   "mean": 680737,
+   "min": 1.00346,
+   "p05": 1.04442,
+   "median": 1.19828,
+   "p95": 2.75106,
+   "max": 1000000000.0,
+   "std": 26082000.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.634007,
+   "median": 0.971321,
+   "p95": 1.47502,
+   "max": 6.05632,
+   "std": 0.293594
+  },
+  "edge_length_mean_pct_diag": 1.09683
+ },
+ "topology": {
+  "singularities": 175,
+  "boundary_irregular": 45,
+  "singularities_per_1k_faces": 39.7096,
+  "interior_vertices": 4090,
+  "boundary_vertices": 614,
+  "boundary_edges": 614,
+  "nonmanifold_edges": 0,
+  "components": 2,
+  "valence_histogram": {
+   "3": 86,
+   "4": 3915,
+   "5": 89
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0409219,
+  "out_to_in_mean_pct": 0.041418,
+  "in_to_out_mean_pct": 0.0404258,
+  "rms_pct": 0.102936,
+  "hausdorff_pct": 2.16533,
+  "area_ratio": 0.980338
+ },
+ "features": {
+  "feature_coverage": 0.496755,
+  "boundary_coverage": 0.77668,
+  "combined_coverage": 0.612389,
+  "feature_length_pct_diag": 1250.35,
+  "boundary_length_pct_diag": 880.036,
+  "feature_segments": 1830,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 37.75,
+ "input_faces": 32848,
+ "cmd": "QRM_NO_FEATURE_PATHS=1 build/quadremesh data/models/beetle.obj -o benchmark/study/it0_no_feature_paths/meshes/beetle.obj -f 5000 -a 35 --no-uv"
+}

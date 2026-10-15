@@ -1,0 +1,100 @@
+{
+"method": "E2_loops_free",
+"faces": {
+  "total": 7137,
+  "quads": 7137,
+  "triangles": 0,
+  "vertices": 7291,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 1.4274
+},
+"quality": {
+  "scaled_jacobian": {
+    "mean": 0.859598,
+    "min": -1,
+    "p05": 0.204127,
+    "median": 0.978424,
+    "p95": 0.999868,
+    "max": 1,
+    "std": 0.246757
+  },
+  "scaled_jacobian_quads": {
+    "mean": 0.859598,
+    "min": -1,
+    "p05": 0.204127,
+    "median": 0.978424,
+    "p95": 0.999868,
+    "max": 1,
+    "std": 0.246757
+  },
+  "frac_sj_below_0.5": 0.0864509,
+  "inverted_or_degenerate": 49,
+  "planarity": {
+    "mean": 0.0147612,
+    "min": 0,
+    "p05": 6.58125e-06,
+    "median": 0.00333771,
+    "p95": 0.0688474,
+    "max": 0.347037,
+    "std": 0.0265442
+  },
+  "aspect_ratio": {
+    "mean": 564666,
+    "min": 1.00244,
+    "p05": 1.0249,
+    "median": 1.44775,
+    "p95": 84.2529,
+    "max": 1e+09,
+    "std": 2.36685e+07
+  },
+  "edge_length_rel": {
+    "mean": 1,
+    "min": 0,
+    "p05": 0.0426639,
+    "median": 1.02003,
+    "p95": 1.88011,
+    "max": 18.198,
+    "std": 0.907563
+  },
+  "edge_length_mean_pct_diag": 1.39539
+},
+"topology": {
+  "singularities": 285,
+  "boundary_irregular": 20,
+  "singularities_per_1k_faces": 39.9327,
+  "interior_vertices": 7007,
+  "boundary_vertices": 284,
+  "boundary_edges": 284,
+  "nonmanifold_edges": 0,
+  "components": 13,
+  "valence_histogram": {
+    "3": 196,
+    "4": 6722,
+    "5": 61,
+    "6": 20,
+    "7": 6,
+    "8": 2
+  }
+},
+"distance": {
+  "mean_pct": 0.127629,
+  "out_to_in_mean_pct": 0.127906,
+  "in_to_out_mean_pct": 0.127353,
+  "rms_pct": 0.339885,
+  "hausdorff_pct": 3.95656,
+  "area_ratio": 1.03314
+},
+"features": {
+  "feature_coverage": 0.802389,
+  "boundary_coverage": 0.663721,
+  "combined_coverage": 0.739256,
+  "feature_length_pct_diag": 735.744,
+  "boundary_length_pct_diag": 614.945,
+  "feature_segments": 772,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+},
+"runtime_s": 36.856,
+"input_faces": 39936
+}

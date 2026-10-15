@@ -1,0 +1,100 @@
+{
+ "method": "it7_hybrid_sb10",
+ "faces": {
+  "total": 4700,
+  "quads": 4679,
+  "triangles": 21,
+  "vertices": 4691,
+  "quad_ratio": 0.995532,
+  "target": 5000,
+  "count_ratio": 0.94
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.964493,
+   "min": -1,
+   "p05": 0.862166,
+   "median": 0.988732,
+   "p95": 0.999348,
+   "max": 0.999981,
+   "std": 0.0942217
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.965737,
+   "min": -1,
+   "p05": 0.869391,
+   "median": 0.988858,
+   "p95": 0.999352,
+   "max": 0.999981,
+   "std": 0.0915437
+  },
+  "frac_sj_below_0.5": 0.00553191,
+  "inverted_or_degenerate": 7,
+  "planarity": {
+   "mean": 0.0136376,
+   "min": 1.53035e-15,
+   "p05": 0.000308266,
+   "median": 0.00609085,
+   "p95": 0.0541409,
+   "max": 0.241247,
+   "std": 0.020084
+  },
+  "aspect_ratio": {
+   "mean": 213722,
+   "min": 1.00317,
+   "p05": 1.02563,
+   "median": 1.14716,
+   "p95": 1.72246,
+   "max": 1000000000.0,
+   "std": 14617600.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.696841,
+   "median": 0.986066,
+   "p95": 1.30644,
+   "max": 2.7962,
+   "std": 0.194329
+  },
+  "edge_length_mean_pct_diag": 1.41652
+ },
+ "topology": {
+  "singularities": 115,
+  "boundary_irregular": 6,
+  "singularities_per_1k_faces": 24.4681,
+  "interior_vertices": 4684,
+  "boundary_vertices": 7,
+  "boundary_edges": 7,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "2": 2,
+   "3": 45,
+   "4": 4569,
+   "5": 66,
+   "6": 2
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0530487,
+  "out_to_in_mean_pct": 0.0499671,
+  "in_to_out_mean_pct": 0.0561303,
+  "rms_pct": 0.109481,
+  "hausdorff_pct": 1.1073,
+  "area_ratio": 0.978942
+ },
+ "features": {
+  "feature_coverage": 0.588839,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.588839,
+  "feature_length_pct_diag": 56.1287,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 88,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 6.07,
+ "input_faces": 20088,
+ "cmd": "build/quadremesh data/models/rocker_arm.obj -o benchmark/study/it7_hybrid_sb10/meshes/rocker_arm.obj -f 5000 -a 35 --no-uv --partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 10"
+}

@@ -1,0 +1,98 @@
+{
+ "method": "it0_no_feature_paths",
+ "faces": {
+  "total": 4505,
+  "quads": 4505,
+  "triangles": 0,
+  "vertices": 4507,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.901
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.954318,
+   "min": -0.0852423,
+   "p05": 0.808763,
+   "median": 0.983372,
+   "p95": 0.998917,
+   "max": 0.999962,
+   "std": 0.0868179
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.954318,
+   "min": -0.0852423,
+   "p05": 0.808763,
+   "median": 0.983372,
+   "p95": 0.998917,
+   "max": 0.999962,
+   "std": 0.0868179
+  },
+  "frac_sj_below_0.5": 0.00710322,
+  "inverted_or_degenerate": 1,
+  "planarity": {
+   "mean": 0.0135766,
+   "min": 2.62108e-10,
+   "p05": 0.000656845,
+   "median": 0.00801474,
+   "p95": 0.0459604,
+   "max": 0.224549,
+   "std": 0.0173079
+  },
+  "aspect_ratio": {
+   "mean": 1.28448,
+   "min": 1.00311,
+   "p05": 1.0364,
+   "median": 1.18251,
+   "p95": 1.78899,
+   "max": 8.27525,
+   "std": 0.407729
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0.0842589,
+   "p05": 0.730956,
+   "median": 0.985669,
+   "p95": 1.2982,
+   "max": 3.20495,
+   "std": 0.192455
+  },
+  "edge_length_mean_pct_diag": 1.39047
+ },
+ "topology": {
+  "singularities": 90,
+  "boundary_irregular": 0,
+  "singularities_per_1k_faces": 19.9778,
+  "interior_vertices": 4507,
+  "boundary_vertices": 0,
+  "boundary_edges": 0,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "3": 49,
+   "4": 4417,
+   "5": 41
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0334406,
+  "out_to_in_mean_pct": 0.032358,
+  "in_to_out_mean_pct": 0.0345231,
+  "rms_pct": 0.0624842,
+  "hausdorff_pct": 1.32235,
+  "area_ratio": 0.989921
+ },
+ "features": {
+  "feature_coverage": 0.816005,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.816005,
+  "feature_length_pct_diag": 131.743,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 150,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 9.65,
+ "input_faces": 23424,
+ "cmd": "QRM_NO_FEATURE_PATHS=1 build/quadremesh data/models/spot.obj -o benchmark/study/it0_no_feature_paths/meshes/spot.obj -f 5000 -a 35 --no-uv"
+}

@@ -1,0 +1,33 @@
+{
+ "name": "it1_feature_paths",
+ "flags": "",
+ "date": "2026-10-15T08:05:17",
+ "git": "f0a388b",
+ "models": [
+  "armadillo",
+  "beetle",
+  "bunny",
+  "damask_chair",
+  "fandisk",
+  "fandisk_noisy",
+  "fountain_scan",
+  "igea",
+  "leather_sofa",
+  "lounge_room",
+  "nefertiti",
+  "rocker_arm",
+  "sheen_chair",
+  "spot",
+  "velvet_sofa"
+ ],
+ "reruns": [
+  {
+   "date": "2026-10-15T08:46:13",
+   "git": "f0a388b",
+   "models": [
+    "fountain_scan",
+    "lounge_room"
+   ]
+  }
+ ]
+}

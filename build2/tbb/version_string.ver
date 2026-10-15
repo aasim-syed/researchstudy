@@ -1,0 +1,11 @@
+#define __TBB_VERSION_STRINGS(N) \
+#N": BUILD_HOST         Linux" ENDL \
+#N": BUILD_OS           Linux-6.18.44-fc-v114" ENDL \
+#N": BUILD_KERNEL       6.18.44-fc-v114" ENDL \
+#N": BUILD_GCC          GNU" ENDL \
+#N": BUILD_LIBC         Unknown" ENDL \
+#N": BUILD_LD           Unknown" ENDL \
+#N": BUILD_TARGET       Unknown" ENDL \
+#N": BUILD_COMMAND      Unknown" ENDL
+
+#define __TBB_DATETIME "Thu, 15 Oct 2026 07:56:55 +0530"

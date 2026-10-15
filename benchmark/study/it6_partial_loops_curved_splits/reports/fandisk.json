@@ -1,0 +1,100 @@
+{
+ "method": "it6_partial_loops_curved_splits",
+ "faces": {
+  "total": 4918,
+  "quads": 4914,
+  "triangles": 4,
+  "vertices": 4919,
+  "quad_ratio": 0.999187,
+  "target": 5000,
+  "count_ratio": 0.9836
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.948033,
+   "min": -0.469048,
+   "p05": 0.768509,
+   "median": 0.995908,
+   "p95": 0.99989,
+   "max": 0.999999,
+   "std": 0.144908
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.948328,
+   "min": -0.469048,
+   "p05": 0.771299,
+   "median": 0.995911,
+   "p95": 0.99989,
+   "max": 0.999999,
+   "std": 0.144584
+  },
+  "frac_sj_below_0.5": 0.0225702,
+  "inverted_or_degenerate": 38,
+  "planarity": {
+   "mean": 0.00130247,
+   "min": 0,
+   "p05": 0,
+   "median": 1.31677e-05,
+   "p95": 0.00435738,
+   "max": 0.306021,
+   "std": 0.00809083
+  },
+  "aspect_ratio": {
+   "mean": 1.37227,
+   "min": 1.00193,
+   "p05": 1.01641,
+   "median": 1.13862,
+   "p95": 2.03989,
+   "max": 98.4981,
+   "std": 2.19426
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0.00989352,
+   "p05": 0.709081,
+   "median": 0.985504,
+   "p95": 1.34973,
+   "max": 3.93091,
+   "std": 0.242795
+  },
+  "edge_length_mean_pct_diag": 1.47502
+ },
+ "topology": {
+  "singularities": 62,
+  "boundary_irregular": 5,
+  "singularities_per_1k_faces": 12.6068,
+  "interior_vertices": 4913,
+  "boundary_vertices": 6,
+  "boundary_edges": 6,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "2": 1,
+   "3": 32,
+   "4": 4851,
+   "5": 28,
+   "6": 1
+  }
+ },
+ "distance": {
+  "mean_pct": 0.00593999,
+  "out_to_in_mean_pct": 0.00601032,
+  "in_to_out_mean_pct": 0.00586965,
+  "rms_pct": 0.030044,
+  "hausdorff_pct": 4.00649,
+  "area_ratio": 0.99971
+ },
+ "features": {
+  "feature_coverage": 0.983329,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.983329,
+  "feature_length_pct_diag": 910.838,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 716,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 5,
+ "input_faces": 12946,
+ "cmd": "build/quadremesh data/models/fandisk.obj -o benchmark/study/it6_partial_loops_curved_splits/meshes/fandisk.obj -f 5000 -a 35 --no-uv --partial-loops --curved-splits"
+}
