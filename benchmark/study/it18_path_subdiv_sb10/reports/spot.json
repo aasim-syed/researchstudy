@@ -1,0 +1,100 @@
+{
+ "method": "it18_path_subdiv_sb10",
+ "faces": {
+  "total": 4031,
+  "quads": 4031,
+  "triangles": 0,
+  "vertices": 4033,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.8062
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.93336,
+   "min": -0.834993,
+   "p05": 0.740096,
+   "median": 0.974981,
+   "p95": 0.998143,
+   "max": 0.999944,
+   "std": 0.143467
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.93336,
+   "min": -0.834993,
+   "p05": 0.740096,
+   "median": 0.974981,
+   "p95": 0.998143,
+   "max": 0.999944,
+   "std": 0.143467
+  },
+  "frac_sj_below_0.5": 0.0218308,
+  "inverted_or_degenerate": 23,
+  "planarity": {
+   "mean": 0.015164,
+   "min": 2.40626e-10,
+   "p05": 0.000606288,
+   "median": 0.00928159,
+   "p95": 0.0527778,
+   "max": 0.172733,
+   "std": 0.0176152
+  },
+  "aspect_ratio": {
+   "mean": 3.04588,
+   "min": 1.00298,
+   "p05": 1.03567,
+   "median": 1.20535,
+   "p95": 2.09926,
+   "max": 3230.93,
+   "std": 63.6729
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0.000224852,
+   "p05": 0.604532,
+   "median": 1.01033,
+   "p95": 1.39282,
+   "max": 3.09661,
+   "std": 0.247182
+  },
+  "edge_length_mean_pct_diag": 1.46063
+ },
+ "topology": {
+  "singularities": 139,
+  "boundary_irregular": 0,
+  "singularities_per_1k_faces": 34.4828,
+  "interior_vertices": 4033,
+  "boundary_vertices": 0,
+  "boundary_edges": 0,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "3": 78,
+   "4": 3894,
+   "5": 53,
+   "6": 7,
+   "7": 1
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0387378,
+  "out_to_in_mean_pct": 0.0378188,
+  "in_to_out_mean_pct": 0.0396568,
+  "rms_pct": 0.064807,
+  "hausdorff_pct": 1.28502,
+  "area_ratio": 0.989864
+ },
+ "features": {
+  "feature_coverage": 0.951521,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.951521,
+  "feature_length_pct_diag": 131.743,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 150,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 7.79,
+ "input_faces": 23424,
+ "cmd": "build/quadremesh data/models/spot.obj -o benchmark/study/it18_path_subdiv_sb10/meshes/spot.obj -f 5000 -a 35 --no-uv --path-subdiv 3 --sing-budget 10"
+}

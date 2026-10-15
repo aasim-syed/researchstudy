@@ -64,6 +64,8 @@ struct Params {
     bool crease_cuts = false;
     bool coverage_search = false;
     int coverage_target_faces = 0;       // internal: face count the coverage tolerance refers to (0 = target_faces)
+    bool sing_budget_im = false;         // coverage stage may use singularities up to 85 % of an Instant
+                                         // Meshes solve of the same input at the same face count
     int path_subdivision = 0;            // 3 / 5: split path edges that miss their crease into this many pieces
     double snap_near = 0.5;              // >0: snap edges within this many L onto uncovered creases
     std::vector<Vector3d> density_focus;  // input-space points that get extra density (error-driven)

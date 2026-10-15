@@ -1,0 +1,100 @@
+{
+ "method": "it18_path_subdiv_sb10",
+ "faces": {
+  "total": 4873,
+  "quads": 4873,
+  "triangles": 0,
+  "vertices": 4877,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.9746
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.970854,
+   "min": -1,
+   "p05": 0.937304,
+   "median": 0.991352,
+   "p95": 0.999286,
+   "max": 0.999994,
+   "std": 0.11511
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.970854,
+   "min": -1,
+   "p05": 0.937304,
+   "median": 0.991352,
+   "p95": 0.999286,
+   "max": 0.999994,
+   "std": 0.11511
+  },
+  "frac_sj_below_0.5": 0.0116971,
+  "inverted_or_degenerate": 27,
+  "planarity": {
+   "mean": 0.0210083,
+   "min": 1.50251e-15,
+   "p05": 0.00114449,
+   "median": 0.0132379,
+   "p95": 0.0676551,
+   "max": 0.259493,
+   "std": 0.0225228
+  },
+  "aspect_ratio": {
+   "mean": 410426,
+   "min": 1.00647,
+   "p05": 1.03212,
+   "median": 1.11314,
+   "p95": 1.37332,
+   "max": 1000000000.0,
+   "std": 20254800.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.760364,
+   "median": 1.00607,
+   "p95": 1.23538,
+   "max": 12.2871,
+   "std": 0.195511
+  },
+  "edge_length_mean_pct_diag": 1.39123
+ },
+ "topology": {
+  "singularities": 74,
+  "boundary_irregular": 4,
+  "singularities_per_1k_faces": 15.1857,
+  "interior_vertices": 4871,
+  "boundary_vertices": 6,
+  "boundary_edges": 6,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "3": 44,
+   "4": 4797,
+   "5": 26,
+   "6": 3,
+   "7": 1
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0474103,
+  "out_to_in_mean_pct": 0.045591,
+  "in_to_out_mean_pct": 0.0492296,
+  "rms_pct": 0.085113,
+  "hausdorff_pct": 1.75622,
+  "area_ratio": 0.98319
+ },
+ "features": {
+  "feature_coverage": 0.562621,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.562621,
+  "feature_length_pct_diag": 35.6743,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 104,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 56.3,
+ "input_faces": 268686,
+ "cmd": "build/quadremesh data/models/igea.obj -o benchmark/study/it18_path_subdiv_sb10/meshes/igea.obj -f 5000 -a 35 --no-uv --path-subdiv 3 --sing-budget 10"
+}

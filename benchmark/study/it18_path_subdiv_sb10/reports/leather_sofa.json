@@ -1,0 +1,99 @@
+{
+ "method": "it18_path_subdiv_sb10",
+ "faces": {
+  "total": 4839,
+  "quads": 4839,
+  "triangles": 0,
+  "vertices": 5398,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.9678
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.854309,
+   "min": -1,
+   "p05": 0.19709,
+   "median": 0.98169,
+   "p95": 0.999888,
+   "max": 0.999998,
+   "std": 0.258967
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.854309,
+   "min": -1,
+   "p05": 0.19709,
+   "median": 0.98169,
+   "p95": 0.999888,
+   "max": 0.999998,
+   "std": 0.258967
+  },
+  "frac_sj_below_0.5": 0.11118,
+  "inverted_or_degenerate": 51,
+  "planarity": {
+   "mean": 0.0180074,
+   "min": 0,
+   "p05": 5.37482e-05,
+   "median": 0.00386779,
+   "p95": 0.0880069,
+   "max": 0.336488,
+   "std": 0.0352082
+  },
+  "aspect_ratio": {
+   "mean": 413963,
+   "min": 1.00749,
+   "p05": 1.07333,
+   "median": 1.40283,
+   "p95": 6.35182,
+   "max": 1000000000.0,
+   "std": 20325800.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.315508,
+   "median": 0.988504,
+   "p95": 1.58048,
+   "max": 8.42544,
+   "std": 0.427711
+  },
+  "edge_length_mean_pct_diag": 2.05534
+ },
+ "topology": {
+  "singularities": 336,
+  "boundary_irregular": 124,
+  "singularities_per_1k_faces": 69.4358,
+  "interior_vertices": 4328,
+  "boundary_vertices": 1070,
+  "boundary_edges": 1070,
+  "nonmanifold_edges": 0,
+  "components": 27,
+  "valence_histogram": {
+   "3": 240,
+   "4": 3992,
+   "5": 84,
+   "6": 12
+  }
+ },
+ "distance": {
+  "mean_pct": 0.107354,
+  "out_to_in_mean_pct": 0.114177,
+  "in_to_out_mean_pct": 0.100531,
+  "rms_pct": 0.275285,
+  "hausdorff_pct": 4.03258,
+  "area_ratio": 0.947705
+ },
+ "features": {
+  "feature_coverage": 0.891981,
+  "boundary_coverage": 0.498051,
+  "combined_coverage": 0.677677,
+  "feature_length_pct_diag": 2393.13,
+  "boundary_length_pct_diag": 2855.15,
+  "feature_segments": 2169,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 14.84,
+ "input_faces": 46492,
+ "cmd": "build/quadremesh data/models/leather_sofa.obj -o benchmark/study/it18_path_subdiv_sb10/meshes/leather_sofa.obj -f 5000 -a 35 --no-uv --path-subdiv 3 --sing-budget 10"
+}

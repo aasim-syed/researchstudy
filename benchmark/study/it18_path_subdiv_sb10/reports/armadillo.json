@@ -1,0 +1,100 @@
+{
+ "method": "it18_path_subdiv_sb10",
+ "faces": {
+  "total": 4338,
+  "quads": 4338,
+  "triangles": 0,
+  "vertices": 4341,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.8676
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.924675,
+   "min": -0.974325,
+   "p05": 0.670042,
+   "median": 0.976771,
+   "p95": 0.997983,
+   "max": 0.999818,
+   "std": 0.149018
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.924675,
+   "min": -0.974325,
+   "p05": 0.670042,
+   "median": 0.976771,
+   "p95": 0.997983,
+   "max": 0.999818,
+   "std": 0.149018
+  },
+  "frac_sj_below_0.5": 0.0184417,
+  "inverted_or_degenerate": 25,
+  "planarity": {
+   "mean": 0.0317876,
+   "min": 3.12603e-15,
+   "p05": 0.00167821,
+   "median": 0.0213605,
+   "p95": 0.0969289,
+   "max": 0.305724,
+   "std": 0.0329841
+  },
+  "aspect_ratio": {
+   "mean": 1.50136,
+   "min": 1.00525,
+   "p05": 1.05458,
+   "median": 1.24534,
+   "p95": 2.34404,
+   "max": 53.6541,
+   "std": 1.57684
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0.00369036,
+   "p05": 0.570777,
+   "median": 0.992776,
+   "p95": 1.49115,
+   "max": 2.7949,
+   "std": 0.272145
+  },
+  "edge_length_mean_pct_diag": 1.25179
+ },
+ "topology": {
+  "singularities": 226,
+  "boundary_irregular": 5,
+  "singularities_per_1k_faces": 52.0977,
+  "interior_vertices": 4335,
+  "boundary_vertices": 6,
+  "boundary_edges": 6,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "3": 120,
+   "4": 4109,
+   "5": 101,
+   "6": 3,
+   "7": 2
+  }
+ },
+ "distance": {
+  "mean_pct": 0.116918,
+  "out_to_in_mean_pct": 0.0956198,
+  "in_to_out_mean_pct": 0.138215,
+  "rms_pct": 0.22846,
+  "hausdorff_pct": 3.53221,
+  "area_ratio": 0.918345
+ },
+ "features": {
+  "feature_coverage": 0.493583,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.493583,
+  "feature_length_pct_diag": 22.4361,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 88,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 13.2,
+ "input_faces": 99976,
+ "cmd": "build/quadremesh data/models/armadillo.obj -o benchmark/study/it18_path_subdiv_sb10/meshes/armadillo.obj -f 5000 -a 35 --no-uv --path-subdiv 3 --sing-budget 10"
+}

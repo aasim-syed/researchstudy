@@ -1,0 +1,99 @@
+{
+ "method": "it18_path_subdiv_sb10",
+ "faces": {
+  "total": 4626,
+  "quads": 4626,
+  "triangles": 0,
+  "vertices": 4631,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.9252
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.921395,
+   "min": -1,
+   "p05": 0.679552,
+   "median": 0.977215,
+   "p95": 0.9986,
+   "max": 0.999978,
+   "std": 0.187427
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.921395,
+   "min": -1,
+   "p05": 0.679552,
+   "median": 0.977215,
+   "p95": 0.9986,
+   "max": 0.999978,
+   "std": 0.187427
+  },
+  "frac_sj_below_0.5": 0.029399,
+  "inverted_or_degenerate": 50,
+  "planarity": {
+   "mean": 0.0171322,
+   "min": 0,
+   "p05": 0.000279294,
+   "median": 0.00797096,
+   "p95": 0.072989,
+   "max": 0.391427,
+   "std": 0.0273316
+  },
+  "aspect_ratio": {
+   "mean": 1080850.0,
+   "min": 1.00436,
+   "p05": 1.03165,
+   "median": 1.19428,
+   "p95": 2.32431,
+   "max": 1000000000.0,
+   "std": 32858500.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.572202,
+   "median": 1.00604,
+   "p95": 1.38658,
+   "max": 16.09,
+   "std": 0.351632
+  },
+  "edge_length_mean_pct_diag": 1.33326
+ },
+ "topology": {
+  "singularities": 172,
+  "boundary_irregular": 14,
+  "singularities_per_1k_faces": 37.1812,
+  "interior_vertices": 4613,
+  "boundary_vertices": 18,
+  "boundary_edges": 18,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "3": 88,
+   "4": 4441,
+   "5": 83,
+   "6": 1
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0541692,
+  "out_to_in_mean_pct": 0.0532736,
+  "in_to_out_mean_pct": 0.0550648,
+  "rms_pct": 0.170486,
+  "hausdorff_pct": 2.37327,
+  "area_ratio": 0.978595
+ },
+ "features": {
+  "feature_coverage": 0.639198,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.639198,
+  "feature_length_pct_diag": 194.693,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 682,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 15.04,
+ "input_faces": 99938,
+ "cmd": "build/quadremesh data/models/nefertiti.obj -o benchmark/study/it18_path_subdiv_sb10/meshes/nefertiti.obj -f 5000 -a 35 --no-uv --path-subdiv 3 --sing-budget 10"
+}

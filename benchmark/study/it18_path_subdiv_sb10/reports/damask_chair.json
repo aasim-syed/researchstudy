@@ -1,0 +1,102 @@
+{
+ "method": "it18_path_subdiv_sb10",
+ "faces": {
+  "total": 4208,
+  "quads": 4208,
+  "triangles": 0,
+  "vertices": 4399,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.8416
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.817773,
+   "min": -1,
+   "p05": 0.0554313,
+   "median": 0.963868,
+   "p95": 0.99978,
+   "max": 1,
+   "std": 0.310308
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.817773,
+   "min": -1,
+   "p05": 0.0554313,
+   "median": 0.963868,
+   "p95": 0.99978,
+   "max": 1,
+   "std": 0.310308
+  },
+  "frac_sj_below_0.5": 0.130941,
+  "inverted_or_degenerate": 96,
+  "planarity": {
+   "mean": 0.017966,
+   "min": 0,
+   "p05": 2.38484e-06,
+   "median": 0.00471183,
+   "p95": 0.0931613,
+   "max": 0.305082,
+   "std": 0.035294
+  },
+  "aspect_ratio": {
+   "mean": 4752850.0,
+   "min": 1.00227,
+   "p05": 1.03806,
+   "median": 1.36462,
+   "p95": 9.01233,
+   "max": 1000000000.0,
+   "std": 68776900.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.166082,
+   "median": 1.06826,
+   "p95": 1.64887,
+   "max": 9.3163,
+   "std": 0.545613
+  },
+  "edge_length_mean_pct_diag": 1.69402
+ },
+ "topology": {
+  "singularities": 429,
+  "boundary_irregular": 35,
+  "singularities_per_1k_faces": 101.949,
+  "interior_vertices": 4171,
+  "boundary_vertices": 228,
+  "boundary_edges": 236,
+  "nonmanifold_edges": 0,
+  "components": 48,
+  "valence_histogram": {
+   "2": 109,
+   "3": 232,
+   "4": 3742,
+   "5": 69,
+   "6": 12,
+   "7": 5,
+   "8": 2
+  }
+ },
+ "distance": {
+  "mean_pct": 0.102328,
+  "out_to_in_mean_pct": 0.0769017,
+  "in_to_out_mean_pct": 0.127755,
+  "rms_pct": 0.241706,
+  "hausdorff_pct": 3.12529,
+  "area_ratio": 0.919112
+ },
+ "features": {
+  "feature_coverage": 0.595299,
+  "boundary_coverage": 0.551552,
+  "combined_coverage": 0.592139,
+  "feature_length_pct_diag": 5985.21,
+  "boundary_length_pct_diag": 466.079,
+  "feature_segments": 4513,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 154.19,
+ "input_faces": 39936,
+ "cmd": "build/quadremesh data/models/damask_chair.obj -o benchmark/study/it18_path_subdiv_sb10/meshes/damask_chair.obj -f 5000 -a 35 --no-uv --path-subdiv 3 --sing-budget 10"
+}

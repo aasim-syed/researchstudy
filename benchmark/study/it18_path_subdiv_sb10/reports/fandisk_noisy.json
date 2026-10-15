@@ -1,0 +1,100 @@
+{
+ "method": "it18_path_subdiv_sb10",
+ "faces": {
+  "total": 3860,
+  "quads": 3860,
+  "triangles": 0,
+  "vertices": 3864,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.772
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.904276,
+   "min": -1,
+   "p05": 0.539314,
+   "median": 0.975301,
+   "p95": 0.997914,
+   "max": 0.999905,
+   "std": 0.199716
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.904276,
+   "min": -1,
+   "p05": 0.539314,
+   "median": 0.975301,
+   "p95": 0.997914,
+   "max": 0.999905,
+   "std": 0.199716
+  },
+  "frac_sj_below_0.5": 0.046114,
+  "inverted_or_degenerate": 45,
+  "planarity": {
+   "mean": 0.0246239,
+   "min": 0,
+   "p05": 0.00144744,
+   "median": 0.0182833,
+   "p95": 0.0634786,
+   "max": 0.369622,
+   "std": 0.0268879
+  },
+  "aspect_ratio": {
+   "mean": 518136,
+   "min": 1.01492,
+   "p05": 1.07105,
+   "median": 1.30478,
+   "p95": 2.89286,
+   "max": 1000000000.0,
+   "std": 22756700.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.592352,
+   "median": 0.96492,
+   "p95": 1.51304,
+   "max": 7.62955,
+   "std": 0.338347
+  },
+  "edge_length_mean_pct_diag": 1.65901
+ },
+ "topology": {
+  "singularities": 168,
+  "boundary_irregular": 11,
+  "singularities_per_1k_faces": 43.5233,
+  "interior_vertices": 3852,
+  "boundary_vertices": 12,
+  "boundary_edges": 12,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "3": 92,
+   "4": 3684,
+   "5": 68,
+   "6": 6,
+   "7": 2
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0610188,
+  "out_to_in_mean_pct": 0.0640677,
+  "in_to_out_mean_pct": 0.0579699,
+  "rms_pct": 0.130048,
+  "hausdorff_pct": 4.36896,
+  "area_ratio": 0.990273
+ },
+ "features": {
+  "feature_coverage": 0.834208,
+  "boundary_coverage": 0.252844,
+  "combined_coverage": 0.810356,
+  "feature_length_pct_diag": 1121.35,
+  "boundary_length_pct_diag": 47.974,
+  "feature_segments": 869,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 14.77,
+ "input_faces": 12925,
+ "cmd": "build/quadremesh data/models/fandisk_noisy.obj -o benchmark/study/it18_path_subdiv_sb10/meshes/fandisk_noisy.obj -f 5000 -a 35 --no-uv --path-subdiv 3 --sing-budget 10"
+}

@@ -745,7 +745,25 @@ static Result quadremesh_once(const TriMesh& input, const Params& p) {
             return count_singularities((int)qm.V.rows(), qq);
         };
         const int tri_cap = ntris() + (int)(p.triangle_budget * T);
-        const int sing_cap = nsing() + (int)(p.singularity_budget * T / 1000.0);
+        int sing_cap = nsing() + (int)(p.singularity_budget * T / 1000.0);
+        if (p.sing_budget_im) {
+            // reference: Instant Meshes on the same (preprocessed) surface at the requested face count
+            std::vector<double> iv(3 * refV.rows());
+            std::vector<int> ifc(3 * refF.rows());
+            for (int i = 0; i < refV.rows(); ++i)
+                for (int k = 0; k < 3; ++k) iv[3 * i + k] = refV(i, k);
+            for (int f = 0; f < refF.rows(); ++f)
+                for (int k = 0; k < 3; ++k) ifc[3 * f + k] = refF(f, k);
+            const int Tref = p.coverage_target_faces > 0 ? p.coverage_target_faces : T;
+            IMResult ir = run_instant_meshes(iv, ifc, Tref, p.feature_angle, boundary_hard);
+            if (ir.ok && !ir.Q.empty()) {
+                const int s_im = count_singularities((int)(ir.V.size() / 3), ir.Q);
+                const double per_face = (double)s_im / ir.Q.size();
+                sing_cap = std::max(nsing(), (int)std::floor(0.85 * per_face * qm.Q.rows()));
+                log("singularity budget from Instant Meshes reference: ", s_im, " singularities / ", ir.Q.size(),
+                    " faces -> cap ", sing_cap, " (now ", nsing(), ")");
+            }
+        }
         int accepted = 0, rejected = 0;
         auto within = [&]() { return ntris() <= tri_cap && nsing() <= sing_cap; };
         auto chain_len = [](const std::vector<Vector3d>& c) {
@@ -1081,7 +1099,9 @@ Result quadremesh(const TriMesh& input, const Params& p) {
         double cov = json_num(js, "feature_coverage"), quad = json_num(js, "quad_ratio"),
                sj = json_num(js, "scaled_jacobian", "mean"), dist = json_num(js, "distance", "mean_pct"),
                s1k = json_num(js, "singularities_per_1k_faces");
-        if (k == 0) s_cap = s1k + p.singularity_budget;
+        // with the Instant Meshes-referenced budget every candidate is already capped in its coverage
+        // stage; the base solves differ, so a candidate may not exceed the first one by more than 5 %
+        if (k == 0) s_cap = p.sing_budget_im ? 1.05 * s1k : s1k + p.singularity_budget;
         bool ok = quad >= 0.98 && sj >= 0.8 && dist < 0.5 && s1k <= s_cap;
         char buf[256];
         std::snprintf(buf, sizeof buf, "coverage search: candidate %zu (feature density %.0f, width %.1f, seed %u): coverage %.3f quad %.3f SJ %.3f dist %.3f%% sing/1k %.1f%s",

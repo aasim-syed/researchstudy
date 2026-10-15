@@ -21,7 +21,8 @@
   "it18_path_subdiv_sb10",
   "it19_path_subdiv_sb25",
   "it20_coverage_mode_subdiv",
-  "it21_max_coverage"
+  "it21_im_budget",
+  "it22_max_coverage"
  ],
  "it0_no_feature_paths": [
   "Baseline before any coverage-specific post-processing: hard feature constraints in the field + proximity snapping of vertices to creases (the default before edge-path recovery). Reproduced with the current code by disabling path recovery (QRM_NO_FEATURE_PATHS=1)."
@@ -115,7 +116,10 @@
  "it20_coverage_mode_subdiv": [
   "Coverage mode (budgeted loops / refinement / curved splits, +25 singularities per 1k) + path-edge subdivision, on the new defaults."
  ],
- "it21_max_coverage": [
-  "it20 + coverage search (4 candidates scored with the evaluator code; quad >= 98 %, SJ >= 0.8, distance < 0.5 %, <= +10 singularities/1k over the first candidate). 4x runtime."
+ "it21_im_budget": [
+  "Singularity budget referenced to the criterion itself: before the coverage stage, Instant Meshes (the same library the benchmark runs, here on the preprocessed surface) remeshes the input at the requested face count; the stage may add irregular vertices up to 85 % of its singularity rate (85 % because the internal reference landed up to ~14 % above the benchmark's Instant Meshes run on rocker arm / fandisk_noisy in a test). Coverage mode + path-edge subdivision (--coverage-mode --path-subdiv 3 --sing-budget-im)."
+ ],
+ "it22_max_coverage": [
+  "it21 + coverage search (4 candidates; with the Instant Meshes-referenced budget a candidate may not exceed the first candidate's singularity rate by more than 5 %). 4x runtime. Recommended setting when feature coverage matters most."
  ]
 }

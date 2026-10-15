@@ -1,0 +1,99 @@
+{
+ "method": "it18_path_subdiv_sb10",
+ "faces": {
+  "total": 4586,
+  "quads": 4586,
+  "triangles": 0,
+  "vertices": 4916,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.9172
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.822343,
+   "min": -1,
+   "p05": 0.180114,
+   "median": 0.946056,
+   "p95": 0.999196,
+   "max": 0.99999,
+   "std": 0.267222
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.822343,
+   "min": -1,
+   "p05": 0.180114,
+   "median": 0.946056,
+   "p95": 0.999196,
+   "max": 0.99999,
+   "std": 0.267222
+  },
+  "frac_sj_below_0.5": 0.110118,
+  "inverted_or_degenerate": 110,
+  "planarity": {
+   "mean": 0.0154739,
+   "min": 0,
+   "p05": 5.15565e-09,
+   "median": 0.00495976,
+   "p95": 0.0658429,
+   "max": 0.382899,
+   "std": 0.0295297
+  },
+  "aspect_ratio": {
+   "mean": 654189,
+   "min": 1.00469,
+   "p05": 1.09117,
+   "median": 1.56439,
+   "p95": 5.45289,
+   "max": 1000000000.0,
+   "std": 25568300.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.392995,
+   "median": 0.921137,
+   "p95": 1.68683,
+   "max": 8.82743,
+   "std": 0.495196
+  },
+  "edge_length_mean_pct_diag": 1.11382
+ },
+ "topology": {
+  "singularities": 291,
+  "boundary_irregular": 58,
+  "singularities_per_1k_faces": 63.454,
+  "interior_vertices": 4230,
+  "boundary_vertices": 686,
+  "boundary_edges": 686,
+  "nonmanifold_edges": 0,
+  "components": 2,
+  "valence_histogram": {
+   "3": 148,
+   "4": 3939,
+   "5": 141,
+   "7": 2
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0511272,
+  "out_to_in_mean_pct": 0.0595076,
+  "in_to_out_mean_pct": 0.0427468,
+  "rms_pct": 0.181038,
+  "hausdorff_pct": 4.23156,
+  "area_ratio": 1.00636
+ },
+ "features": {
+  "feature_coverage": 0.72924,
+  "boundary_coverage": 0.711482,
+  "combined_coverage": 0.721905,
+  "feature_length_pct_diag": 1250.35,
+  "boundary_length_pct_diag": 880.036,
+  "feature_segments": 1830,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 23.28,
+ "input_faces": 32848,
+ "cmd": "build/quadremesh data/models/beetle.obj -o benchmark/study/it18_path_subdiv_sb10/meshes/beetle.obj -f 5000 -a 35 --no-uv --path-subdiv 3 --sing-budget 10"
+}

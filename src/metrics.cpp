@@ -283,6 +283,15 @@ std::string evaluate(const TriMesh& input, const QuadMesh& out, const EvalParams
     // ---------------------------------------------------------- feature coverage
     {
         FeatureSet fs = detect_features(clean.V, clean.F, ep.feature_angle, ep.min_feature_length * L, 1.0 * L);
+        if (const char* sp = std::getenv("QRM_EVAL_SEGMENTS")) {  // diagnostics: the evaluator's crease segments + L
+            if (std::FILE* fp = std::fopen(sp, "w")) {
+                std::fprintf(fp, "# L %.12g\n", L);
+                for (int i = 0; i < fs.segments.rows(); ++i)
+                    std::fprintf(fp, "%.12g %.12g %.12g %.12g %.12g %.12g\n", fs.segments(i, 0), fs.segments(i, 1), fs.segments(i, 2),
+                                 fs.segments(i, 3), fs.segments(i, 4), fs.segments(i, 5));
+                std::fclose(fp);
+            }
+        }
         // output edge segments
         std::vector<std::pair<int, int>> oe;
         for (auto& kv : ecount) oe.push_back(kv.first);
