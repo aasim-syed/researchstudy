@@ -1,2 +1,2 @@
-/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/fountain_scan.obj -o /tmp/claude-0/s/res_ref/meshes/fountain_scan__ours_featref.obj -f 15000 -a 35.0 --no-uv --feature-refine 2
-quadremesh: 1033745 faces -> 19772 quads/tris (79.54s) -> /tmp/claude-0/s/res_ref/meshes/fountain_scan__ours_featref.obj
+/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/fountain_scan.obj -o /home/claude/quadremesh/benchmark/results/meshes/fountain_scan__ours_featref.obj -f 15000 -a 35.0 --no-uv --feature-refine 2
+quadremesh: 1033745 faces -> 16001 quads/tris (101.69s) -> /home/claude/quadremesh/benchmark/results/meshes/fountain_scan__ours_featref.obj

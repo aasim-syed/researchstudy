@@ -5,4 +5,4 @@ from quadremesh import quadremesh
 src, dst, target, angle = sys.argv[1], sys.argv[2], int(sys.argv[3]), float(sys.argv[4])
 quadremesh(src, target_faces=target, feature_angle=angle, learned_field=True, output=dst, report=False,
            transfer_uv=False)
- /home/claude/quadremesh/data/models/armadillo.obj benchmark/results/meshes/armadillo__ours_learned.obj 5000 35.0
+ /home/claude/quadremesh/data/models/armadillo.obj /home/claude/quadremesh/benchmark/results/meshes/armadillo__ours_learned.obj 5000 35.0

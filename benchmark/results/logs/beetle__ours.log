@@ -1,2 +1,2 @@
-/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/beetle.obj -o benchmark/results/meshes/beetle__ours.obj -f 5000 -a 35.0 --no-uv
-quadremesh: 32848 faces -> 4407 quads/tris (12.90s) -> benchmark/results/meshes/beetle__ours.obj
+/home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/beetle.obj -o /home/claude/quadremesh/benchmark/results/meshes/beetle__ours.obj -f 5000 -a 35.0 --no-uv
+quadremesh: 32848 faces -> 4407 quads/tris (12.15s) -> /home/claude/quadremesh/benchmark/results/meshes/beetle__ours.obj
