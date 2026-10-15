@@ -32,6 +32,7 @@ static void usage() {
         "  --sing-budget-im         singularity budget of the coverage stage = 85 %% of an internal Instant Meshes solve\n"
         "  --path-subdiv K          split crease path edges that miss the crease into K (3/5) pieces (0 = off)\n"
         "  --snap-near D            move edges within D x edge length onto uncovered creases (0.5, 0 = off)\n"
+        "  --search-candidates N    4 (default) or 8 solves in the coverage search\n"
         "  --coverage-search        solve with several crease-size settings, keep the best-scoring result\n"
         "  --crease-cuts            cut the mesh along creases still uncovered after the steps above\n"
         "  --trace-all / --no-trace-all  edge paths for all creases / only the field's subset (default: all)\n"
@@ -126,6 +127,7 @@ int main(int argc, char** argv) {
         }
         else if (a == "--crease-cuts") p.crease_cuts = true;
         else if (a == "--coverage-search") p.coverage_search = true;
+        else if (a == "--search-candidates") p.coverage_search_candidates = std::stoi(next());
         else if (a == "--snap-near") p.snap_near = std::stod(next());
         else if (a == "--path-subdiv") p.path_subdivision = std::stoi(next());
         else if (a == "--sing-budget-im") p.sing_budget_im = true;

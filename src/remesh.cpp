@@ -1078,6 +1078,17 @@ Result quadremesh(const TriMesh& input, const Params& p) {
         q.feature_density = base.feature_density > 0 ? 0.0 : 8.0;
         cands.push_back(q);
     }
+    if (p.coverage_search_candidates > 4) {  // more widths and seeds (the solve is seed-sensitive)
+        const double fd = base.feature_density > 0 ? base.feature_density : 8.0;
+        const double extra[4][2] = {{1.0, 2}, {3.0, 0}, {1.5, 3}, {2.5, 4}};
+        for (int k = 0; k < std::min(4, p.coverage_search_candidates - 4); ++k) {
+            Params q = base;
+            q.feature_density = fd;
+            q.feature_density_width = extra[k][0];
+            q.seed = base.seed + (unsigned)extra[k][1];
+            cands.push_back(q);
+        }
+    }
     EvalParams ep;
     ep.feature_angle = p.feature_angle > 0 ? p.feature_angle : 35.0;
     ep.min_feature_length = 3.0;

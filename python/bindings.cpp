@@ -36,6 +36,7 @@ Params params_from_kwargs(const py::kwargs& kw) {
         else if (k == "feature_density_width") p.feature_density_width = v.cast<double>();
         else if (k == "crease_cuts") p.crease_cuts = v.cast<bool>();
         else if (k == "coverage_search") p.coverage_search = v.cast<bool>();
+        else if (k == "coverage_search_candidates") p.coverage_search_candidates = v.cast<int>();
         else if (k == "snap_near") p.snap_near = v.cast<double>();
         else if (k == "path_subdivision") p.path_subdivision = v.cast<int>();
         else if (k == "sing_budget_im") p.sing_budget_im = v.cast<bool>();

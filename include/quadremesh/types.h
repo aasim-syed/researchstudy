@@ -63,6 +63,7 @@ struct Params {
     double feature_density_width = 1.5;  // (density 1 + K exp(-(d / (W L))^2), same expected face count)
     bool crease_cuts = false;
     bool coverage_search = false;
+    int coverage_search_candidates = 4;  // 4 or 8 solves
     int coverage_target_faces = 0;       // internal: face count the coverage tolerance refers to (0 = target_faces)
     bool sing_budget_im = false;         // coverage stage may use singularities up to 85 % of an Instant
                                          // Meshes solve of the same input at the same face count
