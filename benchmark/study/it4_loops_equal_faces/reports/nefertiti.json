@@ -11,53 +11,53 @@
  },
  "quality": {
   "scaled_jacobian": {
-   "mean": 0.953717,
+   "mean": 0.951334,
    "min": -1,
-   "p05": 0.827957,
-   "median": 0.984902,
-   "p95": 0.999217,
-   "max": 0.999995,
-   "std": 0.12245
+   "p05": 0.813231,
+   "median": 0.986077,
+   "p95": 0.99925,
+   "max": 0.999999,
+   "std": 0.142182
   },
   "scaled_jacobian_quads": {
-   "mean": 0.953717,
+   "mean": 0.951334,
    "min": -1,
-   "p05": 0.827957,
-   "median": 0.984902,
-   "p95": 0.999217,
-   "max": 0.999995,
-   "std": 0.12245
+   "p05": 0.813231,
+   "median": 0.986077,
+   "p95": 0.99925,
+   "max": 0.999999,
+   "std": 0.142182
   },
-  "frac_sj_below_0.5": 0.0116947,
-  "inverted_or_degenerate": 16,
+  "frac_sj_below_0.5": 0.0136083,
+  "inverted_or_degenerate": 27,
   "planarity": {
-   "mean": 0.0150996,
-   "min": 3.58504e-16,
-   "p05": 0.000295095,
-   "median": 0.00725595,
-   "p95": 0.0614922,
-   "max": 0.205866,
-   "std": 0.0229332
+   "mean": 0.0152685,
+   "min": 7.9662e-16,
+   "p05": 0.000272192,
+   "median": 0.00732343,
+   "p95": 0.0619976,
+   "max": 0.213705,
+   "std": 0.0233134
   },
   "aspect_ratio": {
    "mean": 425262,
-   "min": 1.00672,
-   "p05": 1.03503,
-   "median": 1.18003,
-   "p95": 1.8196,
+   "min": 1.00382,
+   "p05": 1.03578,
+   "median": 1.17226,
+   "p95": 1.84178,
    "max": 1000000000.0,
    "std": 20617500.0
   },
   "edge_length_rel": {
    "mean": 1,
    "min": 0,
-   "p05": 0.735905,
-   "median": 0.991182,
-   "p95": 1.28129,
-   "max": 2.89519,
-   "std": 0.18047
+   "p05": 0.72166,
+   "median": 0.990058,
+   "p95": 1.29214,
+   "max": 2.92998,
+   "std": 0.185823
   },
-  "edge_length_mean_pct_diag": 1.32608
+  "edge_length_mean_pct_diag": 1.32368
  },
  "topology": {
   "singularities": 120,
@@ -75,24 +75,24 @@
   }
  },
  "distance": {
-  "mean_pct": 0.0405635,
-  "out_to_in_mean_pct": 0.0338927,
-  "in_to_out_mean_pct": 0.0472344,
-  "rms_pct": 0.109238,
-  "hausdorff_pct": 2.11858,
-  "area_ratio": 0.969567
+  "mean_pct": 0.0431509,
+  "out_to_in_mean_pct": 0.0352611,
+  "in_to_out_mean_pct": 0.0510407,
+  "rms_pct": 0.119745,
+  "hausdorff_pct": 2.26717,
+  "area_ratio": 0.967988
  },
  "features": {
-  "feature_coverage": 0.399858,
+  "feature_coverage": 0.421229,
   "boundary_coverage": 1,
-  "combined_coverage": 0.399858,
+  "combined_coverage": 0.421229,
   "feature_length_pct_diag": 194.693,
   "boundary_length_pct_diag": 0,
   "feature_segments": 682,
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 9,
+ "runtime_s": 9.86,
  "input_faces": 99938,
  "cmd": "build/quadremesh data/models/nefertiti.obj -o benchmark/study/it4_loops_equal_faces/meshes/nefertiti.obj -f 5000 -a 35 --no-uv --feature-loops"
 }

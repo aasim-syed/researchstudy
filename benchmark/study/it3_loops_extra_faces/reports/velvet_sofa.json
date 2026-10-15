@@ -92,7 +92,7 @@
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 17.06,
+ "runtime_s": 9.13,
  "input_faces": 16784,
  "cmd": "build/quadremesh data/models/velvet_sofa.obj -o benchmark/study/it3_loops_extra_faces/meshes/velvet_sofa.obj -f 5000 -a 35 --no-uv --feature-loops --no-face-match"
 }

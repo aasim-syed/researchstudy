@@ -96,7 +96,7 @@
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 26.4,
+ "runtime_s": 26.97,
  "input_faces": 46492,
  "cmd": "build/quadremesh data/models/leather_sofa.obj -o benchmark/study/it8_hybrid_sb25/meshes/leather_sofa.obj -f 5000 -a 35 --no-uv --partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 25"
 }

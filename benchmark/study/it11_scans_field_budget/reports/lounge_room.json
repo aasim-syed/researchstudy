@@ -96,7 +96,7 @@
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 145.77,
+ "runtime_s": 180.01,
  "input_faces": 999999,
  "cmd": "build/quadremesh data/models/lounge_room.obj -o benchmark/study/it11_scans_field_budget/meshes/lounge_room.obj -f 15000 -a 35 --no-uv --coverage-mode --field-feature-budget 1.0"
 }

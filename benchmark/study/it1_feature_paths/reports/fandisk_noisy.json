@@ -92,7 +92,7 @@
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 19.25,
+ "runtime_s": 5.9,
  "input_faces": 12925,
  "cmd": "build/quadremesh data/models/fandisk_noisy.obj -o benchmark/study/it1_feature_paths/meshes/fandisk_noisy.obj -f 5000 -a 35 --no-uv"
 }

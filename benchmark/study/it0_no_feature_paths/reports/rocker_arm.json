@@ -92,7 +92,7 @@
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 11.87,
+ "runtime_s": 5.96,
  "input_faces": 20088,
  "cmd": "QRM_NO_FEATURE_PATHS=1 build/quadremesh data/models/rocker_arm.obj -o benchmark/study/it0_no_feature_paths/meshes/rocker_arm.obj -f 5000 -a 35 --no-uv"
 }

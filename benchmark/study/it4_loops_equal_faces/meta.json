@@ -1,8 +1,8 @@
 {
  "name": "it4_loops_equal_faces",
  "flags": "--feature-loops",
- "date": "2026-10-15T08:32:00",
- "git": "f0a388b",
+ "date": "2026-10-15T10:49:46",
+ "git": "723c775",
  "models": [
   "bunny",
   "fandisk",

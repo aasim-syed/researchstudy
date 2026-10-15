@@ -92,7 +92,7 @@
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 16.1,
+ "runtime_s": 5.02,
  "input_faces": 23424,
  "cmd": "build/quadremesh data/models/spot.obj -o benchmark/study/it1_feature_paths/meshes/spot.obj -f 5000 -a 35 --no-uv"
 }

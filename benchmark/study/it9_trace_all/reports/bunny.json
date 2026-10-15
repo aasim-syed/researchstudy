@@ -92,7 +92,7 @@
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 7.37,
+ "runtime_s": 7.42,
  "input_faces": 69451,
  "cmd": "build/quadremesh data/models/bunny.obj -o benchmark/study/it9_trace_all/meshes/bunny.obj -f 5000 -a 35 --no-uv --trace-all"
 }

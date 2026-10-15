@@ -1,8 +1,8 @@
 {
  "name": "it5_partial_loops",
  "flags": "--partial-loops",
- "date": "2026-10-15T08:49:20",
- "git": "f0a388b",
+ "date": "2026-10-15T10:56:47",
+ "git": "723c775",
  "models": [
   "bunny",
   "fandisk",

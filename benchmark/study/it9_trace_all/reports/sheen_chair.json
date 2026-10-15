@@ -95,7 +95,7 @@
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 20.27,
+ "runtime_s": 20.81,
  "input_faces": 39936,
  "cmd": "build/quadremesh data/models/sheen_chair.obj -o benchmark/study/it9_trace_all/meshes/sheen_chair.obj -f 5000 -a 35 --no-uv --trace-all"
 }

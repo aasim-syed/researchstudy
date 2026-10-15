@@ -96,7 +96,7 @@
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 89.49,
+ "runtime_s": 96.44,
  "input_faces": 999999,
  "cmd": "QRM_NO_FEATURE_PATHS=1 build/quadremesh data/models/lounge_room.obj -o benchmark/study/it0_no_feature_paths/meshes/lounge_room.obj -f 15000 -a 35 --no-uv"
 }

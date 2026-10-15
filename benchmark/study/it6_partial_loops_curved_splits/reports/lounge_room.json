@@ -1,102 +1,102 @@
 {
  "method": "it6_partial_loops_curved_splits",
  "faces": {
-  "total": 12864,
-  "quads": 12826,
-  "triangles": 38,
-  "vertices": 13616,
-  "quad_ratio": 0.997046,
+  "total": 12859,
+  "quads": 12825,
+  "triangles": 34,
+  "vertices": 13617,
+  "quad_ratio": 0.997356,
   "target": 15000,
-  "count_ratio": 0.8576
+  "count_ratio": 0.857267
  },
  "quality": {
   "scaled_jacobian": {
-   "mean": 0.905526,
+   "mean": 0.90346,
    "min": -1,
-   "p05": 0.516288,
-   "median": 0.991244,
-   "p95": 0.99981,
+   "p05": 0.494965,
+   "median": 0.991499,
+   "p95": 0.999806,
    "max": 0.999999,
-   "std": 0.196709
+   "std": 0.201772
   },
   "scaled_jacobian_quads": {
-   "mean": 0.907287,
+   "mean": 0.904776,
    "min": -1,
-   "p05": 0.527007,
-   "median": 0.991311,
-   "p95": 0.99981,
+   "p05": 0.506385,
+   "median": 0.991573,
+   "p95": 0.999808,
    "max": 0.999999,
-   "std": 0.193549
+   "std": 0.200039
   },
-  "frac_sj_below_0.5": 0.0474969,
-  "inverted_or_degenerate": 93,
+  "frac_sj_below_0.5": 0.0511704,
+  "inverted_or_degenerate": 88,
   "planarity": {
-   "mean": 0.0187815,
+   "mean": 0.0186936,
    "min": 0,
-   "p05": 0.00026686,
-   "median": 0.00419442,
-   "p95": 0.0979825,
-   "max": 0.360572,
-   "std": 0.036093
+   "p05": 0.000278032,
+   "median": 0.00418501,
+   "p95": 0.0987015,
+   "max": 0.322112,
+   "std": 0.0361114
   },
   "aspect_ratio": {
-   "mean": 545770,
-   "min": 1.00069,
-   "p05": 1.01811,
-   "median": 1.15807,
-   "p95": 2.97706,
+   "mean": 701757,
+   "min": 1.00154,
+   "p05": 1.01776,
+   "median": 1.16249,
+   "p95": 3.07212,
    "max": 1000000000.0,
-   "std": 23355300.0
+   "std": 26481400.0
   },
   "edge_length_rel": {
    "mean": 1,
    "min": 0,
-   "p05": 0.610553,
-   "median": 0.996707,
-   "p95": 1.36354,
-   "max": 3.97941,
-   "std": 0.253016
+   "p05": 0.600771,
+   "median": 0.997654,
+   "p95": 1.36943,
+   "max": 3.98726,
+   "std": 0.258476
   },
-  "edge_length_mean_pct_diag": 0.7482
+  "edge_length_mean_pct_diag": 0.746726
  },
  "topology": {
-  "singularities": 982,
-  "boundary_irregular": 288,
-  "singularities_per_1k_faces": 76.3371,
-  "interior_vertices": 12131,
-  "boundary_vertices": 1485,
-  "boundary_edges": 1512,
-  "nonmanifold_edges": 3,
+  "singularities": 967,
+  "boundary_irregular": 303,
+  "singularities_per_1k_faces": 75.2002,
+  "interior_vertices": 12115,
+  "boundary_vertices": 1502,
+  "boundary_edges": 1532,
+  "nonmanifold_edges": 0,
   "components": 26,
   "valence_histogram": {
-   "2": 157,
-   "3": 473,
-   "4": 11149,
-   "5": 312,
-   "6": 30,
-   "7": 9,
-   "8": 1
+   "2": 154,
+   "3": 470,
+   "4": 11148,
+   "5": 304,
+   "6": 33,
+   "7": 4,
+   "8": 2
   }
  },
  "distance": {
-  "mean_pct": 0.0794378,
-  "out_to_in_mean_pct": 0.0323847,
-  "in_to_out_mean_pct": 0.126491,
-  "rms_pct": 0.23742,
-  "hausdorff_pct": 7.86331,
-  "area_ratio": 0.824006
+  "mean_pct": 0.0808926,
+  "out_to_in_mean_pct": 0.0331535,
+  "in_to_out_mean_pct": 0.128632,
+  "rms_pct": 0.23959,
+  "hausdorff_pct": 7.87141,
+  "area_ratio": 0.82156
  },
  "features": {
-  "feature_coverage": 0.0216314,
-  "boundary_coverage": 0.0952523,
-  "combined_coverage": 0.0604335,
+  "feature_coverage": 0.0219167,
+  "boundary_coverage": 0.0964968,
+  "combined_coverage": 0.0612244,
   "feature_length_pct_diag": 5223.34,
   "boundary_length_pct_diag": 5820.91,
   "feature_segments": 45965,
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 123.33,
+ "runtime_s": 127.85,
  "input_faces": 999999,
  "cmd": "build/quadremesh data/models/lounge_room.obj -o benchmark/study/it6_partial_loops_curved_splits/meshes/lounge_room.obj -f 15000 -a 35 --no-uv --partial-loops --curved-splits"
 }

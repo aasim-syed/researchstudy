@@ -11,53 +11,53 @@
  },
  "quality": {
   "scaled_jacobian": {
-   "mean": 0.938204,
+   "mean": 0.937916,
    "min": -1,
-   "p05": 0.625641,
-   "median": 0.992428,
-   "p95": 0.999598,
-   "max": 0.999995,
-   "std": 0.180492
+   "p05": 0.618668,
+   "median": 0.993068,
+   "p95": 0.999654,
+   "max": 0.999998,
+   "std": 0.185356
   },
   "scaled_jacobian_quads": {
-   "mean": 0.938204,
+   "mean": 0.937916,
    "min": -1,
-   "p05": 0.625641,
-   "median": 0.992428,
-   "p95": 0.999598,
-   "max": 0.999995,
-   "std": 0.180492
+   "p05": 0.618668,
+   "median": 0.993068,
+   "p95": 0.999654,
+   "max": 0.999998,
+   "std": 0.185356
   },
-  "frac_sj_below_0.5": 0.0372241,
-  "inverted_or_degenerate": 106,
+  "frac_sj_below_0.5": 0.0374183,
+  "inverted_or_degenerate": 119,
   "planarity": {
-   "mean": 0.0159027,
+   "mean": 0.0158106,
    "min": 0,
-   "p05": 0.000526711,
-   "median": 0.0075243,
-   "p95": 0.0583698,
+   "p05": 0.000543071,
+   "median": 0.00751725,
+   "p95": 0.0577533,
    "max": 0.484327,
-   "std": 0.0273616
+   "std": 0.0268707
   },
   "aspect_ratio": {
-   "mean": 1230010.0,
-   "min": 1.002,
-   "p05": 1.01849,
-   "median": 1.13198,
-   "p95": 2.30077,
+   "mean": 1294750.0,
+   "min": 1.0009,
+   "p05": 1.0158,
+   "median": 1.12707,
+   "p95": 2.32469,
    "max": 1000000000.0,
-   "std": 35050000.0
+   "std": 35959300.0
   },
   "edge_length_rel": {
    "mean": 1,
    "min": 0,
-   "p05": 0.688402,
-   "median": 1.00787,
-   "p95": 1.26563,
-   "max": 3.83666,
-   "std": 0.198819
+   "p05": 0.685993,
+   "median": 1.0083,
+   "p95": 1.26778,
+   "max": 3.82062,
+   "std": 0.199581
   },
-  "edge_length_mean_pct_diag": 0.618042
+  "edge_length_mean_pct_diag": 0.617173
  },
  "topology": {
   "singularities": 241,
@@ -76,24 +76,24 @@
   }
  },
  "distance": {
-  "mean_pct": 0.036371,
-  "out_to_in_mean_pct": 0.0167613,
-  "in_to_out_mean_pct": 0.0559807,
-  "rms_pct": 0.172909,
+  "mean_pct": 0.0371377,
+  "out_to_in_mean_pct": 0.0171298,
+  "in_to_out_mean_pct": 0.0571456,
+  "rms_pct": 0.174116,
   "hausdorff_pct": 16.0403,
-  "area_ratio": 0.948117
+  "area_ratio": 0.946846
  },
  "features": {
-  "feature_coverage": 0.0345592,
-  "boundary_coverage": 0.101555,
-  "combined_coverage": 0.0795833,
+  "feature_coverage": 0.0364268,
+  "boundary_coverage": 0.102116,
+  "combined_coverage": 0.0805723,
   "feature_length_pct_diag": 1687.31,
   "boundary_length_pct_diag": 3457.55,
   "feature_segments": 15097,
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 121.94,
+ "runtime_s": 128.9,
  "input_faces": 1033745,
  "cmd": "build/quadremesh data/models/fountain_scan.obj -o benchmark/study/it5_partial_loops/meshes/fountain_scan.obj -f 15000 -a 35 --no-uv --partial-loops"
 }

@@ -92,7 +92,7 @@
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 14.62,
+ "runtime_s": 14.3,
  "input_faces": 32848,
  "cmd": "build/quadremesh data/models/beetle.obj -o benchmark/study/it9_trace_all/meshes/beetle.obj -f 5000 -a 35 --no-uv --trace-all"
 }

@@ -92,7 +92,7 @@
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 8.92,
+ "runtime_s": 8.68,
  "input_faces": 99938,
  "cmd": "build/quadremesh data/models/nefertiti.obj -o benchmark/study/it9_trace_all/meshes/nefertiti.obj -f 5000 -a 35 --no-uv --trace-all"
 }

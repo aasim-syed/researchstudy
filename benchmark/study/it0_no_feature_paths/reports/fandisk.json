@@ -92,7 +92,7 @@
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 9.39,
+ "runtime_s": 5.28,
  "input_faces": 12946,
  "cmd": "QRM_NO_FEATURE_PATHS=1 build/quadremesh data/models/fandisk.obj -o benchmark/study/it0_no_feature_paths/meshes/fandisk.obj -f 5000 -a 35 --no-uv"
 }

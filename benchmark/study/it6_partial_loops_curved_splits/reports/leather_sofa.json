@@ -1,101 +1,99 @@
 {
  "method": "it6_partial_loops_curved_splits",
  "faces": {
-  "total": 5190,
-  "quads": 5137,
-  "triangles": 53,
-  "vertices": 5737,
-  "quad_ratio": 0.989788,
+  "total": 5123,
+  "quads": 5106,
+  "triangles": 17,
+  "vertices": 5653,
+  "quad_ratio": 0.996682,
   "target": 5000,
-  "count_ratio": 1.038
+  "count_ratio": 1.0246
  },
  "quality": {
   "scaled_jacobian": {
-   "mean": 0.874812,
+   "mean": 0.889101,
    "min": -1,
-   "p05": 0.220372,
-   "median": 0.992446,
-   "p95": 0.999909,
-   "max": 1,
-   "std": 0.244891
+   "p05": 0.251898,
+   "median": 0.995796,
+   "p95": 0.99991,
+   "max": 0.999998,
+   "std": 0.240592
   },
   "scaled_jacobian_quads": {
-   "mean": 0.878097,
+   "mean": 0.890029,
    "min": -1,
-   "p05": 0.230108,
-   "median": 0.992725,
-   "p95": 0.999909,
-   "max": 1,
-   "std": 0.242795
+   "p05": 0.25345,
+   "median": 0.995838,
+   "p95": 0.99991,
+   "max": 0.999998,
+   "std": 0.240083
   },
-  "frac_sj_below_0.5": 0.0957611,
-  "inverted_or_degenerate": 22,
+  "frac_sj_below_0.5": 0.0886199,
+  "inverted_or_degenerate": 34,
   "planarity": {
-   "mean": 0.0165695,
+   "mean": 0.0137769,
    "min": 0,
-   "p05": 2.27373e-05,
-   "median": 0.0024882,
-   "p95": 0.0869818,
-   "max": 0.42039,
-   "std": 0.035044
+   "p05": 2.58588e-05,
+   "median": 0.00213047,
+   "p95": 0.0682939,
+   "max": 0.319199,
+   "std": 0.0304634
   },
   "aspect_ratio": {
-   "mean": 389414,
-   "min": 1.00134,
-   "p05": 1.01693,
-   "median": 1.20915,
-   "p95": 29.0163,
+   "mean": 1175100.0,
+   "min": 1.00217,
+   "p05": 1.01832,
+   "median": 1.20225,
+   "p95": 19.2843,
    "max": 1000000000.0,
-   "std": 19727700.0
+   "std": 34259400.0
   },
   "edge_length_rel": {
    "mean": 1,
    "min": 0,
-   "p05": 0.192364,
-   "median": 1.09343,
-   "p95": 1.40261,
-   "max": 4.85744,
-   "std": 0.362334
+   "p05": 0.264324,
+   "median": 1.06794,
+   "p95": 1.38045,
+   "max": 4.74279,
+   "std": 0.338197
   },
-  "edge_length_mean_pct_diag": 1.93725
+  "edge_length_mean_pct_diag": 1.98408
  },
  "topology": {
-  "singularities": 364,
-  "boundary_irregular": 103,
-  "singularities_per_1k_faces": 70.1349,
-  "interior_vertices": 4707,
-  "boundary_vertices": 1030,
-  "boundary_edges": 1045,
+  "singularities": 286,
+  "boundary_irregular": 97,
+  "singularities_per_1k_faces": 55.8267,
+  "interior_vertices": 4642,
+  "boundary_vertices": 1011,
+  "boundary_edges": 1011,
   "nonmanifold_edges": 0,
-  "components": 38,
+  "components": 25,
   "valence_histogram": {
-   "2": 32,
-   "3": 231,
-   "4": 4343,
-   "5": 84,
-   "6": 15,
-   "7": 2
+   "3": 203,
+   "4": 4356,
+   "5": 74,
+   "6": 9
   }
  },
  "distance": {
-  "mean_pct": 0.088219,
-  "out_to_in_mean_pct": 0.0754286,
-  "in_to_out_mean_pct": 0.101009,
-  "rms_pct": 0.178624,
-  "hausdorff_pct": 2.49206,
-  "area_ratio": 0.919075
+  "mean_pct": 0.0801194,
+  "out_to_in_mean_pct": 0.0710156,
+  "in_to_out_mean_pct": 0.0892231,
+  "rms_pct": 0.164723,
+  "hausdorff_pct": 1.72239,
+  "area_ratio": 0.925866
  },
  "features": {
-  "feature_coverage": 0.723903,
-  "boundary_coverage": 0.477074,
-  "combined_coverage": 0.589624,
+  "feature_coverage": 0.783954,
+  "boundary_coverage": 0.496722,
+  "combined_coverage": 0.627695,
   "feature_length_pct_diag": 2393.13,
   "boundary_length_pct_diag": 2855.15,
   "feature_segments": 2169,
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 20.59,
+ "runtime_s": 25.73,
  "input_faces": 46492,
  "cmd": "build/quadremesh data/models/leather_sofa.obj -o benchmark/study/it6_partial_loops_curved_splits/meshes/leather_sofa.obj -f 5000 -a 35 --no-uv --partial-loops --curved-splits"
 }

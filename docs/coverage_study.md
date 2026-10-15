@@ -11,13 +11,13 @@ fewer singularities than Instant Meshes at equal face count.
 
 | iteration | flags | models | quad | SJ | dist % | **feature cov.** | sing./1k | total sing. | faces / target | fewer sing. than IM |
 |---|---|---|---|---|---|---|---|---|---|---|
-| it0_no_feature_paths | `QRM_NO_FEATURE_PATHS=1` | 15 | 1.000 | 0.936 | 0.074 | **0.440** | 33.9 | 3122 | 0.94 | 14/15 |
-| it1_feature_paths | `(default)` | 15 | 1.000 | 0.931 | 0.074 | **0.498** | 33.9 | 3122 | 0.94 | 14/15 |
-| it2_feature_refine | `--feature-refine 2` | 15 | 0.962 | 0.880 | 0.108 | **0.532** | 78.7 | 7301 | 0.93 | 6/15 |
-| it3_loops_extra_faces | `--feature-loops --no-face-match` | 15 | 1.000 | 0.919 | 0.060 | **0.522** | 27.2 | 3072 | 1.14 | 14/15 |
-| it4_loops_equal_faces | `--feature-loops` | 15 | 1.000 | 0.918 | 0.068 | **0.491** | 33.6 | 3050 | 0.93 | 13/15 |
-| it5_partial_loops | `--partial-loops` | 15 | 0.998 | 0.928 | 0.061 | **0.511** | 34.9 | 3179 | 0.93 | 14/15 |
-| it6_partial_loops_curved_splits | `--partial-loops --curved-splits` | 15 | 0.994 | 0.922 | 0.060 | **0.540** | 42.2 | 3804 | 0.94 | 12/15 |
+| it0_no_feature_paths | `QRM_NO_FEATURE_PATHS=1` | 15 | 1.000 | 0.934 | 0.076 | **0.439** | 33.4 | 3132 | 0.95 | 14/15 |
+| it1_feature_paths | `(default)` | 15 | 1.000 | 0.929 | 0.076 | **0.494** | 33.4 | 3132 | 0.95 | 14/15 |
+| it2_feature_refine | `--feature-refine 2` | 15 | 0.992 | 0.923 | 0.064 | **0.541** | 41.8 | 3901 | 0.95 | 12/15 |
+| it3_loops_extra_faces | `--feature-loops --no-face-match` | 15 | 1.000 | 0.920 | 0.061 | **0.531** | 26.9 | 3072 | 1.15 | 14/15 |
+| it4_loops_equal_faces | `--feature-loops` | 15 | 1.000 | 0.920 | 0.066 | **0.520** | 31.3 | 2994 | 0.97 | 13/15 |
+| it5_partial_loops | `--partial-loops` | 15 | 0.999 | 0.925 | 0.063 | **0.517** | 33.4 | 3163 | 0.95 | 14/15 |
+| it6_partial_loops_curved_splits | `--partial-loops --curved-splits` | 15 | 0.996 | 0.925 | 0.061 | **0.549** | 36.9 | 3482 | 0.95 | 13/15 |
 | it7_hybrid_sb10 | `--partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 10` | 15 | 0.994 | 0.921 | 0.063 | **0.555** | 40.5 | 3787 | 0.94 | 11/15 |
 | it8_hybrid_sb25 | `--partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 25` | 15 | 0.989 | 0.911 | 0.063 | **0.584** | 48.4 | 4531 | 0.96 | 10/15 |
 | it9_trace_all | `--trace-all` | 15 | 1.000 | 0.925 | 0.077 | **0.506** | 33.4 | 3132 | 0.95 | 14/15 |
@@ -29,85 +29,87 @@ fewer singularities than Instant Meshes at equal face count.
 
 | model | it0_no_feature_paths | it1_feature_paths | it2_feature_refine | it3_loops_extra_faces | it4_loops_equal_faces | it5_partial_loops | it6_partial_loops_curved_splits | it7_hybrid_sb10 | it8_hybrid_sb25 | it9_trace_all | it10_coverage_mode | it11_scans_field_budget | Instant Meshes |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| bunny | 0.26 | 0.41 | 0.64 | 0.41 | 0.41 | 0.41 | 0.56 | 0.57 | 0.65 | 0.41 | 0.65 | – | 0.10 |
+| bunny | 0.26 | 0.41 | 0.55 | 0.44 | 0.44 | 0.44 | 0.57 | 0.57 | 0.65 | 0.41 | 0.65 | – | 0.10 |
 | fandisk | 0.94 | 0.98 | 0.98 | 0.98 | 0.98 | 0.98 | 0.98 | 0.99 | 0.99 | 0.98 | 0.99 | – | 0.76 |
-| fandisk_noisy | 0.72 | 0.76 | 0.84 | 0.77 | 0.77 | 0.75 | 0.75 | 0.76 | 0.78 | 0.76 | 0.78 | – | 0.37 |
-| rocker_arm | 0.28 | 0.40 | 0.68 | 0.40 | 0.40 | 0.40 | 0.53 | 0.59 | 0.68 | 0.40 | 0.68 | – | 0.10 |
-| armadillo | 0.09 | 0.13 | 0.24 | 0.13 | 0.13 | 0.13 | 0.16 | 0.20 | 0.20 | 0.13 | 0.20 | – | 0.10 |
-| spot | 0.82 | 0.88 | 0.88 | 0.88 | 0.88 | 0.88 | 0.96 | 0.94 | 0.96 | 0.88 | 0.96 | – | 0.36 |
-| beetle | 0.50 | 0.51 | 0.51 | 0.72 | 0.58 | 0.63 | 0.63 | 0.62 | 0.67 | 0.51 | 0.67 | – | 0.12 |
-| nefertiti | 0.27 | 0.40 | 0.55 | 0.40 | 0.40 | 0.40 | 0.43 | 0.45 | 0.52 | 0.40 | 0.52 | – | 0.07 |
-| igea | 0.16 | 0.35 | 0.60 | 0.35 | 0.35 | 0.35 | 0.39 | 0.50 | 0.51 | 0.35 | 0.51 | – | 0.13 |
-| sheen_chair | 0.75 | 0.81 | 0.66 | 0.80 | 0.71 | 0.82 | 0.76 | 0.77 | 0.79 | 0.75 | 0.79 | – | 0.48 |
-| damask_chair | 0.43 | 0.43 | 0.42 | 0.46 | 0.43 | 0.40 | 0.36 | 0.36 | 0.45 | 0.55 | 0.58 | 0.62 | 0.30 |
-| velvet_sofa | 0.61 | 0.65 | 0.82 | 0.72 | 0.62 | 0.79 | 0.80 | 0.73 | 0.75 | 0.65 | 0.75 | – | 0.39 |
-| leather_sofa | 0.73 | 0.70 | 0.09 | 0.75 | 0.64 | 0.68 | 0.72 | 0.78 | 0.73 | 0.70 | 0.73 | 0.73 | 0.00 |
-| fountain_scan | 0.03 | 0.03 | 0.03 | 0.03 | 0.03 | 0.03 | 0.04 | 0.04 | 0.04 | 0.07 | 0.09 | 0.09 | 0.01 |
-| lounge_room | 0.02 | 0.02 | 0.03 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.04 | 0.05 | 0.05 | 0.02 |
+| fandisk_noisy | 0.72 | 0.76 | 0.76 | 0.77 | 0.77 | 0.75 | 0.75 | 0.76 | 0.78 | 0.76 | 0.78 | – | 0.37 |
+| rocker_arm | 0.28 | 0.40 | 0.63 | 0.45 | 0.45 | 0.45 | 0.57 | 0.59 | 0.68 | 0.40 | 0.68 | – | 0.10 |
+| armadillo | 0.09 | 0.13 | 0.18 | 0.18 | 0.18 | 0.18 | 0.18 | 0.20 | 0.20 | 0.13 | 0.20 | – | 0.10 |
+| spot | 0.82 | 0.88 | 0.88 | 0.88 | 0.88 | 0.88 | 0.94 | 0.94 | 0.96 | 0.88 | 0.96 | – | 0.36 |
+| beetle | 0.50 | 0.51 | 0.56 | 0.71 | 0.68 | 0.62 | 0.62 | 0.62 | 0.67 | 0.51 | 0.67 | – | 0.12 |
+| nefertiti | 0.27 | 0.40 | 0.47 | 0.42 | 0.42 | 0.42 | 0.44 | 0.45 | 0.52 | 0.40 | 0.52 | – | 0.07 |
+| igea | 0.16 | 0.35 | 0.42 | 0.30 | 0.30 | 0.30 | 0.38 | 0.50 | 0.51 | 0.35 | 0.51 | – | 0.13 |
+| sheen_chair | 0.74 | 0.75 | 0.83 | 0.80 | 0.71 | 0.79 | 0.85 | 0.77 | 0.79 | 0.75 | 0.79 | – | 0.48 |
+| damask_chair | 0.43 | 0.43 | 0.40 | 0.47 | 0.46 | 0.36 | 0.36 | 0.36 | 0.45 | 0.55 | 0.58 | 0.62 | 0.30 |
+| velvet_sofa | 0.61 | 0.65 | 0.67 | 0.72 | 0.83 | 0.73 | 0.73 | 0.73 | 0.75 | 0.65 | 0.75 | – | 0.39 |
+| leather_sofa | 0.73 | 0.70 | 0.72 | 0.78 | 0.64 | 0.78 | 0.78 | 0.78 | 0.73 | 0.70 | 0.73 | 0.73 | 0.00 |
+| fountain_scan | 0.03 | 0.03 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.07 | 0.09 | 0.09 | 0.01 |
+| lounge_room | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.04 | 0.05 | 0.05 | 0.02 |
 
-Code provenance: it0-it8 ran on the working tree between commits f0a388b and the commit that adds this note; it5/it6 used an earlier triangle budget (1.2 %, loops limited to 0.6 of it) and face-count threshold (1.08x). From it9 on, each run's meta.json records the exact commit.
+Code provenance: every iteration was re-run on the same commit (723c775, recorded in each run's meta.json), so the rows differ only by the flags shown.
 
 ## Iterations
 
 ### it0_no_feature_paths
-- flags: `QRM_NO_FEATURE_PATHS=1` · code: `f0a388b` · run: 2026-10-15T07:56:04
+- flags: `QRM_NO_FEATURE_PATHS=1` · code: `723c775` · run: 2026-10-15T10:27:50
 - Baseline before any coverage-specific post-processing: hard feature constraints in the field + proximity snapping of vertices to creases (the default before edge-path recovery). Reproduced with the current code by disabling path recovery (QRM_NO_FEATURE_PATHS=1).
 
 ### it1_feature_paths
-- flags: `(default)` · code: `f0a388b` · run: 2026-10-15T08:05:17
+- flags: `(default)` · code: `723c775` · run: 2026-10-15T10:32:36
 - Hypothesis: many creases have an edge loop running next to them (offset by a fraction of an element) but not on them.
 - Change: edge-path recovery - for every crease chain, a directed-edge Dijkstra through the quad mesh (cost: distance to the crease, misalignment, turning inside a face), the path is snapped onto the crease with a monotone arclength map and locked during relaxation; short chains get jointly chosen endpoints.
 - Cost: none by construction (no topology change). Current default.
 
 ### it2_feature_refine
-- flags: `--feature-refine 2` · code: `f0a388b` · run: 2026-10-15T08:14:04
+- flags: `--feature-refine 2` · code: `723c775` · run: 2026-10-15T10:37:23
 - Hypothesis: creases closer than one element need more vertices locally.
 - Change: refine (1->4 with conforming hanging-node templates) the quads around every chain without a path, then trace again; two rounds.
-- Observed trade-off: template triangles lower the quad ratio and the transition fronts add irregular vertices; the face count grows. Kept as opt-in (--feature-refine 2).
+- Observed (current code, where refinement goes through the budgeted coverage stage): coverage 0.494 -> 0.541, quad ratio 0.992, singularities 33.4 -> 41.8 per 1k, 12/15 below Instant Meshes. Kept as opt-in (--feature-refine 2).
 
 ### it3_loops_extra_faces
-- flags: `--feature-loops --no-face-match` · code: `f0a388b` · run: 2026-10-15T08:24:57
+- flags: `--feature-loops --no-face-match` · code: `723c775` · run: 2026-10-15T10:43:32
 - Hypothesis: a crease that runs lengthwise along a quad strip can get its own edge loop by splitting that strip lengthwise (pure quads, no new irregular vertices).
 - Change: for each chain without a path, find the longest run of quads it crosses rung-to-rung and split the whole strip (through the crease inside the run, on the midline elsewhere); self-crossing strips split their crossing faces into 4. No face-count control in this run (--no-face-match).
-- Observed: whole strips are 10-60x longer than the crease runs, so most added faces do not help coverage.
+- Observed: coverage 0.531 at 1.15x the target face count; whole strips are much longer than the crease runs, so most added faces do not help coverage.
 
 ### it4_loops_equal_faces
-- flags: `--feature-loops` · code: `f0a388b` · run: 2026-10-15T08:32:00
-- Same as it3 but with face-count control: if the output exceeds 1.08x the target, the field is re-solved at a proportionally lower budget so the output lands on the target face count.
-- Purpose: fair comparison at equal face count.
+- flags: `--feature-loops` · code: `723c775` · run: 2026-10-15T10:49:46
+- Same as it3 but with face-count control: if the output exceeds 1.10x the target, the field is re-solved at a proportionally lower budget so the output lands near the target face count.
+- Observed: 0.520 at 0.97x faces, 13/15 below Instant Meshes - most of it3's gain survives at (near) equal face count, but per model it is uneven (velvet 0.65 -> 0.83, sheen 0.75 -> 0.71, leather 0.70 -> 0.64).
 
 ### it5_partial_loops
-- flags: `--partial-loops` · code: `f0a388b` · run: 2026-10-15T08:49:20
+- flags: `--partial-loops` · code: `723c775` · run: 2026-10-15T10:56:47
 - Hypothesis: splitting only the crease's own run (plus up to 8 faces when that reaches the strip's end) gives the same local loop at a fraction of the face cost; each open end leaves one hanging vertex, resolved as quad + triangle, and adjacent triangles are re-paired.
-- Guards: runs shorter than 3 faces are skipped; loop insertion stops at 0.6 x triangle budget (triangle budget = 1.2 % of the target faces), so the quad ratio cannot drop below ~98.8 % from this step. Face-count control on.
+- Guards: runs shorter than 3 faces are skipped; every insertion is tentative and kept only within the triangle budget (1.5 % of the target faces) and singularity budget (+10 per 1k target faces). Face-count control on.
+- Observed: 0.517 at quad 0.999 - slightly below whole-strip loops (it4) in coverage, but it keeps 14/15 models below Instant Meshes.
 
 ### it6_partial_loops_curved_splits
-- flags: `--partial-loops --curved-splits` · code: `f0a388b` · run: 2026-10-15T08:55:35
+- flags: `--partial-loops --curved-splits` · code: `723c775` · run: 2026-10-15T11:03:25
 - Hypothesis: on tightly curved creases the path vertices are on the crease but the straight edges between them are not (chord sag > 0.1 L or turn > 25 deg).
 - Change: split every recovered path edge whose chord midpoint is > 0.09 L from the crease or whose direction deviates > 23 deg, at the crease point; the two adjacent quads become quad + triangle. Worst deviations first, within the remaining triangle budget; two passes.
+- Observed: 0.517 -> 0.549; biggest gains on tightly curved creases (bunny 0.44 -> 0.57, rocker arm 0.45 -> 0.57, spot 0.88 -> 0.94); quad 0.996, 13/15.
 
 ### it7_hybrid_sb10
-- flags: `--partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 10` · code: `f0a388b` · run: 2026-10-15T09:08:28
+- flags: `--partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 10` · code: `723c775` · run: 2026-10-15T11:10:07
 - Hybrid, per crease: partial edge loops for long creases without a path, one round of local refinement only around short creases (<= 8 L), curved-crease splits.
 - Every operation is applied tentatively and kept only if the mesh stays within a triangle budget (+1.5 % of target faces) and a singularity budget (+10 irregular vertices per 1k target faces); checks are topological, so this is cheap.
 - Face-count control re-solves only above 1.10x the target (Instant Meshes itself lands at 0.84-1.03x).
 
 ### it8_hybrid_sb25
-- flags: `--partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 25` · code: `f0a388b` · run: 2026-10-15T09:15:08
+- flags: `--partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 25` · code: `723c775` · run: 2026-10-15T11:16:28
 - Same as it7 with a singularity budget of +25 per 1k target faces: measures the coverage / singularity trade-off.
 
 ### it9_trace_all
-- flags: `--trace-all` · code: `f2fdc85` · run: 2026-10-15T09:33:16
+- flags: `--trace-all` · code: `723c775` · run: 2026-10-15T11:22:39
 - Hypothesis: on inputs whose crease network is denser than the resolution, the field gets a reduced crease set (to keep the integer solve stable), so path recovery never sees the remaining creases. Change: path recovery uses the full crease set while the field keeps the reduced one. Vertex moves only - no topology change.
-- Observed: mean coverage 0.498 -> 0.506 vs it1 with singularities unchanged (14/15 models still below Instant Meshes); the gain is only on the dense-crease inputs (damask_chair 0.43 -> 0.55, fountain_scan 0.03 -> 0.07, lounge_room 0.02 -> 0.04); sheen_chair drops 0.81 -> 0.75. Kept as an option.
+- Observed: mean coverage 0.494 -> 0.506 vs it1 with singularities unchanged (14/15 models still below Instant Meshes); the gain is only on the dense-crease inputs (damask_chair 0.43 -> 0.55, fountain_scan 0.03 -> 0.07, lounge_room 0.02 -> 0.04).
 
 ### it10_coverage_mode
-- flags: `--trace-all --partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 25` · code: `f2fdc85` · run: 2026-10-15T09:37:58
+- flags: `--trace-all --partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 25` · code: `723c775` · run: 2026-10-15T11:27:29
 - it8 (hybrid, singularity budget 25) + full-set path recovery (it9).
 - Observed: best mean coverage so far, 0.598 (it8: 0.584), quad 0.989, SJ 0.908, distance 0.064 %; cost: 48.8 singularities/1k and only 9/15 models below Instant Meshes. Still far from the 0.90 target: the misses concentrate on organic scans (armadillo, igea, nefertiti) and room scans, whose 35-degree 'creases' are mostly sculpting/scan noise shorter than one element.
 
 ### it11_scans_field_budget
-- flags: `--coverage-mode --field-feature-budget 1.0` · code: `c626651` · run: 2026-10-15T09:52:35
+- flags: `--coverage-mode --field-feature-budget 1.0` · code: `723c775` · run: 2026-10-15T11:35:22
 - Scans and the dense-crease chair only (4 models - not comparable to the 15-model means above). Hypothesis: on these inputs the field is given only a fraction of the creases (feature budget 0.06 for scans, 0.3 otherwise), so loops are not aligned with the rest. Change: coverage mode + give the field all creases (--field-feature-budget 1.0).
 - Observed (vs it10 on the same 4 models): damask_chair 0.585 -> 0.624 coverage but 361 -> 403 singularities; leather_sofa, fountain_scan and lounge_room are bit-identical, because the dense-scan path keeps its fixed 0.06 field budget regardless of the flag (the integer solve is unstable on 1M-face scans with more constraints). So the hypothesis is untested on the scans and gives a coverage-for-singularities trade on the chair. Not adopted.
 

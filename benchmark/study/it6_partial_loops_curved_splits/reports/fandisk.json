@@ -11,53 +11,53 @@
  },
  "quality": {
   "scaled_jacobian": {
-   "mean": 0.948033,
-   "min": -0.469048,
-   "p05": 0.768509,
-   "median": 0.995908,
-   "p95": 0.99989,
-   "max": 0.999999,
-   "std": 0.144908
+   "mean": 0.947789,
+   "min": -0.469017,
+   "p05": 0.768434,
+   "median": 0.996097,
+   "p95": 0.99988,
+   "max": 1,
+   "std": 0.145233
   },
   "scaled_jacobian_quads": {
-   "mean": 0.948328,
-   "min": -0.469048,
-   "p05": 0.771299,
-   "median": 0.995911,
-   "p95": 0.99989,
-   "max": 0.999999,
-   "std": 0.144584
+   "mean": 0.948086,
+   "min": -0.469017,
+   "p05": 0.774499,
+   "median": 0.996099,
+   "p95": 0.99988,
+   "max": 1,
+   "std": 0.144894
   },
   "frac_sj_below_0.5": 0.0225702,
   "inverted_or_degenerate": 38,
   "planarity": {
-   "mean": 0.00130247,
+   "mean": 0.00128131,
    "min": 0,
    "p05": 0,
-   "median": 1.31677e-05,
-   "p95": 0.00435738,
+   "median": 1.26968e-05,
+   "p95": 0.00423099,
    "max": 0.306021,
-   "std": 0.00809083
+   "std": 0.0080484
   },
   "aspect_ratio": {
-   "mean": 1.37227,
-   "min": 1.00193,
-   "p05": 1.01641,
-   "median": 1.13862,
-   "p95": 2.03989,
+   "mean": 1.36796,
+   "min": 1.00141,
+   "p05": 1.016,
+   "median": 1.13303,
+   "p95": 2.03607,
    "max": 98.4981,
-   "std": 2.19426
+   "std": 2.19502
   },
   "edge_length_rel": {
    "mean": 1,
-   "min": 0.00989352,
-   "p05": 0.709081,
-   "median": 0.985504,
-   "p95": 1.34973,
-   "max": 3.93091,
-   "std": 0.242795
+   "min": 0.00989284,
+   "p05": 0.71012,
+   "median": 0.98576,
+   "p95": 1.34727,
+   "max": 3.92968,
+   "std": 0.242866
   },
-  "edge_length_mean_pct_diag": 1.47502
+  "edge_length_mean_pct_diag": 1.47512
  },
  "topology": {
   "singularities": 62,
@@ -77,24 +77,24 @@
   }
  },
  "distance": {
-  "mean_pct": 0.00593999,
-  "out_to_in_mean_pct": 0.00601032,
-  "in_to_out_mean_pct": 0.00586965,
-  "rms_pct": 0.030044,
-  "hausdorff_pct": 4.00649,
-  "area_ratio": 0.99971
+  "mean_pct": 0.00603949,
+  "out_to_in_mean_pct": 0.00610154,
+  "in_to_out_mean_pct": 0.00597744,
+  "rms_pct": 0.0304735,
+  "hausdorff_pct": 3.87082,
+  "area_ratio": 0.999684
  },
  "features": {
-  "feature_coverage": 0.983329,
+  "feature_coverage": 0.98379,
   "boundary_coverage": 1,
-  "combined_coverage": 0.983329,
+  "combined_coverage": 0.98379,
   "feature_length_pct_diag": 910.838,
   "boundary_length_pct_diag": 0,
   "feature_segments": 716,
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 5,
+ "runtime_s": 5.4,
  "input_faces": 12946,
  "cmd": "build/quadremesh data/models/fandisk.obj -o benchmark/study/it6_partial_loops_curved_splits/meshes/fandisk.obj -f 5000 -a 35 --no-uv --partial-loops --curved-splits"
 }

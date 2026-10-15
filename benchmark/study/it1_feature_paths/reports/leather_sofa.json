@@ -94,7 +94,7 @@
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 29.68,
+ "runtime_s": 9.41,
  "input_faces": 46492,
  "cmd": "build/quadremesh data/models/leather_sofa.obj -o benchmark/study/it1_feature_paths/meshes/leather_sofa.obj -f 5000 -a 35 --no-uv"
 }

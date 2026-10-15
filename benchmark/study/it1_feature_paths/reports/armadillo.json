@@ -92,7 +92,7 @@
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 26.76,
+ "runtime_s": 7.86,
  "input_faces": 99976,
  "cmd": "build/quadremesh data/models/armadillo.obj -o benchmark/study/it1_feature_paths/meshes/armadillo.obj -f 5000 -a 35 --no-uv"
 }

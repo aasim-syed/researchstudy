@@ -95,7 +95,7 @@
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 96.33,
+ "runtime_s": 102.14,
  "input_faces": 1033745,
  "cmd": "build/quadremesh data/models/fountain_scan.obj -o benchmark/study/it8_hybrid_sb25/meshes/fountain_scan.obj -f 15000 -a 35 --no-uv --partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 25"
 }

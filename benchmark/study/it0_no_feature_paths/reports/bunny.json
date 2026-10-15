@@ -92,7 +92,7 @@
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 14.43,
+ "runtime_s": 7.66,
  "input_faces": 69451,
  "cmd": "QRM_NO_FEATURE_PATHS=1 build/quadremesh data/models/bunny.obj -o benchmark/study/it0_no_feature_paths/meshes/bunny.obj -f 5000 -a 35 --no-uv"
 }

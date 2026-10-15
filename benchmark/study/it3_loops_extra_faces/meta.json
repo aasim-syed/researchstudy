@@ -1,8 +1,8 @@
 {
  "name": "it3_loops_extra_faces",
  "flags": "--feature-loops --no-face-match",
- "date": "2026-10-15T08:24:57",
- "git": "f0a388b",
+ "date": "2026-10-15T10:43:32",
+ "git": "723c775",
  "models": [
   "bunny",
   "fandisk",

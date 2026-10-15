@@ -1,8 +1,8 @@
 {
  "name": "it9_trace_all",
  "flags": "--trace-all",
- "date": "2026-10-15T09:33:16",
- "git": "f2fdc85",
+ "date": "2026-10-15T11:22:39",
+ "git": "723c775",
  "models": [
   "bunny",
   "fandisk",

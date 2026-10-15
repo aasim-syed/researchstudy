@@ -96,7 +96,7 @@
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 53.95,
+ "runtime_s": 65.86,
  "input_faces": 39936,
  "cmd": "build/quadremesh data/models/damask_chair.obj -o benchmark/study/it11_scans_field_budget/meshes/damask_chair.obj -f 5000 -a 35 --no-uv --coverage-mode --field-feature-budget 1.0"
 }

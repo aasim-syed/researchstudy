@@ -92,7 +92,7 @@
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 51.09,
+ "runtime_s": 17.12,
  "input_faces": 268686,
  "cmd": "build/quadremesh data/models/igea.obj -o benchmark/study/it1_feature_paths/meshes/igea.obj -f 5000 -a 35 --no-uv"
 }

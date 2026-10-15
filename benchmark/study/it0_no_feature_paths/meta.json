@@ -1,33 +1,23 @@
 {
  "name": "it0_no_feature_paths",
  "flags": "QRM_NO_FEATURE_PATHS=1",
- "date": "2026-10-15T07:56:04",
- "git": "f0a388b",
+ "date": "2026-10-15T10:27:50",
+ "git": "723c775",
  "models": [
-  "armadillo",
-  "beetle",
   "bunny",
-  "damask_chair",
   "fandisk",
   "fandisk_noisy",
-  "fountain_scan",
-  "igea",
-  "leather_sofa",
-  "lounge_room",
-  "nefertiti",
   "rocker_arm",
-  "sheen_chair",
+  "armadillo",
   "spot",
-  "velvet_sofa"
- ],
- "reruns": [
-  {
-   "date": "2026-10-15T08:43:07",
-   "git": "f0a388b",
-   "models": [
-    "fountain_scan",
-    "lounge_room"
-   ]
-  }
+  "beetle",
+  "nefertiti",
+  "igea",
+  "sheen_chair",
+  "damask_chair",
+  "velvet_sofa",
+  "leather_sofa",
+  "fountain_scan",
+  "lounge_room"
  ]
 }
