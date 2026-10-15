@@ -701,6 +701,9 @@ int snap_near_creases(QuadMesh& m, const std::vector<std::vector<Vector3d>>& cha
         return best;
     };
     int snapped = 0;
+    int why[6] = {0, 0, 0, 0, 0, 0};
+    const bool local_relax = !std::getenv("QRM_SNAP_NORELAX");
+    const bool net_rule = !std::getenv("QRM_SNAP_STRICTNET");  // no candidate, collapse, protected, quality, not covering, coverage lost
     const double md2 = (max_dist * L) * (max_dist * L);
     for (size_t i = 0; i < S.size(); ++i) {
         if (cov[i] || D[i] > md2) continue;
@@ -717,18 +720,18 @@ int snap_near_creases(QuadMesh& m, const std::vector<std::vector<Vector3d>>& cha
             double score = std::sqrt(d2) + 0.5 * L * (1 - cs);
             if (score < bscore) bscore = score, best = e;
         }
-        if (best < 0) continue;
+        if (best < 0) { why[0]++; continue; }
         if (ecos(best, S[i].d) >= cos25 && seg_d2(S[i].p, best) <= tl * tl) { cov[i] = 1; continue; }  // already fixed by an earlier snap
         int a = E(best, 0), b = E(best, 1);
         Vector3d pa = m.V.row(a).transpose(), pb = m.V.row(b).transpose();
         Vector3d qa = closest_on_chain(S[i].c, pa), qb = closest_on_chain(S[i].c, pb);
-        if ((qa - qb).norm() < 0.2 * (pa - pb).norm()) continue;  // edge would collapse onto one crease point
+        if ((qa - qb).norm() < 0.2 * (pa - pb).norm()) { why[1]++; continue; }  // edge would collapse onto one crease point
         bool ok = true;
         const bool strict = std::getenv("QRM_SNAP_STRICT") != nullptr;
         if (strict)
             for (int v : {a, b})
                 if (prot[v] && (m.V.row(v).transpose() - (v == a ? qa : qb)).norm() > 0.02 * L) ok = false;
-        if (!ok) continue;
+        if (!ok) { why[2]++; continue; }
         std::set<int> fs;
         for (int v : {a, b})
             for (int f : vfaces[v]) fs.insert(f);
@@ -737,25 +740,83 @@ int snap_near_creases(QuadMesh& m, const std::vector<std::vector<Vector3d>>& cha
         m.V.row(a) = qa.transpose();
         m.V.row(b) = qb.transpose();
         const double floor_q = std::getenv("QRM_SNAP_FLOOR") ? std::atof(std::getenv("QRM_SNAP_FLOOR")) : 0.1;
-        for (int f : fs)
-            if (face_sj(f) < std::min(floor_q, before[f])) { ok = false; break; }
-        if (ok && (ecos(best, S[i].d) < cos25 || seg_d2(S[i].p, best) > tl * tl)) ok = false;  // the snapped edge must cover
+        auto bad_face = [&]() {
+            for (int f : fs)
+                if (face_sj(f) < std::min(floor_q, before[f])) return true;
+            return false;
+        };
+        // if a face around the moved edge got too distorted, relax the free 1-ring vertices
+        // (not on a covering edge) towards their neighbours' average and test again
+        std::vector<std::pair<int, Vector3d>> relaxed;
+        if (bad_face() && local_relax) {
+            std::set<int> ring;
+            for (int f : fs)
+                for (int j = 0; j < 4; ++j) {
+                    int v = m.Q(f, j);
+                    if (v >= 0 && v != a && v != b && !prot[v]) ring.insert(v);
+                }
+            for (int v : ring) relaxed.push_back({v, m.V.row(v).transpose()});
+            for (int it = 0; it < 6; ++it)
+                for (int v : ring) {
+                    Vector3d c = Vector3d::Zero();
+                    int k = 0;
+                    for (int e : vinc[v]) {
+                        int u = E(e, 0) == v ? E(e, 1) : E(e, 0);
+                        c += m.V.row(u).transpose();
+                        k++;
+                    }
+                    if (k) m.V.row(v) = (0.5 * m.V.row(v).transpose() + 0.5 * c / k).transpose();
+                }
+            for (int v : ring)
+                for (int f : vfaces[v])
+                    if (!before.count(f)) { before[f] = 1.0; fs.insert(f); }
+            // faces of relaxed vertices: compare against their own quality before relaxation
+            for (auto& [v, p0] : relaxed) {
+                Vector3d now = m.V.row(v).transpose();
+                m.V.row(v) = p0.transpose();
+                for (int f : vfaces[v]) before[f] = std::min(before[f], face_sj(f));
+                m.V.row(v) = now.transpose();
+            }
+        }
+        if (bad_face()) ok = false;
+        if (!ok) why[3]++;
+        if (ok && (ecos(best, S[i].d) < cos25 || seg_d2(S[i].p, best) > tl * tl)) { ok = false; why[4]++; }  // the snapped edge must cover
         // crease points the moved vertices were covering must stay covered
-        for (int v : {a, b})
-            for (int j : vs_cov[v])
-                if (ok && !covered_near(j, v)) ok = false;
+        // net rule: a move may uncover crease points it was covering only if it covers more
+        // previously uncovered points nearby (same chain, +-1.5 L) than it loses
+        std::vector<int> lost_ids;
+        if (ok) {
+            std::set<int> seen;
+            for (int v : {a, b})
+                for (int j : vs_cov[v])
+                    if (seen.insert(j).second && !covered_near(j, a) && !covered_near(j, b)) lost_ids.push_back(j);
+            if (!lost_ids.empty()) {
+                int gained = 0;
+                for (int j = std::max(0, (int)i - 15); j <= std::min((int)S.size() - 1, (int)i + 15); ++j)
+                    if (!cov[j] && S[j].c == S[i].c && (covered_near(j, a) || covered_near(j, b))) gained++;
+                if (!net_rule || gained <= (int)lost_ids.size()) ok = false;
+            }
+        }
+        if (!ok && !lost_ids.empty()) why[5]++;
         if (!ok) {
             m.V.row(a) = pa.transpose();
             m.V.row(b) = pb.transpose();
+            for (auto& [v, p0] : relaxed) m.V.row(v) = p0.transpose();
             continue;
         }
         prot[a] = prot[b] = 1;
         cov[i] = 1;
+        for (int j : lost_ids) cov[j] = 0;
+        for (int j = std::max(0, (int)i - 15); j <= std::min((int)S.size() - 1, (int)i + 15); ++j)
+            if (!cov[j] && S[j].c == S[i].c && (covered_near(j, a) || covered_near(j, b))) cov[j] = 1;
         vs_cov[a].push_back((int)i);
         vs_cov[b].push_back((int)i);
         snapped++;
         if (moved) moved->push_back(qa), moved->push_back(qb);
     }
+    if (std::getenv("QRM_DEBUG_SNAP"))
+        std::fprintf(stderr, "snap: %d snapped; rejected: no candidate %d, collapse %d, protected %d, quality %d, not covering %d, coverage lost %d\n",
+                     snapped, why[0], why[1], why[2], why[3], why[4], why[5]);
     return snapped;
 }
 

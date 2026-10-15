@@ -22,7 +22,9 @@
   "it19_path_subdiv_sb25",
   "it20_coverage_mode_subdiv",
   "it21_im_budget",
-  "it22_max_coverage"
+  "it22_max_coverage",
+  "it23_default_snap2",
+  "it24_max_coverage_snap2"
  ],
  "it0_no_feature_paths": [
   "Baseline before any coverage-specific post-processing: hard feature constraints in the field + proximity snapping of vertices to creases (the default before edge-path recovery). Reproduced with the current code by disabling path recovery (QRM_NO_FEATURE_PATHS=1)."
@@ -126,5 +128,11 @@
  "it22_max_coverage": [
   "it21 + coverage search (4 candidates; with the Instant Meshes-referenced budget a candidate may not exceed the first candidate's singularity rate by more than 5 %). 4x runtime. Recommended setting when feature coverage matters most.",
   "Observed: on damask_chair none of the 4 candidates kept the mean SJ >= 0.8 (first run: SJ 0.762 was returned); the search now falls back to the default settings in that case and damask was re-run with that fix (recorded in meta.json reruns): coverage 0.619, SJ 0.816. Final: 0.712 over 15, 0.808 on the 13 non-scan models, every model meets quad >= 98 %, SJ >= 0.8 and distance < 0.5 %; 14/15 below Instant Meshes. Four models reach >= 90 % (fandisk 1.000, spot 0.994, sheen chair 0.925, velvet sofa 0.906), leather sofa 0.895."
+ ],
+ "it23_default_snap2": [
+  "Snapping rejection counters (QRM_DEBUG_SNAP) on leather sofa: most rejected moves would uncover a crease point the moved vertices were covering (parallel creases), would distort a neighbouring quad below SJ 0.1, or still not line up. Two changes: (1) after a move that distorts a neighbour, the free 1-ring vertices are relaxed towards their neighbours' average (6 passes) before the quality test; (2) a move that uncovers covered crease points is accepted when it covers more previously uncovered points of the same chain within +-1.5 L than it loses. New default."
+ ],
+ "it24_max_coverage_snap2": [
+  "it22 (max coverage) with the it23 snapping."
  ]
 }
