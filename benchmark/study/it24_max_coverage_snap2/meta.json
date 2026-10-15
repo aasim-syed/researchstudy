@@ -1,0 +1,48 @@
+{
+ "name": "it24_max_coverage_snap2",
+ "flags": "--coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search",
+ "date": "2026-10-15T19:55:01",
+ "git": "dcfa6e2",
+ "models": [
+  "armadillo",
+  "beetle",
+  "bunny",
+  "damask_chair",
+  "fandisk",
+  "fandisk_noisy",
+  "fountain_scan",
+  "igea",
+  "leather_sofa",
+  "lounge_room",
+  "nefertiti",
+  "rocker_arm",
+  "sheen_chair",
+  "spot",
+  "velvet_sofa"
+ ],
+ "reruns": [
+  {
+   "date": "2026-10-15T21:17:17",
+   "git": "1343c47",
+   "models": [
+    "fountain_scan",
+    "lounge_room"
+   ]
+  },
+  {
+   "date": "2026-10-15T21:25:02",
+   "git": "1343c47",
+   "models": [
+    "fountain_scan",
+    "lounge_room"
+   ]
+  },
+  {
+   "date": "2026-10-15T21:46:34",
+   "git": "1343c47",
+   "models": [
+    "fountain_scan"
+   ]
+  }
+ ]
+}

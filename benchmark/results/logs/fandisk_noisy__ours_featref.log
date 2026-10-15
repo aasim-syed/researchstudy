@@ -1,2 +1,2 @@
 /home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/fandisk_noisy.obj -o /home/claude/quadremesh/benchmark/results/meshes/fandisk_noisy__ours_featref.obj -f 5000 -a 35.0 --no-uv --feature-refine 2
-quadremesh: 12925 faces -> 3947 quads/tris (9.42s) -> /home/claude/quadremesh/benchmark/results/meshes/fandisk_noisy__ours_featref.obj
+quadremesh: 12925 faces -> 3947 quads/tris (9.02s) -> /home/claude/quadremesh/benchmark/results/meshes/fandisk_noisy__ours_featref.obj

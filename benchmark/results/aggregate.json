@@ -4,45 +4,45 @@
    "models": 15,
    "succeeded": 15,
    "quad_ratio": 0.9999948,
-   "sj_mean": 0.9043224666666667,
-   "dist_mean_pct": 0.08629745999999999,
-   "feature_coverage": 0.6482974533333333,
+   "sj_mean": 0.9027535333333333,
+   "dist_mean_pct": 0.08598218666666665,
+   "feature_coverage": 0.6687208733333333,
    "singularities": 218.4,
    "sing_per_1k": 35.587334000000006,
-   "runtime_s": 45.35653333333333
+   "runtime_s": 42.92573333333333
   },
   "ours_learned": {
    "models": 15,
    "succeeded": 15,
    "quad_ratio": 0.9999008,
-   "sj_mean": 0.9147229333333333,
-   "dist_mean_pct": 0.06126105333333333,
-   "feature_coverage": 0.6478143333333333,
-   "singularities": 234.6,
-   "sing_per_1k": 39.160023333333335,
-   "runtime_s": 57.480599999999995
+   "sj_mean": 0.9116964666666667,
+   "dist_mean_pct": 0.06071197,
+   "feature_coverage": 0.6721561,
+   "singularities": 233.13333333333333,
+   "sing_per_1k": 38.88437666666667,
+   "runtime_s": 55.236266666666666
   },
   "ours_featref": {
    "models": 15,
    "succeeded": 15,
    "quad_ratio": 0.9918248666666667,
-   "sj_mean": 0.8981277333333334,
-   "dist_mean_pct": 0.07324796,
-   "feature_coverage": 0.6707634133333333,
+   "sj_mean": 0.8963576666666666,
+   "dist_mean_pct": 0.07321028,
+   "feature_coverage": 0.6907232866666667,
    "singularities": 264.8,
    "sing_per_1k": 41.49032,
-   "runtime_s": 64.23526666666666
+   "runtime_s": 62.821999999999996
   },
   "ours_coverage": {
    "models": 15,
    "succeeded": 15,
-   "quad_ratio": 0.9946088666666667,
-   "sj_mean": 0.9060834666666666,
-   "dist_mean_pct": 0.08143505466666667,
-   "feature_coverage": 0.7118303466666667,
-   "singularities": 253.0,
-   "sing_per_1k": 41.13832,
-   "runtime_s": 265.6306666666667
+   "quad_ratio": 0.9944695333333333,
+   "sj_mean": 0.9032623999999999,
+   "dist_mean_pct": 0.082176048,
+   "feature_coverage": 0.7314640066666667,
+   "singularities": 250.26666666666668,
+   "sing_per_1k": 40.78206,
+   "runtime_s": 268.27200000000005
   },
   "instant_meshes": {
    "models": 15,

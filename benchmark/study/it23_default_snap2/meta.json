@@ -1,0 +1,23 @@
+{
+ "name": "it23_default_snap2",
+ "flags": "",
+ "date": "2026-10-15T19:45:35",
+ "git": "dcfa6e2",
+ "models": [
+  "bunny",
+  "fandisk",
+  "fandisk_noisy",
+  "rocker_arm",
+  "armadillo",
+  "spot",
+  "beetle",
+  "nefertiti",
+  "igea",
+  "sheen_chair",
+  "damask_chair",
+  "velvet_sofa",
+  "leather_sofa",
+  "fountain_scan",
+  "lounge_room"
+ ]
+}

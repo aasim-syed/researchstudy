@@ -130,9 +130,11 @@
   "Observed: on damask_chair none of the 4 candidates kept the mean SJ >= 0.8 (first run: SJ 0.762 was returned); the search now falls back to the default settings in that case and damask was re-run with that fix (recorded in meta.json reruns): coverage 0.619, SJ 0.816. Final: 0.712 over 15, 0.808 on the 13 non-scan models, every model meets quad >= 98 %, SJ >= 0.8 and distance < 0.5 %; 14/15 below Instant Meshes. Four models reach >= 90 % (fandisk 1.000, spot 0.994, sheen chair 0.925, velvet sofa 0.906), leather sofa 0.895."
  ],
  "it23_default_snap2": [
-  "Snapping rejection counters (QRM_DEBUG_SNAP) on leather sofa: most rejected moves would uncover a crease point the moved vertices were covering (parallel creases), would distort a neighbouring quad below SJ 0.1, or still not line up. Two changes: (1) after a move that distorts a neighbour, the free 1-ring vertices are relaxed towards their neighbours' average (6 passes) before the quality test; (2) a move that uncovers covered crease points is accepted when it covers more previously uncovered points of the same chain within +-1.5 L than it loses. New default."
+  "Snapping rejection counters (QRM_DEBUG_SNAP) on leather sofa: most rejected moves would uncover a crease point the moved vertices were covering (parallel creases), would distort a neighbouring quad below SJ 0.1, or still not line up. Two changes: (1) after a move that distorts a neighbour, the free 1-ring vertices are relaxed towards their neighbours' average (6 passes) before the quality test; (2) a move that uncovers covered crease points is accepted when it covers more previously uncovered points of the same chain within +-1.5 L than it loses. New default.",
+  "Observed: 0.648 -> 0.669 over 15 (it17 -> it23), 0.737 -> 0.759 on the 13 non-scan models; every model keeps quad 100 %, SJ >= 0.8 and distance < 0.5 %; 14/15 below Instant Meshes. Leather sofa reaches 0.900 with the default setting."
  ],
  "it24_max_coverage_snap2": [
-  "it22 (max coverage) with the it23 snapping."
+  "it22 (max coverage) with the it23 snapping.",
+  "Observed: 0.712 -> 0.731 over 15 (it22 -> it24), 0.808 -> 0.828 on the 13 non-scan models; quad 0.994, SJ 0.903, distance 0.082 %, 14/15 below Instant Meshes. Five models reach >= 90 %: fandisk 1.000, spot 0.994, sheen chair 0.929, velvet sofa 0.924, leather sofa 0.915. The scans were run separately (an out-of-memory kill from two concurrent scan jobs was re-run; recorded in meta.json reruns)."
  ]
 }

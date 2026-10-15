@@ -11,53 +11,53 @@
  },
  "quality": {
   "scaled_jacobian": {
-   "mean": 0.888887,
+   "mean": 0.886269,
    "min": -1,
-   "p05": 0.389345,
-   "median": 0.98275,
+   "p05": 0.375114,
+   "median": 0.981909,
    "p95": 0.999864,
-   "max": 1,
-   "std": 0.227236
+   "max": 0.999999,
+   "std": 0.231041
   },
   "scaled_jacobian_quads": {
-   "mean": 0.891216,
+   "mean": 0.888445,
    "min": -1,
-   "p05": 0.400726,
-   "median": 0.983069,
+   "p05": 0.378381,
+   "median": 0.982251,
    "p95": 0.999865,
-   "max": 1,
-   "std": 0.224959
+   "max": 0.999999,
+   "std": 0.229182
   },
-  "frac_sj_below_0.5": 0.0636064,
-  "inverted_or_degenerate": 76,
+  "frac_sj_below_0.5": 0.0671058,
+  "inverted_or_degenerate": 73,
   "planarity": {
-   "mean": 0.0140433,
+   "mean": 0.0138666,
    "min": 0,
-   "p05": 4.57715e-09,
-   "median": 0.00407445,
-   "p95": 0.0613266,
-   "max": 0.485406,
-   "std": 0.0287885
+   "p05": 4.45856e-09,
+   "median": 0.0039154,
+   "p95": 0.0603934,
+   "max": 0.477816,
+   "std": 0.0281793
   },
   "aspect_ratio": {
-   "mean": 621124,
+   "mean": 1035200.0,
    "min": 1.00177,
-   "p05": 1.04923,
-   "median": 1.24165,
-   "p95": 4.85822,
+   "p05": 1.04888,
+   "median": 1.24726,
+   "p95": 4.89869,
    "max": 1000000000.0,
-   "std": 24914500.0
+   "std": 32157800.0
   },
   "edge_length_rel": {
    "mean": 1,
    "min": 0,
-   "p05": 0.440629,
-   "median": 1.00013,
-   "p95": 1.55763,
-   "max": 6.58771,
-   "std": 0.344928
+   "p05": 0.436319,
+   "median": 1.00102,
+   "p95": 1.54907,
+   "max": 4.40803,
+   "std": 0.342368
   },
-  "edge_length_mean_pct_diag": 1.05449
+  "edge_length_mean_pct_diag": 1.05421
  },
  "topology": {
   "singularities": 229,
@@ -77,25 +77,25 @@
   }
  },
  "distance": {
-  "mean_pct": 0.0340215,
-  "out_to_in_mean_pct": 0.0353526,
-  "in_to_out_mean_pct": 0.0326905,
-  "rms_pct": 0.0925961,
-  "hausdorff_pct": 2.15465,
-  "area_ratio": 0.987355
+  "mean_pct": 0.0343984,
+  "out_to_in_mean_pct": 0.0357927,
+  "in_to_out_mean_pct": 0.0330041,
+  "rms_pct": 0.0953169,
+  "hausdorff_pct": 2.16142,
+  "area_ratio": 0.986524
  },
  "features": {
-  "feature_coverage": 0.775063,
-  "boundary_coverage": 0.729669,
-  "combined_coverage": 0.756311,
+  "feature_coverage": 0.791893,
+  "boundary_coverage": 0.71903,
+  "combined_coverage": 0.761794,
   "feature_length_pct_diag": 1250.35,
   "boundary_length_pct_diag": 880.036,
   "feature_segments": 1830,
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 90.1,
+ "runtime_s": 142.26,
  "input_faces": 32848,
- "cmd": "build/quadremesh data/models/beetle.obj -o benchmark/study/it22_max_coverage/meshes/beetle.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search",
- "imported_from": "benchmark/study/it22_max_coverage (flags: --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search, code 5d8dbf7)"
+ "cmd": "build/quadremesh data/models/beetle.obj -o benchmark/study/it24_max_coverage_snap2/meshes/beetle.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search",
+ "imported_from": "benchmark/study/it24_max_coverage_snap2 (flags: --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search, code dcfa6e2)"
 }

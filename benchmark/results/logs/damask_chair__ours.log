@@ -1,2 +1,2 @@
 /home/claude/quadremesh/build/quadremesh /home/claude/quadremesh/data/models/damask_chair.obj -o /home/claude/quadremesh/benchmark/results/meshes/damask_chair__ours.obj -f 5000 -a 35.0 --no-uv
-quadremesh: 39936 faces -> 4581 quads/tris (18.97s) -> /home/claude/quadremesh/benchmark/results/meshes/damask_chair__ours.obj
+quadremesh: 39936 faces -> 4581 quads/tris (17.20s) -> /home/claude/quadremesh/benchmark/results/meshes/damask_chair__ours.obj

@@ -11,53 +11,53 @@
  },
  "quality": {
   "scaled_jacobian": {
-   "mean": 0.906431,
-   "min": -0.761517,
-   "p05": 0.627026,
-   "median": 0.963977,
+   "mean": 0.905824,
+   "min": -0.699947,
+   "p05": 0.626565,
+   "median": 0.963731,
    "p95": 0.996919,
    "max": 0.999848,
-   "std": 0.164674
+   "std": 0.166553
   },
   "scaled_jacobian_quads": {
-   "mean": 0.906802,
-   "min": -0.761517,
-   "p05": 0.627852,
-   "median": 0.963981,
+   "mean": 0.906194,
+   "min": -0.699947,
+   "p05": 0.627026,
+   "median": 0.963742,
    "p95": 0.996919,
    "max": 0.999848,
-   "std": 0.163758
+   "std": 0.16565
   },
-  "frac_sj_below_0.5": 0.027367,
-  "inverted_or_degenerate": 32,
+  "frac_sj_below_0.5": 0.0275877,
+  "inverted_or_degenerate": 34,
   "planarity": {
-   "mean": 0.0322571,
+   "mean": 0.0321748,
    "min": 1.92641e-09,
-   "p05": 0.0015806,
-   "median": 0.0227572,
-   "p95": 0.0978444,
-   "max": 0.360432,
-   "std": 0.0329855
+   "p05": 0.00154997,
+   "median": 0.0226833,
+   "p95": 0.0982083,
+   "max": 0.356622,
+   "std": 0.0328951
   },
   "aspect_ratio": {
-   "mean": 2.14048,
+   "mean": 2.14528,
    "min": 1.00873,
-   "p05": 1.05815,
+   "p05": 1.0581,
    "median": 1.30251,
-   "p95": 2.66122,
+   "p95": 2.67218,
    "max": 1177.66,
-   "std": 19.6461
+   "std": 19.647
   },
   "edge_length_rel": {
    "mean": 1,
-   "min": 0.000647701,
-   "p05": 0.453104,
-   "median": 1.00955,
-   "p95": 1.51366,
-   "max": 3.00738,
-   "std": 0.316801
+   "min": 0.000647686,
+   "p05": 0.453238,
+   "median": 1.00952,
+   "p95": 1.51388,
+   "max": 3.00731,
+   "std": 0.317172
   },
-  "edge_length_mean_pct_diag": 1.20849
+  "edge_length_mean_pct_diag": 1.20852
  },
  "topology": {
   "singularities": 274,
@@ -78,25 +78,25 @@
   }
  },
  "distance": {
-  "mean_pct": 0.118141,
-  "out_to_in_mean_pct": 0.0949538,
-  "in_to_out_mean_pct": 0.141328,
-  "rms_pct": 0.23237,
+  "mean_pct": 0.118169,
+  "out_to_in_mean_pct": 0.0950475,
+  "in_to_out_mean_pct": 0.141291,
+  "rms_pct": 0.2324,
   "hausdorff_pct": 3.90968,
-  "area_ratio": 0.915501
+  "area_ratio": 0.915578
  },
  "features": {
-  "feature_coverage": 0.650403,
+  "feature_coverage": 0.662436,
   "boundary_coverage": 1,
-  "combined_coverage": 0.650403,
+  "combined_coverage": 0.662436,
   "feature_length_pct_diag": 22.4361,
   "boundary_length_pct_diag": 0,
   "feature_segments": 88,
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 67.62,
+ "runtime_s": 65.68,
  "input_faces": 99976,
- "cmd": "build/quadremesh data/models/armadillo.obj -o benchmark/study/it22_max_coverage/meshes/armadillo.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search",
- "imported_from": "benchmark/study/it22_max_coverage (flags: --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search, code 5d8dbf7)"
+ "cmd": "build/quadremesh data/models/armadillo.obj -o benchmark/study/it24_max_coverage_snap2/meshes/armadillo.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search",
+ "imported_from": "benchmark/study/it24_max_coverage_snap2 (flags: --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search, code dcfa6e2)"
 }

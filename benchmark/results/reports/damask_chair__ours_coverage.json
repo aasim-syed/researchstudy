@@ -11,53 +11,53 @@
  },
  "quality": {
   "scaled_jacobian": {
-   "mean": 0.816151,
+   "mean": 0.821443,
    "min": -1,
-   "p05": 0.0403429,
-   "median": 0.968368,
-   "p95": 0.999826,
+   "p05": 0.0545416,
+   "median": 0.967103,
+   "p95": 0.999827,
    "max": 0.999999,
-   "std": 0.335747
+   "std": 0.326615
   },
   "scaled_jacobian_quads": {
-   "mean": 0.816151,
+   "mean": 0.821443,
    "min": -1,
-   "p05": 0.0403429,
-   "median": 0.968368,
-   "p95": 0.999826,
+   "p05": 0.0545416,
+   "median": 0.967103,
+   "p95": 0.999827,
    "max": 0.999999,
-   "std": 0.335747
+   "std": 0.326615
   },
-  "frac_sj_below_0.5": 0.128138,
-  "inverted_or_degenerate": 125,
+  "frac_sj_below_0.5": 0.124209,
+  "inverted_or_degenerate": 113,
   "planarity": {
-   "mean": 0.0218448,
+   "mean": 0.0220194,
    "min": 0,
-   "p05": 3.37261e-06,
-   "median": 0.0064596,
-   "p95": 0.106339,
+   "p05": 4.10858e-06,
+   "median": 0.00612869,
+   "p95": 0.104211,
    "max": 0.450972,
-   "std": 0.0380824
+   "std": 0.0389329
   },
   "aspect_ratio": {
-   "mean": 8734090.0,
-   "min": 1.00274,
-   "p05": 1.0359,
-   "median": 1.47338,
-   "p95": 9.63447,
+   "mean": 8079230.0,
+   "min": 1.00249,
+   "p05": 1.0353,
+   "median": 1.46397,
+   "p95": 8.75345,
    "max": 1000000000.0,
-   "std": 93034600.0
+   "std": 89507400.0
   },
   "edge_length_rel": {
    "mean": 1,
    "min": 0,
-   "p05": 0.156492,
-   "median": 1.05925,
-   "p95": 1.76379,
-   "max": 34.6065,
-   "std": 1.08185
+   "p05": 0.171291,
+   "median": 1.05134,
+   "p95": 1.75534,
+   "max": 34.4142,
+   "std": 1.07582
   },
-  "edge_length_mean_pct_diag": 1.63764
+  "edge_length_mean_pct_diag": 1.64679
  },
  "topology": {
   "singularities": 261,
@@ -78,25 +78,25 @@
   }
  },
  "distance": {
-  "mean_pct": 0.33816,
-  "out_to_in_mean_pct": 0.527093,
-  "in_to_out_mean_pct": 0.149227,
-  "rms_pct": 2.64344,
-  "hausdorff_pct": 54.4823,
-  "area_ratio": 0.951123
+  "mean_pct": 0.329013,
+  "out_to_in_mean_pct": 0.514466,
+  "in_to_out_mean_pct": 0.143559,
+  "rms_pct": 2.58587,
+  "hausdorff_pct": 54.4614,
+  "area_ratio": 0.959867
  },
  "features": {
-  "feature_coverage": 0.618692,
-  "boundary_coverage": 0.59243,
-  "combined_coverage": 0.616795,
+  "feature_coverage": 0.675604,
+  "boundary_coverage": 0.610549,
+  "combined_coverage": 0.670904,
   "feature_length_pct_diag": 5985.21,
   "boundary_length_pct_diag": 466.079,
   "feature_segments": 4513,
   "tolerance_L": 0.1,
   "feature_angle": 35
  },
- "runtime_s": 1068.8,
+ "runtime_s": 1068.77,
  "input_faces": 39936,
- "cmd": "build/quadremesh data/models/damask_chair.obj -o benchmark/study/it22_max_coverage/meshes/damask_chair.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search",
- "imported_from": "benchmark/study/it22_max_coverage (flags: --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search, code 5d8dbf7)"
+ "cmd": "build/quadremesh data/models/damask_chair.obj -o benchmark/study/it24_max_coverage_snap2/meshes/damask_chair.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search",
+ "imported_from": "benchmark/study/it24_max_coverage_snap2 (flags: --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search, code dcfa6e2)"
 }
