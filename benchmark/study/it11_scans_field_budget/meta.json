@@ -1,0 +1,12 @@
+{
+ "name": "it11_scans_field_budget",
+ "flags": "--coverage-mode --field-feature-budget 1.0",
+ "date": "2026-10-15T09:52:35",
+ "git": "c626651",
+ "models": [
+  "damask_chair",
+  "leather_sofa",
+  "fountain_scan",
+  "lounge_room"
+ ]
+}

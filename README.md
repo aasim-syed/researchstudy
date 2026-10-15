@@ -47,8 +47,12 @@ bit-identical output for repeated runs.
 
 \* over the models that method could process. Fewer singularities than Instant Meshes on 14/15
 models (3 122 vs 4 782 in total). Feature coverage reaches 98 % on CAD but not on organic
-scans / dense carvings / TSDF rooms; the opt-ins `--feature-refine 2` / `--feature-loops` raise it
-only by adding faces or costing quad ratio / singularities - see `docs/technical_writeup.pdf` for the full analysis.
+scans / dense carvings / TSDF rooms. The opt-in `--coverage-mode` (Python: `coverage_mode=True`)
+raises the mean to 60 % (quad 98.9 %, SJ 0.908, distance 0.064 %) but then has fewer
+singularities than Instant Meshes on only 9/15 models. Every coverage experiment, including
+the failed ones, is in the generated study [`docs/coverage_study.md`](docs/coverage_study.md)
+(reproduce with `python benchmark/coverage_study.py run NAME "FLAGS"` + `report`);
+`docs/technical_writeup.pdf` has the analysis.
 
 ## Build
 
@@ -69,7 +73,8 @@ PYTHONPATH=python python -m pytest tests          # Python tests
 ```
 quadremesh INPUT(.obj|.ply|.glb|.gltf|.off) -o OUT.obj [options]
   -f/--faces N  -e/--edge-length X  -a/--feature-angle DEG  --min-feature-length K
-  --feature-refine N  --feature-loops  --no-face-match
+  --coverage-mode  --feature-refine N  --feature-loops  --partial-loops  --curved-splits
+  --trace-all  --tri-budget F  --sing-budget S  --refine-max-len K  --no-face-match
   --no-boundary  --curvature-weight W  --strokes FILE [--strokes-as-edges]
   --guide FILE [--guide-strength W]  --density FILE  --density-region X Y Z R F
   --curvature-density K  --symmetry x|y|z [--symmetry-offset C]
