@@ -2,7 +2,7 @@
  "name": "it9_trace_all",
  "flags": "--trace-all",
  "date": "2026-10-15T11:22:39",
- "git": "723c775",
+ "git": "5691b6a",
  "models": [
   "bunny",
   "fandisk",

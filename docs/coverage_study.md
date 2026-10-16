@@ -58,142 +58,142 @@ fewer singularities than Instant Meshes at equal face count.
 | fountain_scan | 0.03 | 0.03 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.07 | 0.09 | 0.09 | 0.09 | 0.05 | 0.07 | 0.09 | 0.07 | 0.07 | 0.08 | 0.09 | 0.10 | 0.07 | 0.11 | 0.09 | 0.12 | 0.01 |
 | lounge_room | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.02 | 0.04 | 0.05 | 0.05 | – | 0.05 | 0.06 | 0.06 | 0.06 | 0.07 | 0.07 | 0.08 | 0.08 | 0.07 | 0.07 | 0.08 | 0.09 | 0.02 |
 
-Code provenance: it0-it11 were run on commit 723c775 and it12-it15 on 33a63fe (recorded in each run's meta.json); from it16 on the defaults changed (see it16) - the earlier rows are reproduced at later commits with --legacy prepended to their flags.
+Code provenance: it0-it11 were run on commit 5691b6a and it12-it15 on 4e6b8e1 (recorded in each run's meta.json); from it16 on the defaults changed (see it16) - the earlier rows are reproduced at later commits with --legacy prepended to their flags.
 
 ## Iterations
 
 ### it0_no_feature_paths
-- flags: `QRM_NO_FEATURE_PATHS=1` · code: `723c775` · run: 2026-10-15T10:27:50
+- flags: `QRM_NO_FEATURE_PATHS=1` · code: `5691b6a` · run: 2026-10-15T10:27:50
 - Baseline before any coverage-specific post-processing: hard feature constraints in the field + proximity snapping of vertices to creases (the default before edge-path recovery). Reproduced with the current code by disabling path recovery (QRM_NO_FEATURE_PATHS=1).
 
 ### it1_feature_paths
-- flags: `(default)` · code: `723c775` · run: 2026-10-15T10:32:36
+- flags: `(default)` · code: `5691b6a` · run: 2026-10-15T10:32:36
 - Hypothesis: many creases have an edge loop running next to them (offset by a fraction of an element) but not on them.
 - Change: edge-path recovery - for every crease chain, a directed-edge Dijkstra through the quad mesh (cost: distance to the crease, misalignment, turning inside a face), the path is snapped onto the crease with a monotone arclength map and locked during relaxation; short chains get jointly chosen endpoints.
 - Cost: none by construction (no topology change). Current default.
 
 ### it2_feature_refine
-- flags: `--feature-refine 2` · code: `723c775` · run: 2026-10-15T10:37:23
+- flags: `--feature-refine 2` · code: `5691b6a` · run: 2026-10-15T10:37:23
 - Hypothesis: creases closer than one element need more vertices locally.
 - Change: refine (1->4 with conforming hanging-node templates) the quads around every chain without a path, then trace again; two rounds.
 - Observed (current code, where refinement goes through the budgeted coverage stage): coverage 0.494 -> 0.541, quad ratio 0.992, singularities 33.4 -> 41.8 per 1k, 12/15 below Instant Meshes. Kept as opt-in (--feature-refine 2).
 
 ### it3_loops_extra_faces
-- flags: `--feature-loops --no-face-match` · code: `723c775` · run: 2026-10-15T10:43:32
+- flags: `--feature-loops --no-face-match` · code: `5691b6a` · run: 2026-10-15T10:43:32
 - Hypothesis: a crease that runs lengthwise along a quad strip can get its own edge loop by splitting that strip lengthwise (pure quads, no new irregular vertices).
 - Change: for each chain without a path, find the longest run of quads it crosses rung-to-rung and split the whole strip (through the crease inside the run, on the midline elsewhere); self-crossing strips split their crossing faces into 4. No face-count control in this run (--no-face-match).
 - Observed: coverage 0.531 at 1.15x the target face count; whole strips are much longer than the crease runs, so most added faces do not help coverage.
 
 ### it4_loops_equal_faces
-- flags: `--feature-loops` · code: `723c775` · run: 2026-10-15T10:49:46
+- flags: `--feature-loops` · code: `5691b6a` · run: 2026-10-15T10:49:46
 - Same as it3 but with face-count control: if the output exceeds 1.10x the target, the field is re-solved at a proportionally lower budget so the output lands near the target face count.
 - Observed: 0.520 at 0.97x faces, 13/15 below Instant Meshes - most of it3's gain survives at (near) equal face count, but per model it is uneven (velvet 0.65 -> 0.83, sheen 0.75 -> 0.71, leather 0.70 -> 0.64).
 
 ### it5_partial_loops
-- flags: `--partial-loops` · code: `723c775` · run: 2026-10-15T10:56:47
+- flags: `--partial-loops` · code: `5691b6a` · run: 2026-10-15T10:56:47
 - Hypothesis: splitting only the crease's own run (plus up to 8 faces when that reaches the strip's end) gives the same local loop at a fraction of the face cost; each open end leaves one hanging vertex, resolved as quad + triangle, and adjacent triangles are re-paired.
 - Guards: runs shorter than 3 faces are skipped; every insertion is tentative and kept only within the triangle budget (1.5 % of the target faces) and singularity budget (+10 per 1k target faces). Face-count control on.
 - Observed: 0.517 at quad 0.999 - slightly below whole-strip loops (it4) in coverage, but it keeps 14/15 models below Instant Meshes.
 
 ### it6_partial_loops_curved_splits
-- flags: `--partial-loops --curved-splits` · code: `723c775` · run: 2026-10-15T11:03:25
+- flags: `--partial-loops --curved-splits` · code: `5691b6a` · run: 2026-10-15T11:03:25
 - Hypothesis: on tightly curved creases the path vertices are on the crease but the straight edges between them are not (chord sag > 0.1 L or turn > 25 deg).
 - Change: split every recovered path edge whose chord midpoint is > 0.09 L from the crease or whose direction deviates > 23 deg, at the crease point; the two adjacent quads become quad + triangle. Worst deviations first, within the remaining triangle budget; two passes.
 - Observed: 0.517 -> 0.549; biggest gains on tightly curved creases (bunny 0.44 -> 0.57, rocker arm 0.45 -> 0.57, spot 0.88 -> 0.94); quad 0.996, 13/15.
 
 ### it7_hybrid_sb10
-- flags: `--partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 10` · code: `723c775` · run: 2026-10-15T11:10:07
+- flags: `--partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 10` · code: `5691b6a` · run: 2026-10-15T11:10:07
 - Hybrid, per crease: partial edge loops for long creases without a path, one round of local refinement only around short creases (<= 8 L), curved-crease splits.
 - Every operation is applied tentatively and kept only if the mesh stays within a triangle budget (+1.5 % of target faces) and a singularity budget (+10 irregular vertices per 1k target faces); checks are topological, so this is cheap.
 - Face-count control re-solves only above 1.10x the target (Instant Meshes itself lands at 0.84-1.03x).
 
 ### it8_hybrid_sb25
-- flags: `--partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 25` · code: `723c775` · run: 2026-10-15T11:16:28
+- flags: `--partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 25` · code: `5691b6a` · run: 2026-10-15T11:16:28
 - Same as it7 with a singularity budget of +25 per 1k target faces: measures the coverage / singularity trade-off.
 
 ### it9_trace_all
-- flags: `--trace-all` · code: `723c775` · run: 2026-10-15T11:22:39
+- flags: `--trace-all` · code: `5691b6a` · run: 2026-10-15T11:22:39
 - Hypothesis: on inputs whose crease network is denser than the resolution, the field gets a reduced crease set (to keep the integer solve stable), so path recovery never sees the remaining creases. Change: path recovery uses the full crease set while the field keeps the reduced one. Vertex moves only - no topology change.
 - Observed: mean coverage 0.494 -> 0.506 vs it1 with singularities unchanged (14/15 models still below Instant Meshes); the gain is only on the dense-crease inputs (damask_chair 0.43 -> 0.55, fountain_scan 0.03 -> 0.07, lounge_room 0.02 -> 0.04).
 
 ### it10_coverage_mode
-- flags: `--trace-all --partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 25` · code: `723c775` · run: 2026-10-15T11:27:29
+- flags: `--trace-all --partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 25` · code: `5691b6a` · run: 2026-10-15T11:27:29
 - it8 (hybrid, singularity budget 25) + full-set path recovery (it9).
 - Observed: best mean coverage so far, 0.598 (it8: 0.584), quad 0.989, SJ 0.908, distance 0.064 %; cost: 48.8 singularities/1k and only 9/15 models below Instant Meshes. Still far from the 0.90 target: the misses concentrate on organic scans (armadillo, igea, nefertiti) and room scans, whose 35-degree 'creases' are mostly sculpting/scan noise shorter than one element.
 
 ### it11_scans_field_budget
-- flags: `--coverage-mode --field-feature-budget 1.0` · code: `723c775` · run: 2026-10-15T11:35:22
+- flags: `--coverage-mode --field-feature-budget 1.0` · code: `5691b6a` · run: 2026-10-15T11:35:22
 - Scans and the dense-crease chair only (4 models - not comparable to the 15-model means above). Hypothesis: on these inputs the field is given only a fraction of the creases (feature budget 0.06 for scans, 0.3 otherwise), so loops are not aligned with the rest. Change: coverage mode + give the field all creases (--field-feature-budget 1.0).
 - Observed (vs it10 on the same 4 models): damask_chair 0.585 -> 0.624 coverage but 361 -> 403 singularities; leather_sofa, fountain_scan and lounge_room are bit-identical, because the dense-scan path keeps its fixed 0.06 field budget regardless of the flag (the integer solve is unstable on 1M-face scans with more constraints). So the hypothesis is untested on the scans and gives a coverage-for-singularities trade on the chair. Not adopted.
 
 ### it12_crease_cuts
-- flags: `--coverage-mode --crease-cuts` · code: `33a63fe` · run: 2026-10-15T13:44:43
+- flags: `--coverage-mode --crease-cuts` · code: `4e6b8e1` · run: 2026-10-15T13:44:43
 - Diagnosis (evaluator sample dump, QRM_EVAL_DUMP): on the organic models most uncovered crease length lies 0.1-0.35 L from an output edge or within 0.1 L but misaligned; the crease sets of pipeline and evaluator are identical (checked edge by edge).
 - Change: crease cuts - every crease piece still uncovered after the coverage stage is traced across the faces (closest-point walk); new vertices are inserted where it crosses edges (or nearby vertices are moved onto it), the crossed faces are split along it (with extra vertices where it bends inside a face; run ends anchored to the best vertex of their face), the polygons are re-split into quads + at most one triangle, non-crease vertices are locally untangled, and the cut is kept only if no face gets worse than SJ 0.05 (or than it was) and the triangle/singularity budgets hold. Cut vertices are pinned during later relaxation.
 - Observed: on the 14 models that finished, 0.654 vs 0.636 for it10 on the same 14 (+1.8 points); most uncovered pieces could not be embedded (cuts across a quad at an angle produce concave pieces that fail the quality check). On the room scan (lounge, ~46k crease pieces) the run exceeded the 30-minute limit and was stopped - recorded as failed. Not adopted.
 
 ### it13_feature_density
-- flags: `--trace-all --feature-density 8 --feature-density-width 1.5` · code: `33a63fe` · run: 2026-10-15T13:24:42
+- flags: `--trace-all --feature-density 8 --feature-density-width 1.5` · code: `4e6b8e1` · run: 2026-10-15T13:24:42
 - Hypothesis: the creases that are missed are finer than the elements; smaller elements along creases and larger ones elsewhere (same face count) let the integer grid follow them without any post-hoc topology change.
 - Change: per-vertex density 1 + 8 exp(-(d/1.5L)^2), d = distance to the nearest crease, converted to a conformal scale target for the field solve (QuadriFlow's adaptive-scale path, density ratio clamped at 8, normalised to the same expected face count). Path recovery over all creases (it9) on.
 - Observed: 0.506 -> 0.571 over all 15 (it9 -> it13); 0.575 -> 0.652 on the 13 non-scan models, quads stay 100 %, SJ 0.925 -> 0.905, 14/15 still below Instant Meshes. Largest gains on furniture (velvet, sheen) and curved organic creases (bunny, rocker arm).
 
 ### it14_coverage_mode_density
-- flags: `--coverage-mode --feature-density 8 --feature-density-width 1.5` · code: `33a63fe` · run: 2026-10-15T13:34:04
+- flags: `--coverage-mode --feature-density 8 --feature-density-width 1.5` · code: `4e6b8e1` · run: 2026-10-15T13:34:04
 - it10 (coverage mode) + feature-adaptive element size (it13).
 - Observed: 0.598 -> 0.622 (it10 -> it14); 0.679 -> 0.708 on the 13 non-scan models; singularities as in it10 (9/15).
 
 ### it15_coverage_search
-- flags: `--coverage-mode --coverage-search` · code: `33a63fe` · run: 2026-10-15T14:48:53
+- flags: `--coverage-mode --coverage-search` · code: `4e6b8e1` · run: 2026-10-15T14:48:53
 - Observation from a parameter sweep: per model the coverage varies strongly with where the size is reduced (e.g. fandisk 0.80-0.99 across widths), so no single setting is best for all inputs.
 - Change: --coverage-search solves 4 candidates (coverage mode without / with feature density 8 at widths 1.5 and 2.5, and width 2.0 with another seed), scores each with the evaluator code itself (same as quadeval) and keeps the one with the highest feature coverage among those with quad >= 0.98, SJ >= 0.8, distance < 0.5 % and at most +10 singularities/1k over the first candidate. 4x runtime.
 - Observed: 0.651 over 15 (0.740 on the 13 non-scan models), SJ 0.886, 10/15 below Instant Meshes; runtime 4x.
 
 ### it16_snap_default
-- flags: `(default)` · code: `6f57013` · run: 2026-10-15T15:40:59
+- flags: `(default)` · code: `501a29d` · run: 2026-10-15T15:40:59
 - Diagnosis (evaluator sample dump on it14): on furniture/CAD 81-88 % of the crease length has an output edge within 0.1 L and 96-99 % of that is covered; nearly all misses are edges running alongside the crease 0.1-0.35 L away. On organic scans a large share is within 0.1 L but crossing at > 25 deg.
 - Change: near-miss snapping (vertex moves only): for each uncovered crease point, the best edge within 0.5 L whose direction is within 75 deg gets both end points moved onto the crease; kept only if the edge then covers the point, no incident face drops below min(0.1, its SJ before), and no end point already carries a covering edge of another crease point; moved vertices are pinned in later relaxation. Coverage tolerance during re-solves uses the requested face count (it previously used the reduced solve budget's L).
 - New default: path recovery over all creases (it9) + feature-adaptive size (it13) + near-miss snapping. --legacy restores the earlier defaults (it0-it15 are reproduced with --legacy prepended).
 - Observed: 0.506 -> 0.637 over all 15 (it9 -> it16), 0.575 -> 0.725 on the 13 non-scan models; quads 100 %, SJ 0.902, 14/15 below Instant Meshes. Damask chair's mean SJ falls to 0.776 (< 0.8) because of the feature-adaptive size on its dense carvings.
 
 ### it17_default_guarded
-- flags: `(default)` · code: `a13228d` · run: 2026-10-15T15:53:50
+- flags: `(default)` · code: `64aecaf` · run: 2026-10-15T15:53:50
 - Two fixes on it16. (1) Snapping protection made precise: a vertex that already carries a covering edge may move if every crease point it was covering is still covered afterwards (it16 never moved such vertices). (2) Quality guard: if the mean SJ of the result is below 0.81, the solve is repeated with half the feature-adaptive strength, then without it.
 - Observed: 0.648 over 15, 0.737 on the 13 non-scan models; every model meets quad >= 98 %, SJ >= 0.8 (damask 0.816) and distance < 0.5 %; 14/15 below Instant Meshes (lounge, solved by the Instant Meshes fallback, is the exception as in every iteration). This is the new default.
 
 ### it18_path_subdiv_sb10
-- flags: `--path-subdiv 3 --sing-budget 10` · code: `3e68f40` · run: 2026-10-15T16:36:29
+- flags: `--path-subdiv 3 --sing-budget 10` · code: `b02c8cf` · run: 2026-10-15T16:36:29
 - Bound (measured on the crease polylines): the fraction of crease length within 25 deg of the chord through +-0.5 L is 0.43 (armadillo), 0.66 (igea), 0.67 (nefertiti), 0.83 (bunny), 0.76 (rocker arm) - edges of length ~L cannot cover more on these scans; with chords of 0.5 L it is 0.74-1.00 and with 0.25 L 0.98-1.00. Furniture/CAD creases are 0.96-1.00 already at L.
 - Change: path-edge subdivision - every recovered path edge whose chord misses its piece of the crease is split into 3 at crease points (edges ranked by the crease length the split recovers); the quad on each side becomes a hexagon that is split into 2 quads with the diagonal from the first new vertex on one side and from the second on the other (no valence-2 vertices). Pure quads; costs about 4 irregular vertices per split edge, applied in chunks within the singularity budget (+10 per 1k target faces here).
 - Observed: 0.648 -> 0.671 over 15 (0.737 -> 0.763 on the 13 non-scan models), quads 100 %, SJ 0.897; singularities 35.6 -> 47.5 per 1k, 11/15 below Instant Meshes.
 
 ### it19_path_subdiv_sb25
-- flags: `--path-subdiv 3 --sing-budget 25` · code: `3e68f40` · run: 2026-10-15T16:47:09
+- flags: `--path-subdiv 3 --sing-budget 25` · code: `b02c8cf` · run: 2026-10-15T16:47:09
 - it18 with a singularity budget of +25 per 1k target faces.
 - Observed: 0.703 over 15, 0.798 on the 13 non-scan models, quads 100 %, SJ 0.884; 57.4 singularities per 1k and only 5/15 below Instant Meshes - a fixed budget overspends on models whose own Instant Meshes rate is low.
 
 ### it20_coverage_mode_subdiv
-- flags: `--coverage-mode --path-subdiv 3` · code: `c25f918` · run: 2026-10-15T17:01:05
+- flags: `--coverage-mode --path-subdiv 3` · code: `c1dde66` · run: 2026-10-15T17:01:05
 - Coverage mode (budgeted loops / refinement / curved splits, +25 singularities per 1k) + path-edge subdivision, on the new defaults.
 - Observed: 0.708 over 15, 0.803 on the 13 non-scan models, quad 0.989, SJ 0.884; 6/15 below Instant Meshes.
 
 ### it21_im_budget
-- flags: `--coverage-mode --path-subdiv 3 --sing-budget-im` · code: `5d8dbf7` · run: 2026-10-15T17:17:04
+- flags: `--coverage-mode --path-subdiv 3 --sing-budget-im` · code: `e4197bf` · run: 2026-10-15T17:17:04
 - Singularity budget referenced to the criterion itself: before the coverage stage, Instant Meshes (the same library the benchmark runs, here on the preprocessed surface) remeshes the input at the requested face count; the stage may add irregular vertices up to 85 % of its singularity rate (85 % because the internal reference landed up to ~14 % above the benchmark's Instant Meshes run on rocker arm / fandisk_noisy in a test). Coverage mode + path-edge subdivision (--coverage-mode --path-subdiv 3 --sing-budget-im).
 - Observed: 0.694 over 15, 0.790 on the 13 non-scan models, quad 0.995, SJ 0.897, distance 0.073 %; singularities 41.4 per 1k and 14/15 below Instant Meshes (as the default: only the room scan, which the default also loses). Compared with it20 (fixed budget): -1.4 points of coverage, +8 models below Instant Meshes.
 
 ### it22_max_coverage
-- flags: `--coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search` · code: `5d8dbf7` · run: 2026-10-15T17:31:58
+- flags: `--coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search` · code: `e4197bf` · run: 2026-10-15T17:31:58
 - it21 + coverage search (4 candidates; with the Instant Meshes-referenced budget a candidate may not exceed the first candidate's singularity rate by more than 5 %). 4x runtime. Recommended setting when feature coverage matters most.
 - Observed: on damask_chair none of the 4 candidates kept the mean SJ >= 0.8 (first run: SJ 0.762 was returned); the search now falls back to the default settings in that case and damask was re-run with that fix (recorded in meta.json reruns): coverage 0.619, SJ 0.816. Final: 0.712 over 15, 0.808 on the 13 non-scan models, every model meets quad >= 98 %, SJ >= 0.8 and distance < 0.5 %; 14/15 below Instant Meshes. Four models reach >= 90 % (fandisk 1.000, spot 0.994, sheen chair 0.925, velvet sofa 0.906), leather sofa 0.895.
 
 ### it23_default_snap2
-- flags: `(default)` · code: `dcfa6e2` · run: 2026-10-15T19:45:35
+- flags: `(default)` · code: `4c49e32` · run: 2026-10-15T19:45:35
 - Snapping rejection counters (QRM_DEBUG_SNAP) on leather sofa: most rejected moves would uncover a crease point the moved vertices were covering (parallel creases), would distort a neighbouring quad below SJ 0.1, or still not line up. Two changes: (1) after a move that distorts a neighbour, the free 1-ring vertices are relaxed towards their neighbours' average (6 passes) before the quality test; (2) a move that uncovers covered crease points is accepted when it covers more previously uncovered points of the same chain within +-1.5 L than it loses. New default.
 - Observed: 0.648 -> 0.669 over 15 (it17 -> it23), 0.737 -> 0.759 on the 13 non-scan models; every model keeps quad 100 %, SJ >= 0.8 and distance < 0.5 %; 14/15 below Instant Meshes. Leather sofa reaches 0.900 with the default setting.
 
 ### it24_max_coverage_snap2
-- flags: `--coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search` · code: `dcfa6e2` · run: 2026-10-15T19:55:01
+- flags: `--coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search` · code: `4c49e32` · run: 2026-10-15T19:55:01
 - it22 (max coverage) with the it23 snapping.
 - Observed: 0.712 -> 0.731 over 15 (it22 -> it24), 0.808 -> 0.828 on the 13 non-scan models; quad 0.994, SJ 0.903, distance 0.082 %, 14/15 below Instant Meshes. Five models reach >= 90 %: fandisk 1.000, spot 0.994, sheen chair 0.929, velvet sofa 0.924, leather sofa 0.915. The scans were run separately (an out-of-memory kill from two concurrent scan jobs was re-run; recorded in meta.json reruns).
 

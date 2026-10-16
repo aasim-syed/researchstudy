@@ -2,7 +2,7 @@
  "name": "it5_partial_loops",
  "flags": "--partial-loops",
  "date": "2026-10-15T10:56:47",
- "git": "723c775",
+ "git": "5691b6a",
  "models": [
   "bunny",
   "fandisk",

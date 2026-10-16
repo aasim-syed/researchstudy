@@ -2,7 +2,7 @@
  "name": "it10_coverage_mode",
  "flags": "--trace-all --partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 25",
  "date": "2026-10-15T11:27:29",
- "git": "723c775",
+ "git": "5691b6a",
  "models": [
   "bunny",
   "fandisk",

@@ -2,7 +2,7 @@
  "name": "it22_max_coverage",
  "flags": "--coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search",
  "date": "2026-10-15T17:31:58",
- "git": "5d8dbf7",
+ "git": "e4197bf",
  "models": [
   "armadillo",
   "beetle",
@@ -23,7 +23,7 @@
  "reruns": [
   {
    "date": "2026-10-15T19:15:00",
-   "git": "e54ebfe",
+   "git": "78dde1b",
    "models": [
     "damask_chair"
    ]

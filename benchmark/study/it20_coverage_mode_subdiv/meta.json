@@ -2,7 +2,7 @@
  "name": "it20_coverage_mode_subdiv",
  "flags": "--coverage-mode --path-subdiv 3",
  "date": "2026-10-15T17:01:05",
- "git": "c25f918",
+ "git": "c1dde66",
  "models": [
   "bunny",
   "fandisk",

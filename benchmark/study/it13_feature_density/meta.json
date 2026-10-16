@@ -2,7 +2,7 @@
  "name": "it13_feature_density",
  "flags": "--trace-all --feature-density 8 --feature-density-width 1.5",
  "date": "2026-10-15T13:24:42",
- "git": "33a63fe",
+ "git": "4e6b8e1",
  "models": [
   "bunny",
   "fandisk",

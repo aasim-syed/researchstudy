@@ -2,7 +2,7 @@
  "name": "it2_feature_refine",
  "flags": "--feature-refine 2",
  "date": "2026-10-15T10:37:23",
- "git": "723c775",
+ "git": "5691b6a",
  "models": [
   "bunny",
   "fandisk",

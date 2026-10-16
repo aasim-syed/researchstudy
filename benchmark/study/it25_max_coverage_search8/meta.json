@@ -2,7 +2,7 @@
  "name": "it25_max_coverage_search8",
  "flags": "--coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search --search-candidates 8",
  "date": "2026-10-16T05:41:03",
- "git": "8367889",
+ "git": "c9d8991",
  "models": [
   "bunny",
   "fandisk",

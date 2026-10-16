@@ -2,7 +2,7 @@
  "name": "it3_loops_extra_faces",
  "flags": "--feature-loops --no-face-match",
  "date": "2026-10-15T10:43:32",
- "git": "723c775",
+ "git": "5691b6a",
  "models": [
   "bunny",
   "fandisk",

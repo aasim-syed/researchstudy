@@ -2,7 +2,7 @@
  "name": "it11_scans_field_budget",
  "flags": "--coverage-mode --field-feature-budget 1.0",
  "date": "2026-10-15T11:35:22",
- "git": "723c775",
+ "git": "5691b6a",
  "models": [
   "damask_chair",
   "leather_sofa",

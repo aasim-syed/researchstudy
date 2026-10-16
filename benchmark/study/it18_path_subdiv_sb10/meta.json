@@ -2,7 +2,7 @@
  "name": "it18_path_subdiv_sb10",
  "flags": "--path-subdiv 3 --sing-budget 10",
  "date": "2026-10-15T16:36:29",
- "git": "3e68f40",
+ "git": "b02c8cf",
  "models": [
   "bunny",
   "fandisk",

@@ -2,7 +2,7 @@
  "name": "it19_path_subdiv_sb25",
  "flags": "--path-subdiv 3 --sing-budget 25",
  "date": "2026-10-15T16:47:09",
- "git": "3e68f40",
+ "git": "b02c8cf",
  "models": [
   "bunny",
   "fandisk",

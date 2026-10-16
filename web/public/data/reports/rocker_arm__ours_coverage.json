@@ -100,5 +100,5 @@
  "runtime_s": 48.97,
  "input_faces": 20088,
  "cmd": "build/quadremesh data/models/rocker_arm.obj -o benchmark/study/it24_max_coverage_snap2/meshes/rocker_arm.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search",
- "imported_from": "benchmark/study/it24_max_coverage_snap2 (flags: --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search, code dcfa6e2)"
+ "imported_from": "benchmark/study/it24_max_coverage_snap2 (flags: --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search, code 4c49e32)"
 }

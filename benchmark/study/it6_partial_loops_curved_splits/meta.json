@@ -2,7 +2,7 @@
  "name": "it6_partial_loops_curved_splits",
  "flags": "--partial-loops --curved-splits",
  "date": "2026-10-15T11:03:25",
- "git": "723c775",
+ "git": "5691b6a",
  "models": [
   "bunny",
   "fandisk",

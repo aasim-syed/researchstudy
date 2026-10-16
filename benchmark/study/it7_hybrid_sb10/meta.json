@@ -2,7 +2,7 @@
  "name": "it7_hybrid_sb10",
  "flags": "--partial-loops --curved-splits --feature-refine 1 --refine-max-len 8 --sing-budget 10",
  "date": "2026-10-15T11:10:07",
- "git": "723c775",
+ "git": "5691b6a",
  "models": [
   "bunny",
   "fandisk",

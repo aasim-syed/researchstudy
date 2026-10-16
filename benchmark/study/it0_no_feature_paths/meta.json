@@ -2,7 +2,7 @@
  "name": "it0_no_feature_paths",
  "flags": "QRM_NO_FEATURE_PATHS=1",
  "date": "2026-10-15T10:27:50",
- "git": "723c775",
+ "git": "5691b6a",
  "models": [
   "bunny",
   "fandisk",

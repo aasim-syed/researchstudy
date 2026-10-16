@@ -96,5 +96,5 @@
  "runtime_s": 49.36,
  "input_faces": 12925,
  "cmd": "build/quadremesh data/models/fandisk_noisy.obj -o benchmark/study/it24_max_coverage_snap2/meshes/fandisk_noisy.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search",
- "imported_from": "benchmark/study/it24_max_coverage_snap2 (flags: --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search, code dcfa6e2)"
+ "imported_from": "benchmark/study/it24_max_coverage_snap2 (flags: --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search, code 4c49e32)"
 }

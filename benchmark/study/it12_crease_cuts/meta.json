@@ -2,7 +2,7 @@
  "name": "it12_crease_cuts",
  "flags": "--coverage-mode --crease-cuts",
  "date": "2026-10-15T13:44:43",
- "git": "33a63fe",
+ "git": "4e6b8e1",
  "models": [
   "bunny",
   "fandisk",
