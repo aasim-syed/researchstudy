@@ -1,0 +1,99 @@
+{
+ "method": "it25_max_coverage_search8",
+ "faces": {
+  "total": 5110,
+  "quads": 5080,
+  "triangles": 30,
+  "vertices": 5115,
+  "quad_ratio": 0.994129,
+  "target": 5000,
+  "count_ratio": 1.022
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.922134,
+   "min": -0.660367,
+   "p05": 0.602509,
+   "median": 0.980738,
+   "p95": 0.999448,
+   "max": 0.999999,
+   "std": 0.158679
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.923651,
+   "min": -0.660367,
+   "p05": 0.603481,
+   "median": 0.981051,
+   "p95": 0.999451,
+   "max": 0.999999,
+   "std": 0.157095
+  },
+  "frac_sj_below_0.5": 0.0344423,
+  "inverted_or_degenerate": 18,
+  "planarity": {
+   "mean": 0.0103246,
+   "min": 0,
+   "p05": 1.64536e-08,
+   "median": 0.0018261,
+   "p95": 0.0496258,
+   "max": 0.225606,
+   "std": 0.0205099
+  },
+  "aspect_ratio": {
+   "mean": 3.85869,
+   "min": 1.00697,
+   "p05": 1.06228,
+   "median": 1.3743,
+   "p95": 5.02163,
+   "max": 589.008,
+   "std": 23.0396
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0.00116727,
+   "p05": 0.237214,
+   "median": 1.06215,
+   "p95": 1.6329,
+   "max": 3.58192,
+   "std": 0.428983
+  },
+  "edge_length_mean_pct_diag": 1.24882
+ },
+ "topology": {
+  "singularities": 166,
+  "boundary_irregular": 0,
+  "singularities_per_1k_faces": 32.4853,
+  "interior_vertices": 5115,
+  "boundary_vertices": 0,
+  "boundary_edges": 0,
+  "nonmanifold_edges": 0,
+  "components": 10,
+  "valence_histogram": {
+   "3": 110,
+   "4": 4949,
+   "5": 52,
+   "6": 4
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0275445,
+  "out_to_in_mean_pct": 0.0241838,
+  "in_to_out_mean_pct": 0.0309053,
+  "rms_pct": 0.0777416,
+  "hausdorff_pct": 2.39027,
+  "area_ratio": 0.982863
+ },
+ "features": {
+  "feature_coverage": 0.923849,
+  "boundary_coverage": 0.105847,
+  "combined_coverage": 0.900164,
+  "feature_length_pct_diag": 1072.41,
+  "boundary_length_pct_diag": 31.9776,
+  "feature_segments": 731,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 219.06,
+ "input_faces": 16784,
+ "cmd": "build/quadremesh data/models/velvet_sofa.obj -o benchmark/study/it25_max_coverage_search8/meshes/velvet_sofa.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search --search-candidates 8"
+}
