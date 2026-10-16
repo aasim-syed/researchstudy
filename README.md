@@ -1,17 +1,38 @@
-# quadremesh
+<h1 align="center">quadremesh</h1>
 
-> Continuing on another machine: see [`CHECKPOINT.md`](CHECKPOINT.md) (state, setup, commands, open items, and a prompt for a new session).
->
-> Interactive walkthrough (pipeline stage by stage, 3D viewer, downloads): [`web/`](web/README.md), a React site deployable on Vercel with root directory `web`.
-> Also: [`docs/architecture.html`](docs/architecture.html) (end-to-end diagram), [`docs/assignment_coverage.xlsx`](docs/assignment_coverage.xlsx) (every line of the brief vs the repo), [`docs/cuda_checklist.md`](docs/cuda_checklist.md) (GPU check).
+<p align="center"><b>Triangles in. Structured, feature-aligned quads out.</b><br>
+A C++17 quad remesher with Python bindings, a CLI, an evaluator, and a reproducible 15-model benchmark.</p>
 
-Quality-driven triangle → structured quad remeshing. A C++17 core (Eigen, libigl, a patched
-QuadriFlow integer-grid solver), pybind11 Python bindings, a CLI, an evaluation tool, an optional
-PyTorch learned-field component and a reproducible benchmark against Instant Meshes, QuadriFlow
-and Blender QuadriFlow.
+<p align="center">
+  <img alt="C++17" src="https://img.shields.io/badge/C%2B%2B-17-00599C?logo=c%2B%2B&logoColor=white">
+  <img alt="Python" src="https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white">
+  <img alt="tests" src="https://img.shields.io/badge/tests-C%2B%2B%20%2B%20Python%20passing-2ea043">
+  <img alt="benchmark" src="https://img.shields.io/badge/benchmark-15%20models-8957e5">
+  <img alt="deterministic" src="https://img.shields.io/badge/output-deterministic-1f6feb">
+</p>
 
-```
-quadremesh chair.glb -o chair_quad.obj --faces 5000 --feature-angle 35 --report chair.json
+<p align="center">
+  <a href="docs/media/promo.mp4"><img src="docs/media/promo_preview.gif" alt="Input triangles next to our quad remesh, rotating" width="720"></a><br>
+  <sub>▶ Click for the full-quality video (<a href="docs/media/promo.mp4">promo.mp4</a>, 17 s). Left: input triangles. Right: our quads, singularities marked (blue valence 3, red valence 5+). Rendered by <code>benchmark/make_video.py</code>; every number in the video is read from the evaluator report.</sub>
+</p>
+
+## Why it is different
+
+- **Edges land on the creases.** Feature edges are traced, snapped and recovered as edge paths, so sharp edges stay sharp. Feature coverage against Instant Meshes is in the tables below.
+- **Quality is measured, not claimed.** One evaluator (`quadeval`) scores quad ratio, scaled Jacobian, planarity, aspect, two-sided distance, feature coverage and singularities. Every table in this README is generated from its reports by `docs/gen_tables.py`.
+- **Honest limits.** Models that miss 90 % keep their numbers in the tables, with the measured reasons in [`docs/crease_bounds.md`](docs/crease_bounds.md). No model was dropped, the metric was not relaxed, and failed experiments stay in [`docs/coverage_study.md`](docs/coverage_study.md).
+- **Deterministic.** Same input, same output, bit for bit (checked by the test suite).
+
+## Try it in two minutes
+
+```bash
+./scripts/fetch_deps.sh
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build -j4
+cp build/_quadremesh*.so python/quadremesh/
+
+build/quadremesh data/models/fandisk.obj -o out.obj -f 5000 -a 35 -v        # default
+build/quadremesh data/models/fandisk.obj -o out.obj -f 5000 -a 35     --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search       # max coverage
+build/quadeval data/models/fandisk.obj out.obj --target 5000 --feature-angle 35 -o report.json
 ```
 
 ```python
@@ -20,6 +41,31 @@ res = quadremesh("chair.glb", target_faces=5000, feature_angle=35,
                  output="chair_quad.obj", report="chair.json")
 print(res.quad_ratio, res.report["quality"]["scaled_jacobian"]["mean"])
 ```
+
+Build note: use `-j4` on a 16 GB laptop (a full `-j12` build ran the machine out of memory), and pass
+`-DCMAKE_POLICY_VERSION_MINIMUM=3.5` if your CMake is 4.x and the bundled lemon complains.
+
+## See it
+
+Each strip shows, left to right: quadremesh (ours), Instant Meshes, QuadriFlow, Blender QuadriFlow, at the same target face count. Dots are singularities (blue valence 3, red valence 5+).
+
+<p align="center"><img src="docs/report/fandisk_compare.png" width="900"><br><sub>fandisk (CAD part)</sub></p>
+<p align="center"><img src="docs/report/spot_compare.png" width="900"><br><sub>spot (organic)</sub></p>
+<p align="center"><img src="docs/report/sheen_chair_compare.png" width="900"><br><sub>sheen chair (furniture)</sub></p>
+
+Full visual report for all 15 models: [`docs/report/visual_report.html`](docs/report/visual_report.html).
+
+## Explore
+
+| | |
+|---|---|
+| Interactive walkthrough (pipeline stage by stage, 3D viewer) | [`web/`](web/README.md), a React site deployable on Vercel (root directory `web`) |
+| Architecture diagram | [`docs/architecture.html`](docs/architecture.html) |
+| Technical write-up (PDF) | [`docs/technical_writeup.pdf`](docs/technical_writeup.pdf) |
+| Every pipeline function with code and figure | [`docs/code_reference.md`](docs/code_reference.md) |
+| The brief, line by line, against the repo | [`docs/assignment_coverage.xlsx`](docs/assignment_coverage.xlsx) |
+| GPU (CUDA) check | [`docs/cuda_checklist.md`](docs/cuda_checklist.md) |
+| Continue on another machine | [`CHECKPOINT.md`](CHECKPOINT.md) |
 
 ## Feature coverage at a glance
 
