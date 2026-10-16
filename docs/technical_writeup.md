@@ -7,9 +7,9 @@
 
 ## 0. Feature coverage at a glance
 
-On clean CAD and furniture - the content people model - the ≥ 90 % feature-coverage target is
-met or nearly met; it is missed on raw scans, whose 35° "creases" are scanner noise or zigzag
-below the element size (measured in `docs/crease_bounds.md`).
+<!-- COVSTATEMENT:BEGIN -->
+**Feature coverage ≥ 90 % is reached on 5 of the 15 models**: fandisk 100.0 %, spot 99.4 %, sheen chair 92.9 %, velvet sofa 92.4 %, leather sofa 91.5 % (CAD, furniture, organic). 4 more are close, at 75-90 % (fandisk noisy 85.3 %, rocker arm 82.4 %, bunny 81.0 %, beetle 79.2 %). It is not reached on igea 72.2 %, damask chair 67.6 %, nefertiti 66.7 %, armadillo 66.2 % - organic scans whose creases zigzag below the element size, and dense carvings - nor on the two room scans (fountain scan 12.0 %, lounge room 8.5 %), whose 35° "creases" are scanner noise (both limits measured in `docs/crease_bounds.md`). Averaged over all 15 models coverage is 73.1 % (82.8 % without the room scans), against 22.1 % for Instant Meshes.
+<!-- COVSTATEMENT:END -->
 
 <!-- HEADLINE:BEGIN -->
 | model | type | feature coverage, max coverage | ≥ 90 %? | default | Instant Meshes |
@@ -66,10 +66,11 @@ the same input and target face count, and every output is scored by the same eva
 singularities than Instant Meshes on every model except the room scan (lounge, where the integer
 solver fails and our Instant Meshes fallback takes over).
 
-**Feature coverage ≥ 90 %: not met on the benchmark mean.** What was done about it, and what
-limits it, is measured in §6.1 and in the generated study
-[`docs/coverage_study.md`](coverage_study.md) (24 iterations, every number produced by a script
-from the evaluator's per-model reports, including the attempts that failed). In short:
+**Feature coverage:** met on CAD and furniture, not on raw scans (statement in §0, generated
+from the data). What was done to raise it, and what limits it, is measured in §6.1 and in the
+generated study [`docs/coverage_study.md`](coverage_study.md) (25 iterations, every number
+produced by a script from the evaluator's per-model reports, including the attempts that failed).
+In short:
 
 * Four changes that keep every other criterion raised the default's coverage by about a third:
   edge-path recovery over all creases, a **feature-adaptive element size inside the field solve**

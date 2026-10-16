@@ -188,6 +188,28 @@ def headline_table():
     return "\n".join(L)
 
 
+def coverage_statement():
+    C, IM = bench("ours_coverage"), bench("instant_meshes")
+    cat = {e["name"]: e["category"] for e in MAN}
+    cov = {m: v["features"]["feature_coverage"] for m, v in C.items()}
+    nice = lambda m: m.replace("_", " ")
+    hi = sorted([m for m in cov if cov[m] >= 0.9], key=lambda m: -cov[m])
+    mid = sorted([m for m in cov if 0.75 <= cov[m] < 0.9], key=lambda m: -cov[m])
+    lo = sorted([m for m in cov if m not in SCANS and cov[m] < 0.75], key=lambda m: -cov[m])
+    sc = [m for m in cov if m in SCANS]
+    f = lambda ms: ", ".join(f"{nice(m)} {100 * cov[m]:.1f} %" for m in ms)
+    mean = 100 * st.mean(cov.values())
+    mean13 = 100 * st.mean(cov[m] for m in cov if m not in SCANS)
+    im = 100 * st.mean(v["features"]["feature_coverage"] for v in IM.values())
+    kinds = sorted({cat[m] for m in hi})
+    return (f"**Feature coverage ≥ 90 % is reached on {len(hi)} of the {len(cov)} models**: {f(hi)} "
+            f"({', '.join(kinds)}). {len(mid)} more are close, at 75-90 % ({f(mid)}). "
+            f"It is not reached on {f(lo)} - organic scans whose creases zigzag below the element size, and "
+            f"dense carvings - nor on the two room scans ({f(sc)}), whose 35° \"creases\" are scanner noise "
+            f"(both limits measured in `docs/crease_bounds.md`). Averaged over all {len(cov)} models coverage is "
+            f"{mean:.1f} % ({mean13:.1f} % without the room scans), against {im:.1f} % for Instant Meshes.")
+
+
 def replace(path, name, text):
     s = open(path).read()
     pat = re.compile(r"(<!-- %s:BEGIN -->\n).*?(<!-- %s:END -->)" % (name, name), re.S)
@@ -200,7 +222,7 @@ def replace(path, name, text):
 
 if __name__ == "__main__":
     tabs = {"SUMMARY": summary_table(), "STUDY": study_table(), "PERMODEL": per_model_table(), "HIGHLIGHTS": highlights(),
-            "HEADLINE": headline_table()}
+            "HEADLINE": headline_table(), "COVSTATEMENT": coverage_statement()}
     for doc in ["README.md", "docs/technical_writeup.md"]:
         for k, v in tabs.items():
             if replace(os.path.join(ROOT, doc), k, v):
