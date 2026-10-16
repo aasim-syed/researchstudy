@@ -1,0 +1,61 @@
+=== QUADREMESH CUDA CHECK ===
+[1] environment
+  python                       3.14.4
+  platform                     Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.43
+  WSL                          yes
+  nvidia-smi                   NVIDIA GeForce GTX 1650 Ti, 576.83, 4096 MiB
+  torch                        2.14.1+cu126
+  torch built with CUDA        12.6
+  cuda available               True
+  device                       NVIDIA GeForce GTX 1650 Ti  sm_75  4.0 GiB
+  arch list in torch           sm_50 sm_60 sm_70 sm_75 sm_80 sm_86 sm_90
+[2] correctness on fandisk.obj (6475 vertices, 12946 triangles)
+  optimize_field device        cuda
+  field angle CPU vs CUDA      mean 0.0000 deg, p99 0.0000, max 0.0000
+  weight max abs diff          7.16e-12
+  learned field CPU vs CUDA    mean 0.0000 deg, p99 0.0000, max 0.0000
+  confidence max abs diff      2.09e-07
+[3] timing (median of 5, after warm-up)
+  optimize_field               CPU 0.532 s | CUDA 0.599 s | speed-up 0.89x
+  predict_guide_field          CPU 0.448 s | CUDA 0.581 s | speed-up 0.77x
+  peak GPU memory              52 MiB
+[4] end to end (CUDA guide field -> C++ remesher)
+  output faces                 4322 (target 5000), quads 100.0%
+  mean scaled Jacobian         0.976232
+  mean distance (% diag)       0.00584855
+  feature coverage             0.993326
+  singularities                134
+  remesh time                  25.69 s
+VERDICT: PASS - CUDA path runs and matches CPU
+
+######## igea
+=== QUADREMESH CUDA CHECK ===
+[1] environment
+  python                       3.14.4
+  platform                     Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.43
+  WSL                          yes
+  nvidia-smi                   NVIDIA GeForce GTX 1650 Ti, 576.83, 4096 MiB
+  torch                        2.14.1+cu126
+  torch built with CUDA        12.6
+  cuda available               True
+  device                       NVIDIA GeForce GTX 1650 Ti  sm_75  4.0 GiB
+  arch list in torch           sm_50 sm_60 sm_70 sm_75 sm_80 sm_86 sm_90
+[2] correctness on igea.obj (134345 vertices, 268686 triangles)
+  optimize_field device        cuda
+  field angle CPU vs CUDA      mean 0.0000 deg, p99 0.0000, max 0.0000
+  weight max abs diff          4.99e-08
+  learned field CPU vs CUDA    mean 0.0000 deg, p99 0.0000, max 0.0002
+  confidence max abs diff      2.98e-07
+[3] timing (median of 3, after warm-up)
+  optimize_field               CPU 15.158 s | CUDA 11.247 s | speed-up 1.35x
+  predict_guide_field          CPU 9.887 s | CUDA 8.853 s | speed-up 1.12x
+  peak GPU memory              893 MiB
+[4] end to end (CUDA guide field -> C++ remesher)
+  output faces                 4811 (target 5000), quads 100.0%
+  mean scaled Jacobian         0.973881
+  mean distance (% diag)       0.0452081
+  feature coverage             0.591776
+  singularities                29
+  remesh time                  39.64 s
+VERDICT: PASS - CUDA path runs and matches CPU
+

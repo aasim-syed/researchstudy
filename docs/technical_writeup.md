@@ -209,9 +209,15 @@ input (.obj/.ply/.glb)
 * **CUDA path (`python/quadremesh/torch_field.py`).** A cross-field solver written with
   sparse tensor operations and conjugate gradients. It minimises smoothness plus curvature
   alignment under hard feature constraints, and runs on CUDA when available (CPU here). Its
-  output can be fed as `guide_field`. Learned-field inference also runs on CUDA. *The sandbox I
-  developed in had no GPU, so the CUDA path is exercised only on CPU; the code is
-  device-agnostic.* QuadriFlow's own CUDA kernels (`Optimizer.cu`) exist but are not enabled.
+  output can be fed as `guide_field`. Learned-field inference also runs on CUDA. *Measured on a
+  GTX 1650 Ti (4 GB, sm_75, WSL2, torch 2.14.1+cu126) with `scripts/cuda_check.py`
+  (`docs/cuda_report.txt`): the CUDA and CPU fields agree to float rounding (p99 angle difference
+  0.0000° on both models). On fandisk (12,946 triangles) the GPU is slightly slower
+  (`optimize_field` 0.532 s CPU vs 0.599 s CUDA, `predict_guide_field` 0.448 s vs 0.581 s), because
+  launch and transfer overhead dominate on a small mesh. On igea (268,686 triangles) it is faster:
+  `optimize_field` 15.158 s vs 11.247 s (1.35x), `predict_guide_field` 9.887 s vs 8.853 s (1.12x),
+  peak GPU memory 893 MiB.* QuadriFlow's own CUDA kernels (`Optimizer.cu`) exist but are not
+  enabled.
 
 ## 4. Benchmark protocol
 

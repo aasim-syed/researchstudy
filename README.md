@@ -55,6 +55,17 @@ Each strip shows, left to right: quadremesh (ours), Instant Meshes, QuadriFlow, 
 
 Full visual report for all 15 models: [`docs/report/visual_report.html`](docs/report/visual_report.html).
 
+## GPU (CUDA) path, measured
+
+The optional PyTorch components (`torch_field.optimize_field`, `learned.predict_guide_field`) run on CUDA and give the same field as on the CPU. Measured on a **GTX 1650 Ti (4 GB, sm_75) under WSL2**, torch 2.14.1+cu126, median of several runs after warm-up. Source: `scripts/cuda_check.py`, full output in [`docs/cuda_report.txt`](docs/cuda_report.txt).
+
+| model | triangles | `optimize_field` CPU → CUDA | `predict_guide_field` CPU → CUDA | CUDA vs CPU field (p99 angle) | peak GPU memory |
+|---|---|---|---|---|---|
+| fandisk | 12,946 | 0.532 s → 0.599 s (0.89×) | 0.448 s → 0.581 s (0.77×) | 0.0000° | 52 MiB |
+| igea | 268,686 | 15.158 s → 11.247 s (**1.35×**) | 9.887 s → 8.853 s (**1.12×**) | 0.0000° | 893 MiB |
+
+Both runs end with `VERDICT: PASS`, and the remesh driven by the CUDA guide field keeps 100.0 % quads. The GPU only pays off on large meshes: on a small one the launch and transfer overhead make it slower. The remesher's own solver is C++ on the CPU, so the GPU does not change the coverage numbers above.
+
 ## Explore
 
 | | |
