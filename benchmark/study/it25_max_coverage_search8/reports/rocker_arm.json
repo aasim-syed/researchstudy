@@ -1,0 +1,102 @@
+{
+ "method": "it25_max_coverage_search8",
+ "faces": {
+  "total": 4909,
+  "quads": 4841,
+  "triangles": 68,
+  "vertices": 4876,
+  "quad_ratio": 0.986148,
+  "target": 5000,
+  "count_ratio": 0.9818
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.957004,
+   "min": -0.623681,
+   "p05": 0.810939,
+   "median": 0.9881,
+   "p95": 0.999362,
+   "max": 0.999983,
+   "std": 0.111265
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.961585,
+   "min": -0.623681,
+   "p05": 0.850377,
+   "median": 0.988457,
+   "p95": 0.999364,
+   "max": 0.999983,
+   "std": 0.10171
+  },
+  "frac_sj_below_0.5": 0.0128336,
+  "inverted_or_degenerate": 13,
+  "planarity": {
+   "mean": 0.0157197,
+   "min": 1.00975e-15,
+   "p05": 0.000284984,
+   "median": 0.00651469,
+   "p95": 0.0642699,
+   "max": 0.293687,
+   "std": 0.0237606
+  },
+  "aspect_ratio": {
+   "mean": 1.28181,
+   "min": 1.00256,
+   "p05": 1.02665,
+   "median": 1.16223,
+   "p95": 1.74881,
+   "max": 48.7942,
+   "std": 0.89292
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0.0235815,
+   "p05": 0.624574,
+   "median": 1.00273,
+   "p95": 1.35769,
+   "max": 2.63597,
+   "std": 0.220814
+  },
+  "edge_length_mean_pct_diag": 1.37803
+ },
+ "topology": {
+  "singularities": 156,
+  "boundary_irregular": 5,
+  "singularities_per_1k_faces": 31.7784,
+  "interior_vertices": 4870,
+  "boundary_vertices": 6,
+  "boundary_edges": 6,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "2": 2,
+   "3": 53,
+   "4": 4714,
+   "5": 84,
+   "6": 15,
+   "7": 1,
+   "8": 1
+  }
+ },
+ "distance": {
+  "mean_pct": 0.054371,
+  "out_to_in_mean_pct": 0.0508421,
+  "in_to_out_mean_pct": 0.0578999,
+  "rms_pct": 0.116774,
+  "hausdorff_pct": 1.55267,
+  "area_ratio": 0.978575
+ },
+ "features": {
+  "feature_coverage": 0.854991,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.854991,
+  "feature_length_pct_diag": 56.1287,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 88,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 72.18,
+ "input_faces": 20088,
+ "cmd": "build/quadremesh data/models/rocker_arm.obj -o benchmark/study/it25_max_coverage_search8/meshes/rocker_arm.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search --search-candidates 8"
+}
