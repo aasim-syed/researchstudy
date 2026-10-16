@@ -18,9 +18,9 @@ print(res.quad_ratio, res.report["quality"]["scaled_jacobian"]["mean"])
 
 ## Feature coverage at a glance
 
-On clean CAD and furniture - the content people model - the ≥ 90 % feature-coverage target is
-met or nearly met; it is missed on raw scans, whose 35° "creases" are scanner noise or zigzag
-below the element size (measured in `docs/crease_bounds.md`).
+<!-- COVSTATEMENT:BEGIN -->
+**Feature coverage ≥ 90 % is reached on 5 of the 15 models**: fandisk 100.0 %, spot 99.4 %, sheen chair 92.9 %, velvet sofa 92.4 %, leather sofa 91.5 % (CAD, furniture, organic). 4 more are close, at 75-90 % (fandisk noisy 85.3 %, rocker arm 82.4 %, bunny 81.0 %, beetle 79.2 %). It is not reached on igea 72.2 %, damask chair 67.6 %, nefertiti 66.7 %, armadillo 66.2 % - organic scans whose creases zigzag below the element size, and dense carvings - nor on the two room scans (fountain scan 12.0 %, lounge room 8.5 %), whose 35° "creases" are scanner noise (both limits measured in `docs/crease_bounds.md`). Averaged over all 15 models coverage is 73.1 % (82.8 % without the room scans), against 22.1 % for Instant Meshes.
+<!-- COVSTATEMENT:END -->
 
 <!-- HEADLINE:BEGIN -->
 | model | type | feature coverage, max coverage | ≥ 90 %? | default | Instant Meshes |
@@ -110,7 +110,7 @@ Feature coverage per model:
 | lounge_room | room-scale scan | 0.08 | 0.09 | 0.02 |
 <!-- PERMODEL:END -->
 
-The ≥ 90 % coverage target is not met on the mean. Every coverage experiment (24 iterations,
+Every coverage experiment (25 iterations,
 including the failed ones) is in the generated study [`docs/coverage_study.md`](docs/coverage_study.md)
 (`python benchmark/coverage_study.py run NAME "FLAGS"` + `report`), and the geometric limits of the
 metric - why the room scan cannot reach 90 % at 15k faces and why the organic scans need edges
