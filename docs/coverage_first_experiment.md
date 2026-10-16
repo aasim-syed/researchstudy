@@ -20,3 +20,18 @@ Result: only rocker arm and fandisk_noisy pass 90 %, and both then fail two othe
 (singularities 4-5x Instant Meshes, mean SJ below 0.8). The organic scans, beetle and damask stay
 at 60-79 % even with the singularity limit removed. Not a usable setting; kept as evidence that
 the remaining gap is a trade-off against the other criteria, not an unexplored option.
+
+## Higher face count (4x)
+
+Same max-coverage setting without the search (`--coverage-mode --path-subdiv 3 --sing-budget-im`),
+target 20 000 faces instead of 5 000, scored at 20 000 (so L, the 0.1 L tolerance and the crease
+set all follow the finer resolution):
+
+| model | coverage at 5 000 faces (it24) | coverage at 20 000 faces | crease segments at 5 000 / 20 000 |
+|---|---|---|---|
+| bunny | 81.0 % | 84.2 % | 142 / 414 |
+| armadillo | 66.2 % | 82.4 % | 88 / 220 |
+| igea | 72.2 % | 63.8 % | 104 / 187 |
+
+A finer mesh also makes the test stricter (smaller tolerance, more creases kept), so coverage does
+not converge to 90 % by adding faces; none of the three reaches it at 4x the face count.
