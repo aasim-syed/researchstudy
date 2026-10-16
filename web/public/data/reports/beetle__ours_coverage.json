@@ -1,0 +1,101 @@
+{
+ "method": "ours_coverage",
+ "faces": {
+  "total": 4858,
+  "quads": 4830,
+  "triangles": 28,
+  "vertices": 5148,
+  "quad_ratio": 0.994236,
+  "target": 5000,
+  "count_ratio": 0.9716
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.886269,
+   "min": -1,
+   "p05": 0.375114,
+   "median": 0.981909,
+   "p95": 0.999864,
+   "max": 0.999999,
+   "std": 0.231041
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.888445,
+   "min": -1,
+   "p05": 0.378381,
+   "median": 0.982251,
+   "p95": 0.999865,
+   "max": 0.999999,
+   "std": 0.229182
+  },
+  "frac_sj_below_0.5": 0.0671058,
+  "inverted_or_degenerate": 73,
+  "planarity": {
+   "mean": 0.0138666,
+   "min": 0,
+   "p05": 4.45856e-09,
+   "median": 0.0039154,
+   "p95": 0.0603934,
+   "max": 0.477816,
+   "std": 0.0281793
+  },
+  "aspect_ratio": {
+   "mean": 1035200.0,
+   "min": 1.00177,
+   "p05": 1.04888,
+   "median": 1.24726,
+   "p95": 4.89869,
+   "max": 1000000000.0,
+   "std": 32157800.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.436319,
+   "median": 1.00102,
+   "p95": 1.54907,
+   "max": 4.40803,
+   "std": 0.342368
+  },
+  "edge_length_mean_pct_diag": 1.05421
+ },
+ "topology": {
+  "singularities": 229,
+  "boundary_irregular": 49,
+  "singularities_per_1k_faces": 47.1387,
+  "interior_vertices": 4520,
+  "boundary_vertices": 628,
+  "boundary_edges": 628,
+  "nonmanifold_edges": 0,
+  "components": 2,
+  "valence_histogram": {
+   "3": 106,
+   "4": 4291,
+   "5": 116,
+   "6": 6,
+   "9": 1
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0343984,
+  "out_to_in_mean_pct": 0.0357927,
+  "in_to_out_mean_pct": 0.0330041,
+  "rms_pct": 0.0953169,
+  "hausdorff_pct": 2.16142,
+  "area_ratio": 0.986524
+ },
+ "features": {
+  "feature_coverage": 0.791893,
+  "boundary_coverage": 0.71903,
+  "combined_coverage": 0.761794,
+  "feature_length_pct_diag": 1250.35,
+  "boundary_length_pct_diag": 880.036,
+  "feature_segments": 1830,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 142.26,
+ "input_faces": 32848,
+ "cmd": "build/quadremesh data/models/beetle.obj -o benchmark/study/it24_max_coverage_snap2/meshes/beetle.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search",
+ "imported_from": "benchmark/study/it24_max_coverage_snap2 (flags: --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search, code dcfa6e2)"
+}

@@ -1,0 +1,101 @@
+{
+"method": "instant_meshes",
+"faces": {
+  "total": 14075,
+  "quads": 14075,
+  "triangles": 0,
+  "vertices": 14441,
+  "quad_ratio": 1,
+  "target": 15000,
+  "count_ratio": 0.938333
+},
+"quality": {
+  "scaled_jacobian": {
+    "mean": 0.974687,
+    "min": -0.924604,
+    "p05": 0.8475,
+    "median": 0.998302,
+    "p95": 0.999912,
+    "max": 0.999999,
+    "std": 0.0959435
+  },
+  "scaled_jacobian_quads": {
+    "mean": 0.974687,
+    "min": -0.924604,
+    "p05": 0.8475,
+    "median": 0.998302,
+    "p95": 0.999912,
+    "max": 0.999999,
+    "std": 0.0959435
+  },
+  "frac_sj_below_0.5": 0.00866785,
+  "inverted_or_degenerate": 22,
+  "planarity": {
+    "mean": 0.00808594,
+    "min": 2.17048e-09,
+    "p05": 0.000128504,
+    "median": 0.00393304,
+    "p95": 0.0280301,
+    "max": 0.223494,
+    "std": 0.0125414
+  },
+  "aspect_ratio": {
+    "mean": 1.16444,
+    "min": 1.00088,
+    "p05": 1.00859,
+    "median": 1.06303,
+    "p95": 1.64152,
+    "max": 15.5885,
+    "std": 0.436309
+  },
+  "edge_length_rel": {
+    "mean": 1,
+    "min": 0.122229,
+    "p05": 0.850101,
+    "median": 1.00204,
+    "p95": 1.13655,
+    "max": 2.34876,
+    "std": 0.112724
+  },
+  "edge_length_mean_pct_diag": 0.632515
+},
+"topology": {
+  "singularities": 312,
+  "boundary_irregular": 93,
+  "singularities_per_1k_faces": 22.167,
+  "interior_vertices": 13723,
+  "boundary_vertices": 718,
+  "boundary_edges": 730,
+  "nonmanifold_edges": 0,
+  "components": 6,
+  "valence_histogram": {
+    "2": 26,
+    "3": 174,
+    "4": 13411,
+    "5": 103,
+    "6": 7,
+    "7": 1,
+    "8": 1
+  }
+},
+"distance": {
+  "mean_pct": 0.0539014,
+  "out_to_in_mean_pct": 0.033554,
+  "in_to_out_mean_pct": 0.0742488,
+  "rms_pct": 0.173356,
+  "hausdorff_pct": 16.062,
+  "area_ratio": 0.924215
+},
+"features": {
+  "feature_coverage": 0.0133805,
+  "boundary_coverage": 0.041047,
+  "combined_coverage": 0.0317805,
+  "feature_length_pct_diag": 1741.28,
+  "boundary_length_pct_diag": 3457.55,
+  "feature_segments": 15545,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+},
+"runtime_s": 12.192,
+"input_faces": 1033745
+}

@@ -1,0 +1,105 @@
+{
+ "method": "ours_coverage",
+ "faces": {
+  "total": 4898,
+  "quads": 4864,
+  "triangles": 34,
+  "vertices": 4886,
+  "quad_ratio": 0.993058,
+  "target": 5000,
+  "count_ratio": 0.9796
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.962555,
+   "min": -1,
+   "p05": 0.8927,
+   "median": 0.989995,
+   "p95": 0.999221,
+   "max": 0.999989,
+   "std": 0.134561
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.965717,
+   "min": -1,
+   "p05": 0.913744,
+   "median": 0.990077,
+   "p95": 0.999226,
+   "max": 0.999989,
+   "std": 0.127252
+  },
+  "frac_sj_below_0.5": 0.0171499,
+  "inverted_or_degenerate": 28,
+  "planarity": {
+   "mean": 0.0210339,
+   "min": 2.32341e-16,
+   "p05": 0.0010187,
+   "median": 0.0129015,
+   "p95": 0.0690893,
+   "max": 0.266441,
+   "std": 0.0231023
+  },
+  "aspect_ratio": {
+   "mean": 205594,
+   "min": 1.00086,
+   "p05": 1.0271,
+   "median": 1.10702,
+   "p95": 1.51209,
+   "max": 1000000000.0,
+   "std": 14337000.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.682726,
+   "median": 1.02265,
+   "p95": 1.26294,
+   "max": 2.39704,
+   "std": 0.191749
+  },
+  "edge_length_mean_pct_diag": 1.38188
+ },
+ "topology": {
+  "singularities": 100,
+  "boundary_irregular": 6,
+  "singularities_per_1k_faces": 20.4165,
+  "interior_vertices": 4876,
+  "boundary_vertices": 10,
+  "boundary_edges": 10,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+   "2": 4,
+   "3": 44,
+   "4": 4776,
+   "5": 40,
+   "6": 6,
+   "7": 3,
+   "8": 1,
+   "9": 1,
+   "10": 1
+  }
+ },
+ "distance": {
+  "mean_pct": 0.0469315,
+  "out_to_in_mean_pct": 0.0450836,
+  "in_to_out_mean_pct": 0.0487795,
+  "rms_pct": 0.0811083,
+  "hausdorff_pct": 1.44338,
+  "area_ratio": 0.983498
+ },
+ "features": {
+  "feature_coverage": 0.722336,
+  "boundary_coverage": 1,
+  "combined_coverage": 0.722336,
+  "feature_length_pct_diag": 35.6743,
+  "boundary_length_pct_diag": 0,
+  "feature_segments": 104,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 138.48,
+ "input_faces": 268686,
+ "cmd": "build/quadremesh data/models/igea.obj -o benchmark/study/it24_max_coverage_snap2/meshes/igea.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search",
+ "imported_from": "benchmark/study/it24_max_coverage_snap2 (flags: --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search, code dcfa6e2)"
+}

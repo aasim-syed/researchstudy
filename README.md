@@ -1,6 +1,8 @@
 # quadremesh
 
 > Continuing on another machine: see [`CHECKPOINT.md`](CHECKPOINT.md) (state, setup, commands, open items, and a prompt for a new session).
+>
+> Interactive walkthrough (pipeline stage by stage, 3D viewer, downloads): [`web/`](web/README.md), a React site deployable on Vercel with root directory `web`.
 
 Quality-driven triangle → structured quad remeshing. A C++17 core (Eigen, libigl, a patched
 QuadriFlow integer-grid solver), pybind11 Python bindings, a CLI, an evaluation tool, an optional

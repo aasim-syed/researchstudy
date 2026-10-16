@@ -1,0 +1,102 @@
+{
+ "method": "ours_coverage",
+ "faces": {
+  "total": 5320,
+  "quads": 5291,
+  "triangles": 29,
+  "vertices": 5862,
+  "quad_ratio": 0.994549,
+  "target": 5000,
+  "count_ratio": 1.064
+ },
+ "quality": {
+  "scaled_jacobian": {
+   "mean": 0.857345,
+   "min": -1,
+   "p05": 0.201444,
+   "median": 0.983318,
+   "p95": 0.999862,
+   "max": 1,
+   "std": 0.252977
+  },
+  "scaled_jacobian_quads": {
+   "mean": 0.859621,
+   "min": -1,
+   "p05": 0.208896,
+   "median": 0.983405,
+   "p95": 0.999863,
+   "max": 1,
+   "std": 0.251202
+  },
+  "frac_sj_below_0.5": 0.108647,
+  "inverted_or_degenerate": 37,
+  "planarity": {
+   "mean": 0.0164315,
+   "min": 1.88431e-16,
+   "p05": 4.47052e-05,
+   "median": 0.00343745,
+   "p95": 0.0827069,
+   "max": 0.378298,
+   "std": 0.032406
+  },
+  "aspect_ratio": {
+   "mean": 390036,
+   "min": 1.00247,
+   "p05": 1.04348,
+   "median": 1.37513,
+   "p95": 10.6667,
+   "max": 1000000000.0,
+   "std": 19456700.0
+  },
+  "edge_length_rel": {
+   "mean": 1,
+   "min": 0,
+   "p05": 0.270691,
+   "median": 1.01689,
+   "p95": 1.56602,
+   "max": 5.20566,
+   "std": 0.40982
+  },
+  "edge_length_mean_pct_diag": 1.94952
+ },
+ "topology": {
+  "singularities": 287,
+  "boundary_irregular": 109,
+  "singularities_per_1k_faces": 53.9474,
+  "interior_vertices": 4807,
+  "boundary_vertices": 1055,
+  "boundary_edges": 1055,
+  "nonmanifold_edges": 0,
+  "components": 25,
+  "valence_histogram": {
+   "3": 209,
+   "4": 4520,
+   "5": 63,
+   "6": 12,
+   "7": 1,
+   "10": 2
+  }
+ },
+ "distance": {
+  "mean_pct": 0.103821,
+  "out_to_in_mean_pct": 0.108334,
+  "in_to_out_mean_pct": 0.0993076,
+  "rms_pct": 0.260383,
+  "hausdorff_pct": 3.99771,
+  "area_ratio": 0.94224
+ },
+ "features": {
+  "feature_coverage": 0.914579,
+  "boundary_coverage": 0.454104,
+  "combined_coverage": 0.664073,
+  "feature_length_pct_diag": 2393.13,
+  "boundary_length_pct_diag": 2855.15,
+  "feature_segments": 2169,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+ },
+ "runtime_s": 81.84,
+ "input_faces": 46492,
+ "cmd": "build/quadremesh data/models/leather_sofa.obj -o benchmark/study/it24_max_coverage_snap2/meshes/leather_sofa.obj -f 5000 -a 35 --no-uv --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search",
+ "imported_from": "benchmark/study/it24_max_coverage_snap2 (flags: --coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search, code dcfa6e2)"
+}

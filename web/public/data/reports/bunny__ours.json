@@ -1,0 +1,97 @@
+{
+"method": "ours",
+"faces": {
+  "total": 4354,
+  "quads": 4354,
+  "triangles": 0,
+  "vertices": 4378,
+  "quad_ratio": 1,
+  "target": 5000,
+  "count_ratio": 0.8708
+},
+"quality": {
+  "scaled_jacobian": {
+    "mean": 0.934853,
+    "min": -1,
+    "p05": 0.719034,
+    "median": 0.979458,
+    "p95": 0.998195,
+    "max": 0.999929,
+    "std": 0.159701
+  },
+  "scaled_jacobian_quads": {
+    "mean": 0.934853,
+    "min": -1,
+    "p05": 0.719034,
+    "median": 0.979458,
+    "p95": 0.998195,
+    "max": 0.999929,
+    "std": 0.159701
+  },
+  "frac_sj_below_0.5": 0.0213597,
+  "inverted_or_degenerate": 26,
+  "planarity": {
+    "mean": 0.0237642,
+    "min": 0,
+    "p05": 0.00107692,
+    "median": 0.015485,
+    "p95": 0.0771738,
+    "max": 0.258315,
+    "std": 0.0262537
+  },
+  "aspect_ratio": {
+    "mean": 1.60772e+06,
+    "min": 1.00101,
+    "p05": 1.03867,
+    "median": 1.2054,
+    "p95": 2.27469,
+    "max": 1e+09,
+    "std": 4.00641e+07
+  },
+  "edge_length_rel": {
+    "mean": 1,
+    "min": 0,
+    "p05": 0.626351,
+    "median": 1.01364,
+    "p95": 1.31954,
+    "max": 4.84849,
+    "std": 0.244475
+  },
+  "edge_length_mean_pct_diag": 1.44945
+},
+"topology": {
+  "singularities": 126,
+  "boundary_irregular": 25,
+  "singularities_per_1k_faces": 28.9389,
+  "interior_vertices": 4326,
+  "boundary_vertices": 52,
+  "boundary_edges": 52,
+  "nonmanifold_edges": 0,
+  "components": 1,
+  "valence_histogram": {
+    "3": 67,
+    "4": 4200,
+    "5": 59
+  }
+},
+"distance": {
+  "mean_pct": 0.0819834,
+  "out_to_in_mean_pct": 0.0720156,
+  "in_to_out_mean_pct": 0.0919511,
+  "rms_pct": 0.244336,
+  "hausdorff_pct": 3.48857,
+  "area_ratio": 0.983883
+},
+"features": {
+  "feature_coverage": 0.713878,
+  "boundary_coverage": 0.488428,
+  "combined_coverage": 0.578154,
+  "feature_length_pct_diag": 89.7017,
+  "boundary_length_pct_diag": 135.687,
+  "feature_segments": 142,
+  "tolerance_L": 0.1,
+  "feature_angle": 35
+},
+"runtime_s": 12.554,
+"input_faces": 69451
+}
