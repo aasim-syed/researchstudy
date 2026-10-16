@@ -86,11 +86,10 @@ scored in `benchmark/results/reports/`; re-running them is only needed to change
    criterion holds; then `run_benchmark.py --import-study it25_max_coverage_search8:ours_coverage`,
    `make_report.py`, `gen_tables.py`, `build_pdf.py`, and update the max-coverage flags in
    `README.md` / write-up / `run_benchmark.py` to include `--search-candidates 8`.
-2. **CUDA check on the GTX 1650 (optional, about 15 min).**
-   `python -c "import torch; print(torch.cuda.is_available(), torch.cuda.get_device_name(0))"`.
-   If True, time `quadremesh.torch_field.optimize_field` and `quadremesh.learned.predict_guide_field`
-   on one model with `device="cuda"` vs `device="cpu"`, and replace the "exercised only on CPU"
-   sentence in the write-up section 3 with the measured speed-up.
+2. **CUDA check on the GTX 1650 (optional, about 15 min).** Follow `docs/cuda_checklist.md`;
+   it ends with `PYTHONPATH=python python scripts/cuda_check.py --runs 5`, which prints one report
+   (environment, CUDA vs CPU agreement, timings, end-to-end remesh, VERDICT). Paste it for review,
+   then replace the "exercised only on CPU" sentence in the write-up section 3 with the speed-up.
 3. **Send the submission** (by hand): reply-all to the Ctruh HR email with the repo link and
    `docs/technical_writeup.pdf`. Make sure the repo is public or shared with them.
 

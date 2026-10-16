@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>quadremesh Architecture</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a cloud-architecture sheet - grouped containers with header tabs, colored icon tiles, numbered flow badges, and a step legend beneath. */
+:root {
+  --bg: #f5f7fa; --sheet: #ffffff; --ink: #16191f; --muted: #545b64; --line: #879196; --rule: #d5dbdb;
+  --c-data: #3f8624; --c-iface: #7b4fd6; --c-core: #d45b07; --c-third: #5a6b86; --c-ai: #c7254e; --c-eval: #2e6fd8;
+  --badge: #16191f; --badge-ink: #ffffff;
+  --f-sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f1419; --sheet: #161d26; --ink: #e9edf1; --muted: #a1aab3; --line: #7d8a96; --rule: #2a3440;
+  --c-data: #6fbf4a; --c-iface: #a585f0; --c-core: #f08a3c; --c-third: #8ea0bf; --c-ai: #ef6a8f; --c-eval: #6aa2f5;
+  --badge: #e9edf1; --badge-ink: #0f1419; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0f1419; --sheet: #161d26; --ink: #e9edf1; --muted: #a1aab3; --line: #7d8a96; --rule: #2a3440;
+  --c-data: #6fbf4a; --c-iface: #a585f0; --c-core: #f08a3c; --c-third: #8ea0bf; --c-ai: #ef6a8f; --c-eval: #6aa2f5;
+  --badge: #e9edf1; --badge-ink: #0f1419; color-scheme: dark }
+
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--f-sans); }
+.wrap { max-width: 1280px; margin: 0 auto; padding-block: 32px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 22px; }
+header { display: grid; gap: 6px; }
+.kicker { font: 500 .78rem var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--c-core); }
+h1 { margin: 0; font-size: clamp(1.6rem, 3.4vw, 2.3rem); font-weight: 700; text-wrap: balance; }
+h2 { margin: 0; font-size: 1.1rem; font-weight: 600; }
+p { margin: 0; max-width: 70ch; }
+.sub { color: var(--muted); }
+.sheet { background: var(--sheet); border: 1px solid var(--rule); border-radius: 4px; padding: 18px; display: grid; gap: 14px; min-width: 0; }
+figure { margin: 0; display: grid; gap: 10px; min-width: 0; }
+.scroll { overflow-x: auto; }
+.scroll svg { display: block; width: 100%; min-width: 980px; height: auto; }
+figcaption { color: var(--muted); font-size: .9rem; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.kpi { border: 1px solid var(--rule); border-radius: 4px; padding: 10px 12px; display: grid; gap: 2px; min-width: 0; }
+.kpi b { font: 600 1.35rem var(--f-sans); font-variant-numeric: tabular-nums; }
+.kpi span { font-size: .82rem; color: var(--muted); }
+.kpi.miss b { color: var(--c-ai); }
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 8px 22px; list-style: none; padding: 0; margin: 0; }
+.steps li { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 10px; align-items: start; font-size: .92rem; }
+.steps li i { font: 600 .78rem/26px var(--f-mono); font-style: normal; text-align: center; width: 26px; height: 26px; border-radius: 50%; background: var(--badge); color: var(--badge-ink); }
+.steps code, .legend code { font: .82rem var(--f-mono); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: .86rem; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 14px; border-radius: 3px; display: inline-block; }
+/* SVG classes (all colors from tokens) */
+.g-box { fill: none; stroke-width: 1.5; }
+.g-dash { stroke-dasharray: 6 5; }
+.g-title { font: 600 13px var(--f-sans); fill: var(--ink); }
+.n-label { font: 600 12px var(--f-sans); fill: var(--ink); text-anchor: middle; }
+.n-file { font: 400 10.5px var(--f-mono); fill: var(--muted); text-anchor: middle; }
+.n-tag { font: 500 9.5px var(--f-mono); text-anchor: middle; letter-spacing: .05em; }
+.flow { stroke: var(--line); stroke-width: 1.6; fill: none; }
+.flow-dash { stroke-dasharray: 5 4; }
+.badge circle { fill: var(--badge); }
+.badge text { font: 600 10.5px var(--f-mono); fill: var(--badge-ink); text-anchor: middle; dominant-baseline: central; }
+.glyph { stroke: #ffffff; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.glyph-f { fill: #ffffff; }
+.glyph-t { font: 700 13px var(--f-mono); fill: #ffffff; text-anchor: middle; dominant-baseline: central; }
+.c-data { fill: var(--c-data); } .s-data { stroke: var(--c-data); }
+.c-iface { fill: var(--c-iface); } .s-iface { stroke: var(--c-iface); }
+.c-core { fill: var(--c-core); } .s-core { stroke: var(--c-core); }
+.c-third { fill: var(--c-third); } .s-third { stroke: var(--c-third); }
+.c-ai { fill: var(--c-ai); } .s-ai { stroke: var(--c-ai); }
+.c-eval { fill: var(--c-eval); } .s-eval { stroke: var(--c-eval); }
+.t-third { fill: var(--c-third); } .t-ai { fill: var(--c-ai); }
+.arrowhead { fill: var(--line); }
+</style>
+
+<div class="wrap">
+<header>
+  <span class="kicker">Ctruh assignment · end-to-end architecture</span>
+  <h1>quadremesh: triangles in, structured quads out</h1>
+  <p class="sub">The whole product on one sheet: how a mesh enters, every stage of the C++ core it passes through, what comes out, and how the benchmark scores it and turns the scores into the documents. Numbered badges follow the data; the legend below says what moves at each step.</p>
+</header>
+
+<div class="sheet">
+<figure>
+<div class="scroll">
+<svg viewBox="0 45 1240 700" role="img" aria-label="Architecture: mesh files and options enter through the CLI or Python API, pass through the quadremesh C++ core (preprocess, creases, field, integer grid, post-process, coverage stage, guards, search) and leave as a quad mesh and a JSON report; a benchmark runs four methods on 15 models, scores them with the evaluator and generates the reports and documents.">
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="arrowhead"/></marker>
+  </defs>
+
+  <!-- ===== groups ===== -->
+  <!-- Inputs -->
+  <rect x="20" y="60" width="190" height="380" class="g-box s-data"/>
+  <rect x="20" y="60" width="26" height="26" class="c-data"/><path d="M27 79 L33 67 L39 79 Z" class="glyph"/>
+  <text x="56" y="78" class="g-title">Inputs</text>
+  <!-- Interfaces -->
+  <rect x="230" y="60" width="180" height="380" class="g-box s-iface"/>
+  <rect x="230" y="60" width="26" height="26" class="c-iface"/><text x="243" y="73" class="glyph-t" style="font-size:11px">&gt;_</text>
+  <text x="266" y="78" class="g-title">Interfaces</text>
+  <!-- Core -->
+  <rect x="430" y="60" width="590" height="380" class="g-box s-core"/>
+  <rect x="430" y="60" width="26" height="26" class="c-core"/><circle cx="443" cy="73" r="6" class="glyph"/><path d="M443 64 v3 M443 79 v3 M434 73 h3 M449 73 h3" class="glyph"/>
+  <text x="466" y="78" class="g-title">quadremesh core · C++17</text>
+  <text x="1008" y="78" class="n-file" style="text-anchor:end">src/remesh.cpp orchestrates</text>
+  <!-- Outputs -->
+  <rect x="1040" y="60" width="180" height="380" class="g-box s-data"/>
+  <rect x="1040" y="60" width="26" height="26" class="c-data"/><path d="M1047 67 h12 v12 h-12 z M1053 67 v12 M1047 73 h12" class="glyph"/>
+  <text x="1076" y="78" class="g-title">Outputs</text>
+  <!-- Evaluation -->
+  <rect x="20" y="470" width="1200" height="265" class="g-box s-eval"/>
+  <rect x="20" y="470" width="26" height="26" class="c-eval"/><path d="M27 489 a7 7 0 0 1 12 0 M33 489 l3 -5" class="glyph"/>
+  <text x="56" y="488" class="g-title">Evaluation, benchmark and reporting</text>
+  <text x="1208" y="488" class="n-file" style="text-anchor:end">benchmark/ · docs/</text>
+
+  <!-- ===== Inputs nodes ===== -->
+  <rect x="95" y="100" width="40" height="40" rx="4" class="c-data"/><path d="M104 132 L115 108 L126 132 Z M109.5 120 L120.5 120" class="glyph"/>
+  <text x="115" y="158" class="n-label">Triangle mesh</text><text x="115" y="172" class="n-file">.obj .ply .glb .gltf .off</text>
+  <rect x="95" y="210" width="40" height="40" rx="4" class="c-data"/><path d="M103 220 h24 M103 230 h24 M103 240 h24" class="glyph"/><circle cx="110" cy="220" r="2.5" class="glyph-f"/><circle cx="121" cy="230" r="2.5" class="glyph-f"/><circle cx="113" cy="240" r="2.5" class="glyph-f"/>
+  <text x="115" y="268" class="n-label">Options</text><text x="115" y="282" class="n-file">faces · angle · flags</text>
+  <rect x="95" y="320" width="40" height="40" rx="4" class="c-data"/><path d="M102 342 q6 -12 13 0 t13 0" class="glyph"/>
+  <text x="115" y="378" class="n-label">Guidance (optional)</text><text x="115" y="392" class="n-file">strokes · density · symmetry</text>
+
+  <!-- ===== Interfaces nodes ===== -->
+  <rect x="300" y="100" width="40" height="40" rx="4" class="c-iface"/><text x="320" y="120" class="glyph-t">&gt;_</text>
+  <text x="320" y="158" class="n-label">CLI</text><text x="320" y="172" class="n-file">apps/quadremesh_cli.cpp</text>
+  <rect x="300" y="210" width="40" height="40" rx="4" class="c-iface"/><text x="320" y="230" class="glyph-t">{ }</text>
+  <text x="320" y="268" class="n-label">Python API</text><text x="320" y="282" class="n-file">api.py · pybind11</text>
+  <rect x="246" y="306" width="148" height="122" rx="4" class="g-box s-ai g-dash"/>
+  <rect x="300" y="320" width="40" height="40" rx="4" class="c-ai"/><circle cx="310" cy="331" r="3" class="glyph-f"/><circle cx="310" cy="349" r="3" class="glyph-f"/><circle cx="330" cy="340" r="3" class="glyph-f"/><path d="M310 331 L330 340 L310 349" class="glyph"/>
+  <text x="320" y="378" class="n-label">Learned field</text><text x="320" y="392" class="n-file">learned.py · PyTorch</text>
+  <text x="320" y="415" class="n-tag t-ai">OPTIONAL · CUDA</text>
+
+  <!-- ===== Core row A ===== -->
+  <rect x="492" y="100" width="40" height="40" rx="4" class="c-core"/><path d="M501 121 l6 6 l13 -14" class="glyph"/>
+  <text x="512" y="158" class="n-label">Preprocess</text><text x="512" y="172" class="n-file">preprocess.cpp</text>
+  <rect x="637" y="100" width="40" height="40" rx="4" class="c-core"/><path d="M645 132 L657 110 L669 132" class="glyph"/>
+  <text x="657" y="158" class="n-label">Crease detection</text><text x="657" y="172" class="n-file">features.cpp</text>
+  <rect x="782" y="100" width="40" height="40" rx="4" class="c-core"/><path d="M793 112 l18 16 M811 112 l-18 16" class="glyph"/><path d="M802 108 v24 M790 120 h24" class="glyph" style="opacity:.55"/>
+  <text x="802" y="158" class="n-label">Field + adaptive size</text><text x="802" y="172" class="n-file">field.cpp</text>
+  <rect x="927" y="100" width="40" height="40" rx="4" class="c-third"/><path d="M935 108 h24 v24 h-24 z M943 108 v24 M951 108 v24 M935 116 h24 M935 124 h24" class="glyph"/>
+  <text x="947" y="158" class="n-label">Integer-grid solve</text><text x="947" y="172" class="n-file">QuadriFlow (patched)</text>
+  <text x="947" y="187" class="n-tag t-third">THIRD-PARTY</text>
+
+  <!-- ===== Core row B ===== -->
+  <rect x="492" y="320" width="40" height="40" rx="4" class="c-core"/><path d="M499 346 q13 -16 26 0" class="glyph"/><path d="M499 334 h26" class="glyph" style="opacity:.6"/>
+  <text x="512" y="378" class="n-label">Crease paths + relax</text><text x="512" y="392" class="n-file">postprocess.cpp</text>
+  <rect x="637" y="320" width="40" height="40" rx="4" class="c-core"/><circle cx="657" cy="340" r="11" class="glyph"/><circle cx="657" cy="340" r="4" class="glyph-f"/>
+  <text x="657" y="378" class="n-label">Coverage stage</text><text x="657" y="392" class="n-file">crease_cut.cpp</text>
+  <text x="657" y="407" class="n-tag" style="fill:var(--muted)">SNAP · SUBDIVIDE · BUDGET</text>
+  <rect x="782" y="320" width="40" height="40" rx="4" class="c-core"/><path d="M802 327 l11 4 v8 q0 9 -11 14 q-11 -5 -11 -14 v-8 z" class="glyph"/>
+  <text x="802" y="378" class="n-label">Quality guards</text><text x="802" y="392" class="n-file">remesh.cpp</text>
+  <text x="802" y="407" class="n-tag" style="fill:var(--muted)">SJ · FACE COUNT</text>
+  <rect x="873" y="306" width="148" height="122" rx="4" class="g-box s-core g-dash"/>
+  <rect x="927" y="320" width="40" height="40" rx="4" class="c-core"/><circle cx="944" cy="337" r="8" class="glyph"/><path d="M950 343 l8 8" class="glyph"/>
+  <text x="947" y="378" class="n-label">Coverage search</text><text x="947" y="392" class="n-file">remesh.cpp</text>
+  <text x="947" y="415" class="n-tag" style="fill:var(--c-core)">OPTIONAL · BEST OF 4</text>
+
+  <!-- ===== Outputs ===== -->
+  <rect x="1110" y="150" width="40" height="40" rx="4" class="c-data"/><path d="M1119 160 l22 0 M1119 167 l22 0 M1119 174 l14 0 M1119 181 l18 0" class="glyph"/>
+  <text x="1130" y="208" class="n-label">Quality report</text><text x="1130" y="222" class="n-file">JSON</text>
+  <rect x="1110" y="320" width="40" height="40" rx="4" class="c-data"/><path d="M1118 328 h24 v24 h-24 z M1126 328 v24 M1134 328 v24 M1118 336 h24 M1118 344 h24" class="glyph"/>
+  <text x="1130" y="378" class="n-label">Quad mesh</text><text x="1130" y="392" class="n-file">.obj + UVs</text>
+
+  <!-- ===== Evaluation row ===== -->
+  <rect x="110" y="540" width="40" height="40" rx="4" class="c-eval"/><path d="M124 550 l14 10 l-14 10 z" class="glyph"/>
+  <text x="130" y="598" class="n-label">Benchmark runner</text><text x="130" y="612" class="n-file">run_benchmark.py</text><text x="130" y="626" class="n-file">15 models</text>
+  <rect x="305" y="540" width="40" height="40" rx="4" class="c-third"/><path d="M313 548 h9 v9 h-9 z M328 548 h9 v9 h-9 z M313 563 h9 v9 h-9 z M328 563 h9 v9 h-9 z" class="glyph"/>
+  <text x="325" y="598" class="n-label">Four methods</text><text x="325" y="612" class="n-file">ours · Instant Meshes</text><text x="325" y="626" class="n-file">QuadriFlow · Blender</text>
+  <rect x="500" y="540" width="40" height="40" rx="4" class="c-eval"/><path d="M509 571 a11 11 0 0 1 22 0" class="glyph"/><path d="M520 571 l7 -9" class="glyph"/>
+  <text x="520" y="598" class="n-label">Evaluator</text><text x="520" y="612" class="n-file">quadeval · metrics.cpp</text>
+  <rect x="695" y="540" width="40" height="40" rx="4" class="c-eval"/><path d="M704 552 h16 v20 h-16 z M709 548 h16 v20" class="glyph"/>
+  <text x="715" y="598" class="n-label">Per-model reports</text><text x="715" y="612" class="n-file">results/ · study/</text>
+  <rect x="890" y="540" width="40" height="40" rx="4" class="c-eval"/><circle cx="910" cy="560" r="7" class="glyph"/><path d="M910 546 v4 M910 570 v4 M896 560 h4 M920 560 h4 M900 550 l3 3 M917 567 l3 3 M920 550 l-3 3 M903 567 l-3 3" class="glyph"/>
+  <text x="910" y="598" class="n-label">Generators</text><text x="910" y="612" class="n-file">tables · study · bounds</text><text x="910" y="626" class="n-file">code map · visual report</text>
+  <rect x="1085" y="540" width="40" height="40" rx="4" class="c-data"/><path d="M1095 548 h14 l6 6 v18 h-20 z M1100 563 l4 4 l7 -8" class="glyph"/>
+  <text x="1105" y="598" class="n-label">Deliverables</text><text x="1105" y="612" class="n-file">write-up PDF · README</text><text x="1105" y="626" class="n-file">visual report</text>
+
+  <!-- ===== flows: inputs -> interfaces ===== -->
+  <path d="M141 120 H292" class="flow" marker-end="url(#ah)"/>
+  <path d="M141 226 H292" class="flow" marker-end="url(#ah)"/>
+  <path d="M141 340 H190 V240 H292" class="flow" marker-end="url(#ah)"/>
+  <!-- interfaces -> core (bus) -->
+  <path d="M346 120 H418" class="flow"/><path d="M346 230 H418" class="flow"/><path d="M346 340 H418" class="flow flow-dash"/>
+  <path d="M418 120 V340" class="flow"/>
+  <path d="M418 120 H484" class="flow" marker-end="url(#ah)"/>
+  <!-- core row A -->
+  <path d="M538 120 H629" class="flow" marker-end="url(#ah)"/>
+  <path d="M683 120 H774" class="flow" marker-end="url(#ah)"/>
+  <path d="M828 120 H919" class="flow" marker-end="url(#ah)"/>
+  <!-- elbow A -> B -->
+  <path d="M947 196 V262 H512 V312" class="flow" marker-end="url(#ah)"/>
+  <!-- core row B -->
+  <path d="M538 340 H629" class="flow" marker-end="url(#ah)"/>
+  <path d="M683 340 H774" class="flow" marker-end="url(#ah)"/>
+  <path d="M828 340 H919" class="flow flow-dash" marker-end="url(#ah)"/>
+  <!-- core -> outputs -->
+  <path d="M973 340 H1102" class="flow" marker-end="url(#ah)"/>
+  <path d="M1030 340 V170 H1102" class="flow" marker-end="url(#ah)"/>
+  <!-- evaluation row -->
+  <path d="M156 560 H297" class="flow" marker-end="url(#ah)"/>
+  <path d="M351 560 H492" class="flow" marker-end="url(#ah)"/>
+  <path d="M546 560 H687" class="flow" marker-end="url(#ah)"/>
+  <path d="M741 560 H882" class="flow" marker-end="url(#ah)"/>
+  <path d="M936 560 H1077" class="flow" marker-end="url(#ah)"/>
+  <!-- outputs feed the evaluator (the core's own report uses the same code) -->
+  <path d="M1170 340 H1200 V510 H520 V532" class="flow flow-dash" marker-end="url(#ah)"/>
+
+  <!-- ===== badges ===== -->
+  <g class="badge"><circle cx="216" cy="120" r="10"/><text x="216" y="120">1</text></g>
+  <g class="badge"><circle cx="380" cy="340" r="10"/><text x="380" y="340">2</text></g>
+  <g class="badge"><circle cx="452" cy="120" r="10"/><text x="452" y="120">3</text></g>
+  <g class="badge"><circle cx="584" cy="120" r="10"/><text x="584" y="120">4</text></g>
+  <g class="badge"><circle cx="729" cy="120" r="10"/><text x="729" y="120">5</text></g>
+  <g class="badge"><circle cx="874" cy="120" r="10"/><text x="874" y="120">6</text></g>
+  <g class="badge"><circle cx="730" cy="262" r="10"/><text x="730" y="262">7</text></g>
+  <g class="badge"><circle cx="584" cy="340" r="10"/><text x="584" y="340">8</text></g>
+  <g class="badge"><circle cx="729" cy="340" r="10"/><text x="729" y="340">9</text></g>
+  <g class="badge"><circle cx="874" cy="340" r="10"/><text x="874" y="340">10</text></g>
+  <g class="badge"><circle cx="1066" cy="340" r="10"/><text x="1066" y="340">11</text></g>
+  <g class="badge"><circle cx="226" cy="560" r="10"/><text x="226" y="560">12</text></g>
+  <g class="badge"><circle cx="421" cy="560" r="10"/><text x="421" y="560">13</text></g>
+  <g class="badge"><circle cx="616" cy="560" r="10"/><text x="616" y="560">14</text></g>
+  <g class="badge"><circle cx="811" cy="560" r="10"/><text x="811" y="560">15</text></g>
+  <g class="badge"><circle cx="1006" cy="560" r="10"/><text x="1006" y="560">16</text></g>
+
+  <!-- footer inside the evaluation group: the four criteria the evaluator measures -->
+  <text x="40" y="676" class="g-title">What the evaluator measures on every output</text>
+  <text x="40" y="700" class="n-file" style="text-anchor:start">quad ratio ≥ 98 %  ·  mean scaled Jacobian ≥ 0.8  ·  mean distance &lt; 0.5 % of diagonal  ·  feature coverage ≥ 90 %  ·  singularities vs Instant Meshes</text>
+  <text x="40" y="724" class="n-file" style="text-anchor:start">One evaluator (src/metrics.cpp) serves the CLI's --report, quadeval, the benchmark, the coverage study and the coverage search, so every number is measured the same way.</text>
+</svg>
+</div>
+<figcaption>Solid boxes are always on; dashed boxes are optional. Orange is our C++ core, slate is third-party (QuadriFlow, with Instant Meshes as fallback; the baselines), pink is the optional PyTorch component, green is data in and out, blue is evaluation.</figcaption>
+</figure>
+<div class="legend">
+  <span><i style="background:var(--c-data)"></i>data in / out</span>
+  <span><i style="background:var(--c-iface)"></i>interfaces</span>
+  <span><i style="background:var(--c-core)"></i>our C++ core</span>
+  <span><i style="background:var(--c-third)"></i>third-party</span>
+  <span><i style="background:var(--c-ai)"></i>optional AI</span>
+  <span><i style="background:var(--c-eval)"></i>evaluation</span>
+</div>
+</div>
+
+<div class="sheet">
+  <h2>What moves at each step</h2>
+  <ol class="steps">
+    <li><i>1</i><span>Mesh file path and options reach the CLI (<code>quadremesh in.obj -o out.obj -f 5000</code>) or the Python call <code>quadremesh("in.obj", 5000)</code>; strokes and density maps go in as options.</span></li>
+    <li><i>2</i><span>Optional: the PyTorch network predicts a guide direction per vertex (on CUDA if present) and passes it in as <code>guide_field</code>.</span></li>
+    <li><i>3</i><span><code>quadremesh()</code> receives the triangle mesh and parameters; everything after this runs in C++.</span></li>
+    <li><i>4</i><span>Clean, manifold, consistently oriented triangles (duplicates welded, holes filled, broken edges repaired).</span></li>
+    <li><i>5</i><span>The crease set: every edge with a dihedral angle above 35°, noise rejected, chains shorter than 3 L dropped.</span></li>
+    <li><i>6</i><span>Cross field locked to the creases, plus a scale target that makes quads smaller near creases at the same total count.</span></li>
+    <li><i>7</i><span>Raw quads per connected part from QuadriFlow's integer grid; parts it cannot solve go to Instant Meshes.</span></li>
+    <li><i>8</i><span>Quads with an edge path snapped onto every crease, then smoothed and projected back onto the original surface.</span></li>
+    <li><i>9</i><span>Coverage operations (near-miss snapping, path-edge subdivision, loops) kept only within the triangle budget and a singularity budget set at 85 % of Instant Meshes.</span></li>
+    <li><i>10</i><span>Guards checked: mean SJ ≥ 0.81 or re-solve with less adaptive size; output ≤ 1.10 × target faces or re-solve. Optional: four solves scored by the evaluator, best valid one kept.</span></li>
+    <li><i>11</i><span>The quad mesh (.obj with UVs) and its JSON quality report.</span></li>
+    <li><i>12</i><span>The runner sends each of the 15 benchmark models to every method at the same face count.</span></li>
+    <li><i>13</i><span>Each method's quad mesh goes to the evaluator.</span></li>
+    <li><i>14</i><span>One JSON report per model and method (quads, SJ, distance, coverage, singularities, runtime).</span></li>
+    <li><i>15</i><span>Scripts turn the reports into the summary tables, the coverage study, the crease-limit analysis, the code map and the visual report.</span></li>
+    <li><i>16</i><span>Write-up PDF, README and visual report, with every number generated from the reports.</span></li>
+  </ol>
+</div>
+
+<div class="sheet">
+  <h2>Results at the end of the pipeline</h2>
+  <div class="kpis">
+    <div class="kpi"><b>100 %</b><span>quads (default)</span></div>
+    <div class="kpi"><b>0.903</b><span>mean scaled Jacobian, every model ≥ 0.82</span></div>
+    <div class="kpi"><b>0.086 %</b><span>mean distance (Instant Meshes 0.316 %)</span></div>
+    <div class="kpi"><b>14 / 15</b><span>models with fewer singularities than Instant Meshes</span></div>
+  </div>
+  <h2>Feature coverage (target ≥ 90 %)</h2>
+  <div class="kpis">
+    <div class="kpi"><b>≥ 90 % · 5 models</b><span>fandisk 100 % · spot 99.4 % · sheen chair 92.9 % · velvet sofa 92.4 % · leather sofa 91.5 %</span></div>
+    <div class="kpi"><b>75–90 % · 4 models</b><span>fandisk noisy 85.3 % · rocker arm 82.4 % · bunny 81.0 % · beetle 79.2 %</span></div>
+    <div class="kpi miss"><b>&lt; 75 % · 6 models</b><span>igea 72.2 % · damask chair 67.6 % · nefertiti 66.7 % · armadillo 66.2 % · room scans: fountain 12.0 %, lounge 8.5 %</span></div>
+  </div>
+  <p class="sub">Mean over all 15: 73.1 % (82.8 % without the two room scans), vs Instant Meshes 22.1 %. The room scans' 35° “creases” are scanner noise: lounge would need more crease-aligned edges than its mesh has, so even 100 % on the other 13 models gives a mean of 88.0 %.</p>
+  <p class="sub">From the generated tables on <code>main</code>. Max-coverage setting: <code>--coverage-mode --path-subdiv 3 --sing-budget-im --coverage-search</code>.</p>
+</div>
+</div>
+
+</html>
