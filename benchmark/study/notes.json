@@ -24,7 +24,8 @@
   "it21_im_budget",
   "it22_max_coverage",
   "it23_default_snap2",
-  "it24_max_coverage_snap2"
+  "it24_max_coverage_snap2",
+  "it25_max_coverage_search8"
  ],
  "it0_no_feature_paths": [
   "Baseline before any coverage-specific post-processing: hard feature constraints in the field + proximity snapping of vertices to creases (the default before edge-path recovery). Reproduced with the current code by disabling path recovery (QRM_NO_FEATURE_PATHS=1)."
@@ -136,5 +137,8 @@
  "it24_max_coverage_snap2": [
   "it22 (max coverage) with the it23 snapping.",
   "Observed: 0.712 -> 0.731 over 15 (it22 -> it24), 0.808 -> 0.828 on the 13 non-scan models; quad 0.994, SJ 0.903, distance 0.082 %, 14/15 below Instant Meshes. Five models reach >= 90 %: fandisk 1.000, spot 0.994, sheen chair 0.929, velvet sofa 0.924, leather sofa 0.915. The scans were run separately (an out-of-memory kill from two concurrent scan jobs was re-run; recorded in meta.json reruns)."
+ ],
+ "it25_max_coverage_search8": [
+  "it24 with 8 search candidates instead of 4 (extra crease-zone widths 1.0 / 3.0 and seeds 2-4). A 4-model test gave fandisk_noisy 0.853 -> 0.863 and rocker arm 0.824 -> 0.855, bunny and beetle unchanged. 2x runtime."
  ]
 }
