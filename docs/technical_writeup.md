@@ -198,10 +198,12 @@ input (.obj/.ply/.glb)
   | bunny | 22.4 | 22.4 | **20.4** |
   | armadillo | 22.1 | 22.1 | **21.0** |
 
-  End to end, the effect is small, because the angle-limited pass deliberately limits its
-  authority. Singularities per 1k faces drop from 31.4 to 29.7 on average, with clear gains on
-  noisy and furniture inputs (fandisk_noisy 31.9→25.9, sheen chair 52.5→34.8, leather sofa
-  62.5→55.5) and small losses on some clean models. It is therefore **opt-in**
+  End to end (benchmark method `ours_learned` vs `ours`, both on the current default), the effect
+  is mixed, because the angle-limited pass deliberately limits its authority: mean feature
+  coverage 66.9 % → 67.2 %, mean SJ 0.903 → 0.912, mean distance 0.086 % → 0.061 %, but
+  singularities per 1k faces 35.6 → 38.9 on average (fewer on 7 models, more on 7). It helps
+  most on clean CAD and organic models (fandisk coverage 0.94 → 0.99, igea 0.52 → 0.59) and hurts
+  on dense carvings (damask chair 57 → 97 singularities per 1k). It is therefore **opt-in**
   (`learned_field=True`) rather than the default.
 * **CUDA path (`python/quadremesh/torch_field.py`).** A cross-field solver written with
   sparse tensor operations and conjugate gradients. It minimises smoothness plus curvature
